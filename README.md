@@ -4,7 +4,7 @@ whatsns问答系统是一款可以根据自身业务需求快速搭建垂直化�
 
 #### 特别提示
 V4免费版用户已安装的，如果需要更新，请移动V4更新地址
-https://gitee.com/huangyouzhi/whatsnsV4_free_update
+http://git.whatsns.com/whatsns/whatsns_freev4.1_update20191229
 
 #### 软件架构
 基于php的CodeIgniter3.1.6开发
@@ -15,9 +15,9 @@ https://gitee.com/huangyouzhi/whatsnsV4_free_update
 
 
 
->  **直接上传程序到问答根目录即可，安装方法，上传程序后直接输入http://你的域名/install** 
+>  **直接上传程序到问答根目录即可，安装方法，上传程序后直接输入http://你的域名/install/** 
 > 
->  **如果是二级目录安装：安装在某个域名网站下的用户，请将安装地址定位到你的问答，输入http://你的域名/二级目录/install** 
+>  **如果是二级目录安装：安装在某个域名网站下的用户，请将安装地址定位到你的问答，输入http://你的域名/二级目录/install/** 
 
 #### 4.1更新功能说明
 * 安装包兼容mysql5.7和mysql8.0数据库环境的安装
