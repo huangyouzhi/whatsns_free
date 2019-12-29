@@ -1,6 +1,4 @@
 # whatsns内容付费seo优化带采集和熊掌号运营问答系统
-#### 宝塔面板安装等用户特别注意
-如果是php7+版本安装，请留意是否开启了opencache是否开启，安装过程最好先关闭此缓存组件，因为需要读写config.php和database.php配置文件，开启后会导致因为缓存问题不能读取到最新的php文件，从而超级管理员创建失败不能登录（登录会提示账号密码错误）
 #### 项目介绍
 whatsns问答系统是一款可以根据自身业务需求快速搭建垂直化领域的php开源问答系统，内置强大的采集功能，支持云存储，图片水印设置，全文检索，站内行为监控，短信注册和通知，伪静态URL自定义，熊掌号功能，百度结构化地图（标签，问题，文章，分类，用户空间），PC和Wap模板分离，内置多套pc和wap模板，站长自由切换，同时后台支持模板管理在线编辑修改模板，强大的防灌水拦截和过滤配置等上百项功能，深入SEO优化，适合对SEO有需求的站长。商业版还支持火车采集，高级微信公众号接口功能，支持支付宝支付、微信扫码支付、微信JSSDK支付、微信H5支付、小程序支付、适合不同场景支付业务需求，如充值，打赏，回答偷看，付费专家咨询。 
 
@@ -21,6 +19,21 @@ https://gitee.com/huangyouzhi/whatsnsV4_free_update
 > 
 >  **如果是二级目录安装：安装在某个域名网站下的用户，请将安装地址定位到你的问答，输入http://你的域名/二级目录/install** 
 
+#### 4.1更新功能说明
+安装包兼容mysql5.7和mysql8.0数据库环境的安装
+付费课程增加付费课程试听功能
+基础版和高级企业版，Plus版增加微信消息模板回答通知，采纳答案通知
+改进兼容因导入discuz用户密码规则不兼容导致登录失败问题
+基础版和高级企业版，Plus版增加改进微信文本回复，支持超链接功能
+优化xunsearch同步 ，防止重复插入和重复生成索引
+优化前端模板页面，权限验证部分异步加载，增加对CDN支持
+优化文章对技术类得内容发布
+修复uc同步登录问题
+改进问题库和文章栏目url利于seo
+高级企业版，Plus版增加修复因RDS等独立mysql服务器导致微信支付回调无记录问题
+增加对分类栏目的英文支持，也就是分类拼音可以代替id访问
+内容付费pc版头部增加私信通知
+增加对url访问后缀合法性校验，防止被恶意攻击影响seo
 #### 4.0更新功能说明
 
 
@@ -78,19 +91,3 @@ https://gitee.com/huangyouzhi/whatsnsV4_free_update
 
 ![输入图片说明](https://images.gitee.com/uploads/images/2019/0221/091318_18ee656d_482269.png "屏幕截图.png")
 
-#### 参与贡献
-
-1. Fork 本项目
-2. 新建 Feat_xxx 分支
-3. 提交代码
-4. 新建 Pull Request
-
-
-#### 码云特技
-
-1. 使用 Readme\_XXX.md 来支持不同的语言，例如 Readme\_en.md, Readme\_zh.md
-2. 码云官方博客 [blog.gitee.com](https://blog.gitee.com)
-3. 你可以 [https://gitee.com/explore](https://gitee.com/explore) 这个地址来了解码云上的优秀开源项目
-4. [GVP](https://gitee.com/gvp) 全称是码云最有价值开源项目，是码云综合评定出的优秀开源项目
-5. 码云官方提供的使用手册 [https://gitee.com/help](https://gitee.com/help)
-6. 码云封面人物是一档用来展示码云会员风采的栏目 [https://gitee.com/gitee-stars/](https://gitee.com/gitee-stars/)
