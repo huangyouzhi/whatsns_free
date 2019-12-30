@@ -2,9 +2,6 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 $active_group = 'default';
 $query_builder  = TRUE;
-define('ASK2_CHARSET', 'UTF-8');
-define('ASK2_VERSION', '4.0');
-define('ASK2_RELEASE', '20190219');
 $db['default'] =array (
   'dsn' => '',
   'hostname' => 'localhost',
