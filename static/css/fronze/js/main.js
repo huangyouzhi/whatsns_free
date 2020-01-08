@@ -426,7 +426,12 @@ if(flag==1){
 	   }else if(flag==3){
 		   alert("手机号不正确");
 	   }else{
-		   alert(flag);
+		   if(flag==5){
+		   alert("稍后获取验证码");
+	   }else{
+		    alert(flag);
+	   }
+		  
 	   }
 	  
 }
@@ -453,15 +458,19 @@ function gosms(_type){
   		}
   	},1000);
   }else{
-	  if(flag==0){
+	 if(flag==0){
 		   alert("平台短信已经关闭");
-	   }
-	   if(flag==2){
-		   alert("手机号已存在");
+	   }else if(flag==2){
+		   alert("手机号没有在网站注册");
 	   }else if(flag==3){
 		   alert("手机号不正确");
 	   }else{
-		   alert("稍后在获取验证码");
+		   if(flag==5){
+		   alert("稍后获取验证码");
+	   }else{
+		    alert(flag);
+	   }
+		  
 	   }
 	  
  }
