@@ -4,8 +4,8 @@ class Question_model extends CI_Model {
 
 	var $search;
 	var $index;
-	var $statustable = array ('all' => ' AND status in (1,2) ', '0' => ' AND status=0', '1' => ' AND status=1', '2' => ' AND status=2', '6' => ' AND status=6', '4' => ' AND status=1 AND price>0', '9' => ' AND status=9' );
-	var $ordertable = array ('all' => 'AND status in (1,2) ORDER BY time DESC', '0' => ' AND status=0  ORDER BY time DESC', '1' => ' AND status=1  ORDER BY time DESC', '2' => ' AND status=2  ORDER BY  time DESC', '6' => ' AND status=6  ORDER BY time DESC,shangjin DESC,hasvoice DESC', '4' => ' AND status=1 AND price>0 ORDER BY time DESC, price DESC', '9' => ' AND status=9  ORDER BY time DESC,shangjin DESC,hasvoice DESC' );
+	var $statustable = array ('all' => ' AND status in (1,2,6) ', '0' => ' AND status=0', '1' => ' AND status=1', '2' => ' AND status=2', '6' => ' AND status=6', '4' => ' AND status=1 AND price>0', '9' => ' AND status=9' );
+	var $ordertable = array ('all' => 'AND status in (1,2,6) ORDER BY time DESC', '0' => ' AND status=0  ORDER BY time DESC', '1' => ' AND status=1  ORDER BY time DESC', '2' => ' AND status=2  ORDER BY  time DESC', '6' => ' AND status=6  ORDER BY time DESC,shangjin DESC,hasvoice DESC', '4' => ' AND status=1 AND price>0 ORDER BY time DESC, price DESC', '9' => ' AND status=9  ORDER BY time DESC,shangjin DESC,hasvoice DESC' );
 
 	function __construct() {
 		parent::__construct ();
@@ -1086,7 +1086,7 @@ class Question_model extends CI_Model {
 			$questionnum = $this->search->getLastCount ();
 		} else {
 		
-			$query=$this->db-> select('count(id) AS total')->where_in('status',$status)->like('title',$title)->or_like('description', $title)->get("question");
+			$query=$this->db-> select('count(id) AS total')->where_in('status',explode ( ",", $status ))->like('title',$title)->or_like('description', $title)->get("question");
 		
 			$questionnum = $query-> row() -> total;
 			
@@ -1135,7 +1135,7 @@ class Question_model extends CI_Model {
 
 		} else {
 			$query=$this->db->
-			where_in('status',$status)
+			where_in('status',explode ( ",", $status ))
 			->group_start() //左括号
 			->like('title',$title)
 			->or_like('description', $title)
@@ -1161,7 +1161,7 @@ class Question_model extends CI_Model {
 
 		
 				$query=$this->db->
-			where_in('status',$status)
+			where_in('status',explode ( ",", $status ))
 			->group_start() //左括号
 			->like('title',$title)
 			->or_like('description', $title)
