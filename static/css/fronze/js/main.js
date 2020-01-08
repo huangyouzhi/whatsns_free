@@ -390,7 +390,7 @@ function ajaxpost(_url,_data,callback,type){
 
 function check_phone(_phone){
 	
-	 if(!(/^1(3|4|5|7|8)\d{9}$/.test(_phone))){ 
+	if(!(/^1(1|2|3|4|5|7|8|9)\d{9}$/.test(_phone))){ 
 	       
 	        return false; 
 	    }else{

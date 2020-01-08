@@ -146,7 +146,7 @@ myModalTrigger.show();
 }
 function check_phone(_phone){
 	
-	 if(!(/^1(3|4|5|7|8)\d{9}$/.test(_phone))){ 
+	 if(!(/^1(1|2|3|4|5|7|8|9)\d{9}$/.test(_phone))){ 
 	       
 	        return false; 
 	    }else{
@@ -182,7 +182,12 @@ function gopwdsms(_type){
 	   }else if(flag==3){
 		   alert("手机号不正确");
 	   }else{
-		   alert(flag);
+		   if(flag==3){
+		   alert("稍后获取验证码");
+	   }else{
+		    alert(flag);
+	   }
+		  
 	   }
 	  
  }
@@ -211,14 +216,19 @@ function gosms(_type){
   	},1000);
   }else{
 	  
-	  if(flag==0){
+ if(flag==0){
 		   alert("平台短信已经关闭");
 	   }else if(flag==2){
-		   alert("手机号已存在");
+		   alert("手机号没有在网站注册");
 	   }else if(flag==3){
 		   alert("手机号不正确");
 	   }else{
-		   alert("稍后在获取验证码");
+		   if(flag==3){
+		   alert("稍后获取验证码");
+	   }else{
+		    alert(flag);
+	   }
+		  
 	   }
 	  
   }

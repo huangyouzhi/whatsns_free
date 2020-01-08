@@ -46,7 +46,7 @@ class User extends CI_Controller {
 			exit ();
 		}
 		$phone = $this->input->post ( 'phone' );
-		if (! preg_match ( "/^1[34578]{1}\d{9}$/", $phone )) {
+		if (! preg_match ( "/^1[123456789]{1}\d{9}$/", $phone )) {
 			
 			exit ( "3" );
 		}
@@ -64,7 +64,7 @@ class User extends CI_Controller {
 			
 			if ($timespan < 60) {
 				
-				echo '0';
+				echo '5';
 				exit ();
 			} else {
 				$phone = $this->input->post ( 'phone' );
@@ -137,7 +137,7 @@ class User extends CI_Controller {
 			exit ();
 		}
 		$phone = $this->input->post ( 'phone' );
-		if (! preg_match ( "/^1[34578]{1}\d{9}$/", $phone )) {
+		if (! preg_match ( "/^1[123456789]{1}\d{9}$/", $phone )) {
 			
 			exit ( "3" );
 		}

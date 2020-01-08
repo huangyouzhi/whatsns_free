@@ -205,7 +205,7 @@ class Api_user extends CI_Controller {
 		
 		if (isset ( $this->setting ['smscanuse'] ) && $this->setting ['smscanuse'] == 1) {
 			
-			if (! preg_match ( "/^1[34578]{1}\d{9}$/", $phone )) {
+			if (! preg_match ( "/^1[123456789]{1}\d{9}$/", $phone )) {
 				
 				exit ( "手机号码不正确" );
 			}
