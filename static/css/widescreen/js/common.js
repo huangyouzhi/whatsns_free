@@ -182,7 +182,7 @@ function gopwdsms(_type){
 	   }else if(flag==3){
 		   alert("手机号不正确");
 	   }else{
-		   if(flag==3){
+		   if(flag==5){
 		   alert("稍后获取验证码");
 	   }else{
 		    alert(flag);
@@ -223,7 +223,7 @@ function gosms(_type){
 	   }else if(flag==3){
 		   alert("手机号不正确");
 	   }else{
-		   if(flag==3){
+		   if(flag==5){
 		   alert("稍后获取验证码");
 	   }else{
 		    alert(flag);
