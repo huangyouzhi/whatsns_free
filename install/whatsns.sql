@@ -14,7 +14,7 @@ CREATE TABLE `whatsns__keywords` (
   `replacement` varchar(200) NOT NULL,
   `admin` varchar(200) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 #
 # Data for table "whatsns__keywords"
@@ -28,7 +28,7 @@ CREATE TABLE `whatsns_user_invateanswer` (
   `invateuid` int(11) NOT NULL DEFAULT '0' COMMENT '邀请人的uid',
   `state` varchar(255) DEFAULT '1' COMMENT '取消邀请还是没有，默认没有取消',
   PRIMARY KEY (`Id`)
-) ENGINE=MyISAM AUTO_INCREMENT=28 DEFAULT CHARSET=utf8 COMMENT='用户邀请回答表';
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COMMENT='用户邀请回答表';
 #
 # Structure for table "whatsns_tag"
 #
@@ -54,7 +54,7 @@ CREATE TABLE `whatsns_tag` (
   KEY `tagquestions` (`tagquestions`),
   KEY `tagarticles` (`tagarticles`),
   KEY `followers` (`followers`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='标签表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='标签表';
 
 #
 # Structure for table "whatsns_tag_item"
@@ -73,7 +73,7 @@ CREATE TABLE `whatsns_tag_item` (
   KEY `time` (`time`),
   KEY `typeid` (`typeid`),
   KEY `itemtype` (`itemtype`)
-) ENGINE=MyISAM AUTO_INCREMENT=779 DEFAULT CHARSET=utf8 COMMENT='标签问题文章表';
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COMMENT='标签问题文章表';
 
 
 #
@@ -84,7 +84,7 @@ CREATE TABLE `whatsns_ad` (
   `html` text,
   `page` varchar(50) NOT NULL DEFAULT '',
   `position` varchar(50) NOT NULL DEFAULT ''
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 #
 # Data for table "whatsns_ad"
@@ -122,7 +122,7 @@ CREATE TABLE `whatsns_alipayorder` (
   `sign` varchar(200) NOT NULL,
   `uid` int(10) DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 #
 # Data for table "whatsns_alipayorder"
@@ -156,7 +156,7 @@ CREATE TABLE `whatsns_answer` (
   KEY `authorid` (`authorid`),
   KEY `adopttime` (`adopttime`),
   KEY `time` (`time`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 #
 # Data for table "whatsns_answer"
@@ -178,7 +178,7 @@ CREATE TABLE `whatsns_answer_append` (
   KEY `answerid` (`answerid`),
   KEY `authorid` (`authorid`),
   KEY `time` (`time`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 #
 # Data for table "whatsns_answer_append"
@@ -197,7 +197,7 @@ CREATE TABLE `whatsns_answer_comment` (
   `content` varchar(100) NOT NULL,
   `time` int(10) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 #
 # Data for table "whatsns_answer_comment"
@@ -213,7 +213,7 @@ CREATE TABLE `whatsns_answer_support` (
   `aid` int(10) NOT NULL DEFAULT '0',
   `time` int(10) NOT NULL DEFAULT '0',
   PRIMARY KEY (`sid`,`aid`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 #
 # Data for table "whatsns_answer_support"
@@ -235,7 +235,7 @@ CREATE TABLE `whatsns_article_comment` (
    `state` int(5) DEFAULT '1',
   PRIMARY KEY (`id`),
       KEY `state` (`state`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 #
 # Data for table "whatsns_article_comment"
@@ -251,7 +251,7 @@ CREATE TABLE `whatsns_article_support` (
   `aid` int(10) NOT NULL DEFAULT '0',
   `time` int(10) NOT NULL DEFAULT '0',
   PRIMARY KEY (`sid`,`aid`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 #
 # Data for table "whatsns_article_support"
@@ -283,7 +283,7 @@ CREATE TABLE `whatsns_articlecomment` (
   KEY `authorid` (`authorid`),
   KEY `adopttime` (`adopttime`),
   KEY `time` (`time`)
-) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
 
 #
 # Data for table "whatsns_articlecomment"
@@ -307,7 +307,7 @@ CREATE TABLE `whatsns_attach` (
   PRIMARY KEY (`id`),
   KEY `uid` (`uid`),
   KEY `time` (`time`,`isimage`,`downloads`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 #
 # Data for table "whatsns_attach"
@@ -345,7 +345,7 @@ CREATE TABLE `whatsns_autocaiji` (
   `atitle` int(10) DEFAULT '0',
   `caijitype` int(10) DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=16 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;
 
 #
 # Data for table "whatsns_autocaiji"
@@ -365,7 +365,7 @@ CREATE TABLE `whatsns_badword` (
   `findpattern` varchar(255) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`),
   UNIQUE KEY `find` (`find`)
-) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;
 
 #
 # Data for table "whatsns_badword"
@@ -387,7 +387,7 @@ CREATE TABLE `whatsns_banned` (
   `time` int(10) unsigned NOT NULL DEFAULT '0',
   `expiration` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 #
 # Data for table "whatsns_banned"
@@ -427,7 +427,7 @@ CREATE TABLE `whatsns_category` (
   KEY `isusearticle` (`isusearticle`),
   KEY `followers` (`followers`),
   KEY `isuseask` (`isuseask`)
-) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;
 
 #
 # Data for table "whatsns_category"
@@ -445,7 +445,7 @@ CREATE TABLE `whatsns_category_admin` (
   `uid` int(11) NOT NULL DEFAULT '0',
   `time` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 #
 # Data for table "whatsns_category_admin"
@@ -462,7 +462,7 @@ CREATE TABLE `whatsns_categotry_follower` (
   `uid` int(10) NOT NULL DEFAULT '0',
   `time` int(10) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 #
 # Data for table "whatsns_categotry_follower"
@@ -481,7 +481,7 @@ CREATE TABLE `whatsns_credit` (
   `credit1` smallint(6) NOT NULL DEFAULT '0',
   `credit2` smallint(6) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4;
 
 #
 # Data for table "whatsns_credit"
@@ -506,7 +506,7 @@ CREATE TABLE `whatsns_crontab` (
   `minute` char(36) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`),
   KEY `nextrun` (`available`,`nextrun`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 #
 # Data for table "whatsns_crontab"
@@ -523,7 +523,7 @@ CREATE TABLE `whatsns_datacall` (
   `expression` text NOT NULL,
   `time` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
 
 #
 # Data for table "whatsns_datacall"
@@ -551,7 +551,7 @@ CREATE TABLE `whatsns_doing` (
   KEY `sourceid` (`questionid`),
   KEY `createtime` (`createtime`),
   KEY `referid` (`referid`)
-) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4;
 
 #
 # Data for table "whatsns_doing"
@@ -571,7 +571,7 @@ CREATE TABLE `whatsns_editor` (
   `displayorder` smallint(3) unsigned NOT NULL DEFAULT '0',
   `description` text NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 #
 # Data for table "whatsns_editor"
@@ -586,7 +586,7 @@ CREATE TABLE `whatsns_expert` (
   `uid` int(10) NOT NULL DEFAULT '0',
   `cid` int(10) NOT NULL DEFAULT '0',
   PRIMARY KEY (`uid`,`cid`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 #
 # Data for table "whatsns_expert"
@@ -604,7 +604,7 @@ CREATE TABLE `whatsns_famous` (
   `time` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `time` (`time`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 #
 # Data for table "whatsns_famous"
@@ -624,7 +624,7 @@ CREATE TABLE `whatsns_favorite` (
   KEY `uid` (`uid`),
   KEY `qid` (`qid`),
   KEY `time` (`time`)
-) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4;
 
 #
 # Data for table "whatsns_favorite"
@@ -644,7 +644,7 @@ CREATE TABLE `whatsns_gift` (
   `time` int(11) NOT NULL DEFAULT '0',
   `available` tinyint(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 #
 # Data for table "whatsns_gift"
@@ -672,7 +672,7 @@ CREATE TABLE `whatsns_giftlog` (
   `time` int(11) NOT NULL DEFAULT '0',
   `status` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
 
 #
 # Data for table "whatsns_giftlog"
@@ -696,7 +696,7 @@ CREATE TABLE `whatsns_inform` (
   `counts` int(11) NOT NULL DEFAULT '0',
   `time` int(10) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 #
 # Data for table "whatsns_inform"
@@ -713,7 +713,7 @@ CREATE TABLE `whatsns_keywords` (
   `replacement` varchar(200) NOT NULL,
   `admin` varchar(200) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 #
 # Data for table "whatsns_keywords"
@@ -732,7 +732,7 @@ CREATE TABLE `whatsns_link` (
   `description` mediumtext NOT NULL,
   `logo` varchar(255) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4;
 
 #
 # Data for table "whatsns_link"
@@ -751,7 +751,7 @@ CREATE TABLE `whatsns_login_auth` (
   `openid` varchar(50) NOT NULL,
   `time` int(10) NOT NULL DEFAULT '0',
   PRIMARY KEY (`uid`,`type`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 #
 # Data for table "whatsns_login_auth"
@@ -776,7 +776,7 @@ CREATE TABLE `whatsns_message` (
   PRIMARY KEY (`id`),
   KEY `touid` (`touid`,`time`),
   KEY `fromuid` (`fromuid`,`time`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 #
 # Data for table "whatsns_message"
@@ -797,7 +797,7 @@ CREATE TABLE `whatsns_nav` (
   `type` tinyint(1) NOT NULL DEFAULT '0',
   `displayorder` tinyint(3) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=20 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;
 
 #
 # Data for table "whatsns_nav"
@@ -820,7 +820,7 @@ CREATE TABLE `whatsns_note` (
   `views` int(10) NOT NULL DEFAULT '0',
   `url` varchar(250) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 #
 # Data for table "whatsns_note"
@@ -839,7 +839,7 @@ CREATE TABLE `whatsns_note_comment` (
   `content` text NOT NULL,
   `time` int(10) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;
 
 #
 # Data for table "whatsns_note_comment"
@@ -861,7 +861,7 @@ CREATE TABLE `whatsns_paylog` (
   `typeid` int(10) NOT NULL DEFAULT '0',
     `beizhu` varchar(200) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 #
 # Data for table "whatsns_paylog"
@@ -905,7 +905,7 @@ CREATE TABLE `whatsns_question` (
   KEY `price` (`price`),
   KEY `answers` (`answers`),
   KEY `authorid` (`authorid`)
-) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;
 
 #
 # Data for table "whatsns_question"
@@ -922,7 +922,7 @@ CREATE TABLE `whatsns_question_attention` (
   `follower` char(18) NOT NULL,
   `time` int(10) NOT NULL DEFAULT '0',
   PRIMARY KEY (`qid`,`followerid`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 #
 # Data for table "whatsns_question_attention"
@@ -942,7 +942,7 @@ CREATE TABLE `whatsns_question_supply` (
   PRIMARY KEY (`id`),
   KEY `time` (`time`),
   KEY `qid` (`qid`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 #
 # Data for table "whatsns_question_supply"
@@ -960,7 +960,7 @@ CREATE TABLE `whatsns_question_tag` (
   `pinyin` varchar(200) DEFAULT '',
   PRIMARY KEY (`qid`,`name`),
   KEY `time` (`time`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 #
 # Data for table "whatsns_question_tag"
@@ -980,7 +980,7 @@ CREATE TABLE `whatsns_recommend` (
   `url` varchar(255) NOT NULL DEFAULT '',
   `time` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`qid`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 #
 # Data for table "whatsns_recommend"
@@ -1001,7 +1001,7 @@ CREATE TABLE `whatsns_session` (
   UNIQUE KEY `sid` (`sid`),
   KEY `uid` (`uid`),
   KEY `time` (`time`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 #
 # Data for table "whatsns_session"
@@ -1016,7 +1016,7 @@ CREATE TABLE `whatsns_setting` (
   `k` varchar(32) NOT NULL DEFAULT '',
   `v` text NOT NULL,
   PRIMARY KEY (`k`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 #
 # Data for table "whatsns_setting"
@@ -1036,7 +1036,7 @@ CREATE TABLE `whatsns_site_log` (
   `username` varchar(200) NOT NULL,
   `time` int(10) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=41 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;
 
 #
 # Data for table "whatsns_site_log"
@@ -1051,7 +1051,7 @@ CREATE TABLE `whatsns_tid_qid` (
   `tid` int(10) NOT NULL DEFAULT '0',
   `qid` int(10) NOT NULL DEFAULT '0',
   PRIMARY KEY (`tid`,`qid`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 #
 # Data for table "whatsns_tid_qid"
@@ -1069,7 +1069,7 @@ CREATE TABLE `whatsns_topdata` (
   `order` int(10) NOT NULL DEFAULT '1',
   `time` int(10) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 #
 # Data for table "whatsns_topdata"
@@ -1108,7 +1108,7 @@ CREATE TABLE `whatsns_topic` (
    KEY `state` (`state`),
   KEY `articleclassid` (`articleclassid`),
   KEY `authorid` (`authorid`)
-) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;
 
 
 #
@@ -1133,7 +1133,7 @@ CREATE TABLE IF NOT EXISTS `whatsns_user_notify` (
   `message` int(2) DEFAULT '1' COMMENT '1通知 0不通知',
   `weekly` int(2) DEFAULT '1' COMMENT '1通知 0不通知',
   `feature_news` int(2) DEFAULT '1' COMMENT '1通知 0不通知'
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='用户通知表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='用户通知表';
 
 --
 -- Indexes for dumped tables
@@ -1168,7 +1168,7 @@ CREATE TABLE `whatsns_topic_likes` (
   KEY `uid` (`uid`),
   KEY `tid` (`tid`),
   KEY `time` (`time`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 #
 # Data for table "whatsns_topic_likes"
@@ -1184,7 +1184,7 @@ CREATE TABLE `whatsns_topic_tag` (
   `name` varchar(200) NOT NULL,
   `time` int(10) NOT NULL DEFAULT '0',
   `pinyin` varchar(200) DEFAULT ''
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 #
 # Data for table "whatsns_topic_tag"
@@ -1205,7 +1205,7 @@ CREATE TABLE `whatsns_topic_viewhistory` (
   KEY `uid` (`uid`),
   KEY `tid` (`tid`),
   KEY `time` (`time`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 #
 # Data for table "whatsns_topic_viewhistory"
@@ -1224,7 +1224,7 @@ CREATE TABLE `whatsns_topicclass` (
   `displayorder` int(10) NOT NULL DEFAULT '0',
   `articles` int(10) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 #
 # Data for table "whatsns_topicclass"
@@ -1288,7 +1288,7 @@ CREATE TABLE `whatsns_user` (
   PRIMARY KEY (`uid`),
   KEY `username` (`username`),
   KEY `email` (`email`)
-) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;
 
 
 #
@@ -1306,7 +1306,7 @@ CREATE TABLE `whatsns_user_attention` (
   `follower` char(18) NOT NULL,
   `time` int(10) NOT NULL DEFAULT '0',
   PRIMARY KEY (`uid`,`followerid`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 #
 # Data for table "whatsns_user_attention"
@@ -1321,7 +1321,7 @@ CREATE TABLE `whatsns_user_category` (
   `uid` int(10) NOT NULL DEFAULT '0',
   `cid` int(4) NOT NULL DEFAULT '0',
   PRIMARY KEY (`uid`,`cid`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 #
 # Data for table "whatsns_user_category"
@@ -1342,7 +1342,7 @@ CREATE TABLE `whatsns_user_depositmoney` (
   `touid` int(10) NOT NULL DEFAULT '0',
   `time` int(10) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 #
 # Data for table "whatsns_user_depositmoney"
@@ -1357,7 +1357,7 @@ CREATE TABLE `whatsns_user_readlog` (
   `uid` int(10) NOT NULL DEFAULT '0',
   `qid` int(10) NOT NULL DEFAULT '0',
   PRIMARY KEY (`uid`,`qid`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 #
 # Data for table "whatsns_user_readlog"
@@ -1376,7 +1376,7 @@ CREATE TABLE `whatsns_user_tixian` (
   `time` int(10) NOT NULL DEFAULT '0',
   `beizu` varchar(200) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 #
 # Data for table "whatsns_user_tixian"
@@ -1396,7 +1396,7 @@ CREATE TABLE `whatsns_userbank` (
   `time` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `id` (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 #
 # Data for table "whatsns_userbank"
@@ -1420,7 +1420,7 @@ CREATE TABLE `whatsns_usergroup` (
   `articlelimits` int(10) DEFAULT '1',
   `canfreereadansser` int(10) DEFAULT '0',
   PRIMARY KEY (`groupid`)
-) ENGINE=MyISAM AUTO_INCREMENT=28 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;
 
 
 
@@ -1438,7 +1438,7 @@ CREATE TABLE `whatsns_userlog` (
   PRIMARY KEY (`id`),
   KEY `sid` (`sid`),
   KEY `time` (`time`)
-) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4;
 
 #
 # Data for table "whatsns_userlog"
@@ -1462,7 +1462,7 @@ CREATE TABLE `whatsns_vertify` (
   `time` int(10) NOT NULL DEFAULT '0' COMMENT '认证时间',
   `shibaiyuanyin` varchar(500) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 #
 # Data for table "whatsns_vertify"
@@ -1478,7 +1478,7 @@ CREATE TABLE `whatsns_visit` (
   `time` int(10) NOT NULL DEFAULT '0',
   KEY `ip` (`ip`),
   KEY `time` (`time`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 #
 # Data for table "whatsns_visit"
@@ -1501,7 +1501,7 @@ CREATE TABLE `whatsns_weixin_follower` (
   `unionid` varchar(200) NOT NULL,
   `sex` varchar(100) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 #
 # Data for table "whatsns_weixin_follower"
@@ -1516,7 +1516,7 @@ CREATE TABLE `whatsns_weixin_info` (
   `id` int(10) NOT NULL AUTO_INCREMENT,
   `msg` text NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 #
 # Data for table "whatsns_weixin_info"
@@ -1539,7 +1539,7 @@ CREATE TABLE `whatsns_weixin_keywords` (
   `wzid` int(10) NOT NULL DEFAULT '0',
   `wburl` varchar(200) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 #
 # Data for table "whatsns_weixin_keywords"
@@ -1558,7 +1558,7 @@ CREATE TABLE `whatsns_weixin_menu` (
   `menu_link` varchar(200) NOT NULL,
   `menu_pid` int(10) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 #
 # Data for table "whatsns_weixin_menu"
@@ -1595,7 +1595,7 @@ CREATE TABLE `whatsns_weixin_notify` (
   `touid` int(10) NOT NULL DEFAULT '0',
   `haspay` int(10) DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 #
 # Data for table "whatsns_weixin_notify"
@@ -1628,7 +1628,7 @@ CREATE TABLE `whatsns_weixin_order` (
   `title` varchar(200) NOT NULL,
   `prepay_id` varchar(200) DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 #
 # Data for table "whatsns_weixin_order"
@@ -1647,7 +1647,7 @@ CREATE TABLE `whatsns_weixin_qiandao` (
   `money` int(10) NOT NULL DEFAULT '0',
   `location` varchar(200) NOT NULL,
   `time` int(10) NOT NULL DEFAULT '0'
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 #
 # Data for table "whatsns_weixin_qiandao"
@@ -1667,7 +1667,7 @@ CREATE TABLE `whatsns_weixin_setting` (
   `appsecret` varchar(200) NOT NULL,
   `winxintype` varchar(200) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 #
 # Data for table "whatsns_weixin_setting"
