@@ -1032,7 +1032,7 @@ class Question_model extends CI_Model {
 				'cid2'=>$cid2,
 				'cid3'=>$cid3,
 		);
-		$this->db->where_in('id',$qids)->update('question',$data);
+		$this->db->where_in('id',explode(',', $qids))->update('question',$data);
 		
 	
 		if ($this->base->setting ['xunsearch_open']) {
