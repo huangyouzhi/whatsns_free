@@ -109,7 +109,7 @@
         //,emotionLocalization:false //是否开启表情本地化，默认关闭。若要开启请确保emotion文件夹下包含官网提供的images表情文件夹
 
         //粘贴只保留标签，去除标签所有属性
-        //,retainOnlyLabelPasted: false
+        //,retainOnlyLabelPasted: true
 
         //,pasteplain:false  //是否默认为纯文本粘贴。false为不使用纯文本粘贴，true为使用纯文本粘贴
         //纯文本粘贴模式下的过滤规则
@@ -364,7 +364,7 @@
 		,outputXssFilter: true
 		// xss过滤白名单 名单来源: https://raw.githubusercontent.com/leizongmin/js-xss/master/lib/default.js
 		,whitList: {
-			iframe: ['frameborder','border','marginwidth','marginheight','width','height','src','id'],
+			iframe: ['frameborder','webkitfullscreen','mozfullscreen',"'allowfullscreen'",'allowfullscreen','border','style','marginwidth','marginheight','width','height','src','id'],
 			a:      ['target', 'href', 'title', 'class', 'style'],
 			abbr:   ['title', 'class', 'style'],
 			address: ['class', 'style'],
@@ -391,19 +391,19 @@
 			dl:     ['class', 'style'],
 			dt:     ['class', 'style'],
 			em:     ['class', 'style'],
-			font:   ['color', 'size', 'face'],
-			footer: [],
+			font:   ['color', 'size', 'face', 'style'],
+			footer: ['style'],
 			h1:     ['class', 'style'],
 			h2:     ['class', 'style'],
 			h3:     ['class', 'style'],
 			h4:     ['class', 'style'],
 			h5:     ['class', 'style'],
 			h6:     ['class', 'style'],
-			header: [],
+			header: ['style'],
 			hr:     [],
 			i:      ['class', 'style'],
-			img:    ['src', 'alt', 'title', 'width', 'height', 'id', '_src', 'loadingclass', 'class', 'data-latex'],
-			ins:    ['datetime'],
+			img:    ['src', 'style','data-src','alt', 'title', 'width', 'height', 'id', '_url','_src', 'loadingclass', 'class', 'data-latex'],
+			ins:    ['datetime', 'style'],
 			li:     ['class', 'style'],
 			mark:   [],
 			nav:    [],
@@ -411,8 +411,8 @@
 			p:      ['class', 'style'],
 			pre:    ['class', 'style'],
 			s:      [],
-			section:[],
-			small:  [],
+			section:['style'],
+			small:  ['style'],
 			span:   ['class', 'style'],
 			sub:    ['class', 'style'],
 			sup:    ['class', 'style'],
@@ -432,7 +432,7 @@
 'type', 'class', 'style', 'pluginspage',
 'src', 'width', 'height', 'align', 'wmode',
 'play', 'loop', 'menu', 'allowscriptaccess',
-'allowfullscreen', 'id'
+'allowfullscreen', 'id', 'controls', 'preload'
 ]
 
 		}

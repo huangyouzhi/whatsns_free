@@ -8055,7 +8055,7 @@ UE.Editor.defaultOptions = function(editor){
         autoClearEmptyNode: true,
         fullscreen: false,
         readonly: false,
-        zIndex: 1,
+        zIndex: 999,
         imagePopup: true,
         enterTag: 'p',
         customDomain: false,
@@ -17644,6 +17644,25 @@ UE.plugins['video'] = function (){
      */
     function creatInsertStr(url,width,height,id,align,classname,type){
 
+        console.log(type);
+        if(url.indexOf('iframe')!=-1){
+        	type="iframe";
+        }
+        if(/^<iframe/.test(url)){
+            var conUrl = '';
+            if(/src=\"[^\s"]+/i.test(url)){
+                conUrl = url.match(/src=\"[^\s"]+/i)[0].substr(5);
+                url=conUrl
+            }else{
+            	   if(/src=\'[^\s']+/i.test(url)){
+                       conUrl = url.match(/src=\'[^\s']+/i)[0].substr(5);
+                       url=conUrl
+                   }
+            }
+        }
+        console.log(url+'----')
+
+        console.log(conUrl);
         url = utils.unhtmlForUrl(url);
         align = utils.unhtml(align);
         classname = utils.unhtml(classname);
@@ -17652,13 +17671,29 @@ UE.plugins['video'] = function (){
         height = parseInt(height, 10) || 0;
 
         var str;
+        url = utils.trim(url);
+        
+  
+
         switch (type){
+        
+        case  'iframe':
+        	
+        	  if(width=="420"){
+        		  width=600;
+        	  }
+        	  if(height=="280"){
+        		  height=500;
+        	  }
+              str='<iframe mozfullscreen="" webkitfullscreen=""  allowfullscreen="" src="'+conUrl+'" width="'+width+'" height="'+height+'"'+(align ? ' style="float:' + align + '"': '')+' scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>';
+        	  console.log(str)
+              break;
             case 'image':
                 str = '<img ' + (id ? 'id="' + id+'"' : '') + ' width="'+ width +'" height="' + height + '" _url="'+url+'" class="' + classname.replace(/\bvideo-js\b/, '') + '"'  +
                     ' src="' + me.options.UEDITOR_HOME_URL+'themes/default/images/spacer.gif" style="background:url('+me.options.UEDITOR_HOME_URL+'themes/default/images/videologo.gif) no-repeat center center; border:1px solid gray;'+(align ? 'float:' + align + ';': '')+'" />'
                 break;
             case 'embed':
-                str = '<embed type="application/x-shockwave-flash" class="' + classname + '" pluginspage="http://www.macromedia.com/go/getflashplayer"' +
+                str = '<embed class="' + classname + '" pluginspage="http://www.macromedia.com/go/getflashplayer"' +
                     ' src="' +  utils.html(url) + '" width="' + width  + '" height="' + height  + '"'  + (align ? ' style="float:' + align + '"': '') +
                     ' wmode="transparent" play="true" loop="false" menu="false" allowscriptaccess="never" allowfullscreen="true" >';
                 break;
