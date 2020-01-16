@@ -360,9 +360,9 @@ INSERT INTO `whatsns_autocaiji` VALUES (3,'http://wenda.so.com/c/164?filt=20&pn=
 CREATE TABLE `whatsns_badword` (
   `id` smallint(6) unsigned NOT NULL AUTO_INCREMENT,
   `admin` varchar(15) NOT NULL DEFAULT '',
-  `find` varchar(255) NOT NULL DEFAULT '',
-  `replacement` varchar(255) NOT NULL DEFAULT '',
-  `findpattern` varchar(255) NOT NULL DEFAULT '',
+  `find` varchar(100) NOT NULL DEFAULT '',
+  `replacement` varchar(100) NOT NULL DEFAULT '',
+  `findpattern` varchar(100) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`),
   UNIQUE KEY `find` (`find`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;
