@@ -1399,7 +1399,10 @@ class User extends CI_Controller {
 		$articles = returnarraynum ( $this->db->query ( getwheresql ( 'topic', 'authorid=' . $userid, $this->db->dbprefix ) )->row_array () );
 		$attentions = $this->user_model->rownum_attention_question ( $userid );
 		$this->db->query ( "UPDATE " . $this->db->dbprefix . "user SET articles=$articles,questions=$questions,answers=$answers,attentions=$attentions where uid=" . $userid );
-		
+	     $this->user['articles']=$articles;
+	     $this->user['answers']=$answers;
+	     $this->user['questions']=$questions;
+	     $this->user['attentions']=$attentions;
 		include template ( 'myscore' );
 	}
 	function level() {
@@ -1543,33 +1546,33 @@ class User extends CI_Controller {
 			show_404 ();
 			exit ();
 		}
-		// 判断是否来自app端代理请求
-		if ($this->config->item ( 'go_app' )) {
-			if (strstr ( $useragent, $this->setting ['app_useragnet'] )) {
-				$appurl = SITE_URL . $this->config->item ( 'go_app_dirname' ) . "space?id=$userid&comefrom=app";
-				header ( "location:$appurl" );
-			}
-		}
-		if ($this->config->item ( 'go_weixin' )) {
-			if (strstr ( $useragent, 'MicroMessenger' )) {
-				$appurl = SITE_URL . $this->config->item ( 'go_weixin_dirname' ) . "space?id=$userid&comefrom=weixin";
-				header ( "location:$appurl" );
-			}
-		}
+	
 		
 		if ($member) {
+				$userid=	$member ['uid'];
+					$questions = returnarraynum ( $this->db->query ( getwheresql ( 'question', 'authorid=' . $userid, $this->db->dbprefix ) )->row_array () );
+		$answers = returnarraynum ( $this->db->query ( getwheresql ( 'answer', 'authorid=' . $userid, $this->db->dbprefix ) )->row_array () );
+		$articles = returnarraynum ( $this->db->query ( getwheresql ( 'topic', 'authorid=' . $userid, $this->db->dbprefix ) )->row_array () );
+		$attentions = $this->user_model->rownum_attention_question ( $userid );
+		$this->db->query ( "UPDATE " . $this->db->dbprefix . "user SET articles=$articles,questions=$questions,answers=$answers,attentions=$attentions where uid=" . $userid );
+	
 			// 判断是不是专家
 			if ($member ['expert'] && is_mobile ()) {
 				$askurl = url ( "user/space_answer/" . $member ['uid'] );
 				header ( "location:$askurl" );
 			}
+			   $member['articles']=$articles;
+	     $member['answers']=$answers;
+	    $member['questions']=$questions;
+	     $member['attentions']=$attentions;
 			$this->load->model ( 'doing_model' );
 			$membergroup = $this->usergroup [$member ['groupid']];
 			$adoptpercent = $this->user_model->adoptpercent ( $member );
 			$page = max ( 1, intval ( $this->uri->rsegments [4] ) );
 			$pagesize = 15;
 			$startindex = ($page - 1) * $pagesize;
-			
+	
+		
 			$doinglist = $this->doing_model->list_by_type ( "my", $userid, $startindex, $pagesize );
 			$rownum = $this->doing_model->rownum_by_type ( "my", $userid );
 			
