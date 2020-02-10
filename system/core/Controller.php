@@ -98,7 +98,7 @@ class CI_Controller {
 		$this->isinstall ();
 		
 		$this->init_cache ();
-		
+		$this->checkurl ();
 		$this->init_user ();
 		
 		$this->banned ();
@@ -107,8 +107,70 @@ class CI_Controller {
 		
 		$this->time = time ();
 		$this->ip = getip ();
+	}
+	/**
+	 *
+	 * 检车访问url是否正规，防搜索引擎抓取非正常网址
+	 *
+	 * @date: 2019年11月17日 下午9:39:07
+	 *
+	 * @author : 61703
+	 *        
+	 * @param
+	 *        	: variable
+	 *        	
+	 * @return :
+	 *
+	 */
+	function checkurl() {
+		// 获取当前页面路由规则
+		$regular = strtolower ( $this->uri->rsegments [1] ) . '/' . strtolower ( $this->uri->rsegments [2] );
+		global $setting;
+		$url = $_SERVER ['REQUEST_URI'];
 		
-		// log_message ( 'info', 'Controller Class Initialized' );
+		$p = pathinfo ( $url );
+		// 获取访问页面的后缀，可能是html,php或者别的后缀
+		$_fix = $p ['extension'];
+		
+		//如果网页带参数，提取参数前的后缀
+		if(strstr ( $_fix, '?' )){
+			$_fix=substr($_fix,0,strrpos($_fix,'?'));
+		}
+
+		if(strstr ( $url, 'index.php?' )||$this->uri->rsegments [1]=='appstore'||$this->uri->rsegments [1]=='custom'||$this->uri->rsegments [1]=='pay'||$this->uri->rsegments [1]=='ebank'||$this->uri->rsegments [1]=='api_user'||strstr ( $this->uri->rsegments [1], 'app_' )){
+			
+		}else{
+				// 判断是否是首页
+			if (strstr ( $regular, 'index/index' )) {
+				// 如果是首页只允许后缀是 php或者后台配置的后缀
+				if ($_fix && $_fix != trim ( $setting ['seo_suffix'], '.' )) {
+					//同时后缀也不等于默认的php
+					if ($_fix != 'php') {
+						show_404 ();
+					}
+				}
+			} else {
+				// 判断如果不是后台seo设置得网页后缀或者不是分类栏目地址就返回404
+				if (strstr ( $regular, 'seo/index' ) || strstr ( $regular, 'ask/index' ) || strstr ( $regular, 'category/view' ) || strstr ( $regular, 'topic/catlist' )) { // 去掉文章栏目和问题栏目的url尾巴
+					// 栏目白名单 ，如果有后缀就返回404，和后台配置相同除外
+					if ($_fix && $_fix != trim ( $setting ['seo_suffix'], '.' )) {
+						show_404 ();
+					}
+				} else {
+					
+					if (strstr ( $regular, '/index' )){
+						//排除首页分享
+					}else{
+						// 非栏目页面判断网址后缀是否是后台配置默认的网址后缀
+						if ($_fix != trim ( $setting ['seo_suffix'], '.' )) {
+							show_404 ();
+						}
+					}
+					
+				}
+			}
+		}
+		
 	}
 	// 检查是否已经安装
 	function isinstall() {
@@ -154,7 +216,7 @@ class CI_Controller {
 			if ($this->setting ['needlogin'] == 1) {
 				$method = $this->uri->segments [2];
 				
-				if ($this->uri->segments [1] != 'account'&&$this->uri->segments [1] != 'plugin_weixin' && $this->uri->segments [1] != 'pccaiji_question' && $this->uri->segments [1] != 'pccaiji_catgory' && $this->uri->segments [1] != 'api_user' && $method != 'code' && $method != 'login' && $method != 'register' && $method != 'getpass' && $method != 'resetpass' && $method != 'checkemail' && $method != 'getsmscode') {
+				if ($this->uri->segments [1] != 'account' && $this->uri->segments [1] != 'plugin_weixin' && $this->uri->segments [1] != 'pccaiji_question' && $this->uri->segments [1] != 'pccaiji_catgory' && $this->uri->segments [1] != 'api_user' && $method != 'code' && $method != 'login' && $method != 'register' && $method != 'getpass' && $method != 'resetpass' && $method != 'checkemail' && $method != 'getsmscode') {
 					
 					$url = url ( 'user/login' );
 					header ( "Location:$url" );
@@ -162,12 +224,11 @@ class CI_Controller {
 				}
 			}
 		}
-		if ($user['isblack'] == 1) {
+		if ($user ['isblack'] == 1) {
 			
-			exit ("您已被网站管理员拉黑");
-			
+			exit ( "您已被网站管理员拉黑" );
 		}
-
+		
 		if ($user ['uid'] && $user ['invatecode'] == null) {
 			$this->user_model->sendinvatecodetouid ( $user ['uid'] );
 		}
@@ -178,7 +239,6 @@ class CI_Controller {
 		$user ['avatar'] = get_avatar_dir ( $user ['uid'] );
 		
 		$user = $this->user = array_merge ( $user, $this->usergroup [$user ['groupid']] );
-	
 	}
 	/**
 	 *
@@ -495,6 +555,7 @@ class CI_Controller {
 		$controlname = isset ( $this->router->routes [$this->uri->rsegments [1]] ) ? $this->router->routes [$this->uri->rsegments [1]] : $this->uri->rsegments [1];
 		defined ( 'ROUTE_A' ) or define ( 'ROUTE_A', $controlname );
 		$regular = strtolower ( $this->uri->rsegments [1] ) . '/' . strtolower ( $this->uri->rsegments [2] );
+		
 		$flag = false;
 		
 		$querystring = $regular; // isset ( $_SERVER ['REQUEST_URI'] ) ? $_SERVER ['REQUEST_URI'] : '';
@@ -537,21 +598,15 @@ class CI_Controller {
 				$regular = $querystring;
 			}
 		}
-		$isajax = (0 === strpos ( isset ( $querystring_arr [1] ) ? $querystring_arr [1] : $this->uri->segment ( 2 ), 'ajax' ));
-		$isapi = ('api' == substr ( strtolower ( isset ( $querystring_arr [0] ) ? $querystring_arr [0] : $this->uri->segment ( 1 ) ), 0, 3 ));
-		$isapp = ('app' == substr ( strtolower ( isset ( $querystring_arr [0] ) ? $querystring_arr [0] : $this->uri->segment ( 1 ) ), 0, 3 ));
+		$isajax = (0 === strpos ( isset ( $querystring_arr [1] ) ? $querystring_arr [1] : $this->uri->rsegments [2], 'ajax' ));
+		$isapi = ('api' == substr ( strtolower ( isset ( $querystring_arr [0] ) ? $querystring_arr [0] : $this->uri->rsegments [1] ), 0, 3 ));
+		$isapp = ('app' == substr ( strtolower ( isset ( $querystring_arr [0] ) ? $querystring_arr [0] : $this->uri->rsegments [1] ), 0, 3 ));
 		if ($this->whitelist) {
 			
 			$whitelist = explode ( ',', strtolower ( $this->whitelist ) );
-			$flag = in_array ( isset ( $querystring_arr [1] ) ? $querystring_arr [1] : $this->uri->segment ( 2 ), $whitelist );
+			$flag = in_array ( isset ( $querystring_arr [1] ) ? $querystring_arr [1] : $this->uri->rsegments [2], $whitelist );
 		}
 		
-		// 增加口令验证，防止恶意灌水，除了ajax方式提交之外都会产生口令，保证页面是正常访问时候产生
-		// 软件都是直接ajax 提交，所以没有拿到tokenid是不会提交成功
-		// if (! $isajax && ! $isapi && $regular != 'user/code' && strtolower ( $controlname ) != 'attach' && $regular != 'user/attentto' && $regular != 'index/notfound' && $regular != 'user/getsmscode' && $regular != 'user/vertifyemail' && $regular != 'user/sendcheckmail') {
-		// session_start ();
-		// $_SESSION ['tokenid'] = md5 ( time () );
-		// }
 		if (config_item ( 'dir_name' ) . "/index" == $regular) {
 			$regular = "index/index";
 		}
@@ -565,6 +620,7 @@ class CI_Controller {
 		if (strstr ( $regular, 'from=groupmessage' )) {
 			$regular = str_replace ( 'from=groupmessage', 'index', $regular );
 		}
+		
 		if ($this->checkable ( $regular, $querystring ) || $isapp || $isajax || ! empty ( $flag )) {
 			// 如果允许访问，你还可以增加别的代码
 		} else {
@@ -573,6 +629,7 @@ class CI_Controller {
 				$this->message ( '您无权进行当前操作，原因如下：<br/> 您所在的用户组(' . $this->user ['grouptitle'] . ')无法进行此操作。', 'index' );
 				exit ();
 			} else {
+				
 				header ( "Location:" . url ( 'user/login' ) );
 				exit ();
 			}
@@ -590,7 +647,7 @@ class CI_Controller {
 			$redirect = $url;
 		} else {
 			
-			$redirect = base_url () . $this->setting ['seo_prefix'] . $url . $this->setting ['seo_suffix'];
+			$redirect = url ( $url );
 		}
 		$tpldir = (0 === strpos ( $this->uri->segment ( 1 ), 'admin' )) ? 'admin' : $this->setting ['tpl_dir'];
 		$panneltype = 'hidefixed';
@@ -613,7 +670,7 @@ class CI_Controller {
 		if (1 == $this->user ['groupid'])
 			return true;
 		
-		$regulars = explode ( ',', 'user/checkemail,api_article/newqlist,api_article/list,api_user/editpwdapi,api_user/loginoutapi,api_user/bindloginapi,api_user/loginapi,index/taobao,question/searchkey,pccaiji_catgory/addtopic,pccaiji_catgory/selectlist,pccaiji_catgory/list,topic/search,user/search,category/search,buy/buydetail,buy/default,download/default,user/regtip,rule/index,user/login,user/logout,user/code,index/help,js/view,' . $this->user ['regulars'] );
+		$regulars = explode ( ',', 'api_user/registerapi,user/checkemail,api_article/newqlist,api_article/list,api_user/editpwdapi,api_user/loginoutapi,api_user/bindloginapi,api_user/loginapi,index/taobao,question/searchkey,pccaiji_catgory/addtopic,pccaiji_catgory/selectlist,pccaiji_catgory/list,topic/search,user/search,category/search,buy/buydetail,buy/default,download/default,user/regtip,rule/index,user/login,user/logout,user/code,index/help,js/view,' . $this->user ['regulars'] );
 		return in_array ( $url, $regulars );
 	}
 	/* 增加日志记录 */

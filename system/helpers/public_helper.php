@@ -1,14 +1,18 @@
 <?php
-require_once FCPATH.'lib/aliyunsmssdk/vendor/autoload.php';
+require_once FCPATH . 'lib/aliyunsmssdk/vendor/autoload.php';
 use AlibabaCloud\Client\AlibabaCloud;
 use AlibabaCloud\Client\Exception\ClientException;
 use AlibabaCloud\Client\Exception\ServerException;
 /**
  * 请求接口返回内容
- * @param  string $url [请求的URL地址]
- * @param  string $params [请求的参数]
- * @param  int $ipost [是否采用POST形式]
- * @return  string
+ * 
+ * @param string $url
+ *        	[请求的URL地址]
+ * @param string $params
+ *        	[请求的参数]
+ * @param int $ipost
+ *        	[是否采用POST形式]
+ * @return string
  */
 function juhecurl($url, $params = false, $ispost = 0) {
 	$httpInfo = array ();
@@ -38,38 +42,53 @@ function juhecurl($url, $params = false, $ispost = 0) {
 	curl_close ( $ch );
 	return $response;
 }
-function aliyunsms($phonenum,$tmpcode,$code){
-global $setting;
-AlibabaCloud::accessKeyClient($setting['aliyunsmskey'], $setting['aliyunsmsaccessSecret'])
-	->regionId('cn-hangzhou')
-	->asDefaultClient();
+function aliyunsms($phonenum, $tmpcode, $code) {
+	global $setting;
+	AlibabaCloud::accessKeyClient ( $setting ['aliyunsmskey'], $setting ['aliyunsmsaccessSecret'] )->regionId ( 'cn-hangzhou' )->asDefaultClient ();
 	
 	try {
-		$result = AlibabaCloud::rpc()
-		->product('Dysmsapi')
+		$result = AlibabaCloud::rpc ()->product ( 'Dysmsapi' )->
 		// ->scheme('https') // https | http
-		->version('2017-05-25')
-		->action('SendSms')
-		->method('POST')
-		->host('dysmsapi.aliyuncs.com')
-		->options([
+		version ( '2017-05-25' )->action ( 'SendSms' )->method ( 'POST' )->host ( 'dysmsapi.aliyuncs.com' )->options ( [ 
+				'query' => [ 
+						'RegionId' => "cn-hangzhou",
+						'PhoneNumbers' => $phonenum,
+						'SignName' => $setting ['aliyunsmssign'],
+						'TemplateCode' => $tmpcode,
+						'TemplateParam' => "{\"code\":\"$code\"}" 
+				] 
+		] )->request ();
+		$smsresult = $result->toArray ();
+		return $smsresult;
+	} catch ( ClientException $e ) {
+		echo $e->getErrorMessage () . PHP_EOL;
+	} catch ( ServerException $e ) {
+		echo $e->getErrorMessage () . PHP_EOL;
+	}
+}
+function aliyunregsms($phonenum, $tmpcode, $sitename,$username,$password) {
+	global $setting;
+	AlibabaCloud::accessKeyClient ( $setting ['aliyunsmskey'], $setting ['aliyunsmsaccessSecret'] )->regionId ( 'cn-hangzhou' )->asDefaultClient ();
+	
+	try {
+		$result = AlibabaCloud::rpc ()->product ( 'Dysmsapi' )->
+		// ->scheme('https') // https | http
+		version ( '2017-05-25' )->action ( 'SendSms' )->method ( 'POST' )->host ( 'dysmsapi.aliyuncs.com' )->options ( [
 				'query' => [
 						'RegionId' => "cn-hangzhou",
 						'PhoneNumbers' => $phonenum,
-						'SignName' => $setting['aliyunsmssign'],
+						'SignName' => $setting ['aliyunsmssign'],
 						'TemplateCode' => $tmpcode,
-						'TemplateParam' => "{\"code\":\"$code\"}",
-				],
-		])
-		->request();
-		$smsresult=$result->toArray();
+						'TemplateParam' => "{\"sitename\":\"$sitename\",\"username\":\"$username\",\"password\":\"$password\"}"
+				]
+		] )->request ();
+		$smsresult = $result->toArray ();
 		return $smsresult;
-	} catch (ClientException $e) {
-		echo $e->getErrorMessage() . PHP_EOL;
-	} catch (ServerException $e) {
-		echo $e->getErrorMessage() . PHP_EOL;
+	} catch ( ClientException $e ) {
+		echo $e->getErrorMessage () . PHP_EOL;
+	} catch ( ServerException $e ) {
+		echo $e->getErrorMessage () . PHP_EOL;
 	}
-	
 }
 function sendsms($key, $mobile, $tpl_id, $tpl_value) {
 	$sendUrl = 'http://v.juhe.cn/sms/send'; // 短信接口的URL
@@ -179,6 +198,19 @@ function dz_segment($title = '', $content = '', $encode = 'utf-8') {
 		return false;
 	}
 }
+/**
+
+* 生成指定个数得随机字符
+
+* @date: 2019年10月15日 上午9:14:33
+
+* @author: 61703
+
+* @param: $GLOBALS
+
+* @return:
+
+*/
 function getRandChar($length) {
 	$str = null;
 	$strPol = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz";
@@ -205,8 +237,8 @@ function get_avatar_dir($uid) {
 		$avatar_dir = "data/avatar/" . $dir1 . '/' . $dir2 . '/' . $dir3 . "/small_" . $uid;
 		if (file_exists ( $avatar_dir . ".jpg" ))
 			return base_url () . $avatar_dir . ".jpg" . $rand;
-		if (file_exists ( $avatar_dir . ".jepg" ))
-			return base_url () . $avatar_dir . ".jepg" . $rand;
+		if (file_exists ( $avatar_dir . ".jpeg" ))
+			return base_url () . $avatar_dir . ".jpeg" . $rand;
 		if (file_exists ( $avatar_dir . ".gif" ))
 			return base_url () . $avatar_dir . ".gif" . $rand;
 		if (file_exists ( $avatar_dir . ".png" ))
@@ -236,8 +268,8 @@ function get_cid_dir($cid, $type = 'big') {
 	
 	if (file_exists ( $avatar_dir . ".jpg" ))
 		return base_url () . $avatar_dir . ".jpg";
-	if (file_exists ( $avatar_dir . ".jepg" ))
-		return base_url () . $avatar_dir . ".jepg";
+	if (file_exists ( $avatar_dir . ".jpeg" ))
+		return base_url () . $avatar_dir . ".jpeg";
 	if (file_exists ( $avatar_dir . ".gif" ))
 		return base_url () . $avatar_dir . ".gif";
 	if (file_exists ( $avatar_dir . ".png" ))
@@ -246,18 +278,59 @@ function get_cid_dir($cid, $type = 'big') {
 	// 显示系统默认分类图片地址
 	return base_url () . '/static/images/defaulticon.jpg';
 }
+/**
+
+* 获取栏目地址
+
+* @date: 2019年9月24日 上午9:19:08
+
+* @author: 61703
+
+* @param: $userdir 如果设置位true，表示优先使用目录做url不使用分类id
+
+* @return:
+
+*/
+function getcaturl($catid,$url,$userdir=true){
+	if(file_exists(FCPATH."data/cache/category.php")){
+		$category=include FCPATH."data/cache/category.php";
+	}
+
+	//$catid=intval($catid);
+	
+	$cat=$category[$catid];
+
+	if($cat){
+		if(!empty($cat['dir'])&&$userdir){
+			//如果分类栏目不能为空，则使用栏目拼音代替分类id
+			$url=str_replace('#id#', $cat['dir'], $url);
+		}else{
+			$url=str_replace('#id#', $cat['id'], $url);
+		}
+	}else{
+		$url=str_replace('#id#', $catid, $url);
+	}
+	return url($url);
+}
 /* 伪静态和html纯静态可以同时存在 */
 function url($var, $url = '') {
 	global $setting;
+	$_fix = '';
 	
-	$location = 'index.php?' . $var . $setting ['seo_suffix'];
+	if (strstr ( $var, 'seo/index' ) ||strstr ( $var, 'ask/index' ) ||strstr ( $var, 'category/view' ) || strstr ( $var, 'topic/catlist' )) { // 去掉文章栏目和问题栏目的url尾巴
+		
+	
+	} else {
+		$_fix = $setting ['seo_suffix'];
+	}
+	$location = 'index.php?' . $var . $_fix;
 	if ((false === strpos ( $var, 'admin_' )) && $setting ['seo_on']) {
 		$useragent = $_SERVER ['HTTP_USER_AGENT'];
 		
 		if (! strstr ( $useragent, 'MicroMessenger' )) {
-			$location = $var . $setting ['seo_suffix'];
+			$location = $var . $_fix;
 		} else {
-			$location = 'index.php?' . $var . $setting ['seo_suffix'];
+			$location = 'index.php?' . $var . $_fix;
 		}
 	}
 	
@@ -436,11 +509,11 @@ function clearhtml($miaosu, $len = '200') {
 	$miaosu = strip_tags ( $miaosu );
 	$miaosu = strip_tags ( str_replace ( '&amp;nbsp;', '', $miaosu ) );
 	$miaosu = str_replace ( '&nbsp;', '', $miaosu );
-	//$miaosu = str_replace ( ' ', '', $miaosu );
+	// $miaosu = str_replace ( ' ', '', $miaosu );
 	$miaosu = str_replace ( '"', '', $miaosu );
 	$miaosu = str_replace ( '“', '', $miaosu );
 	$miaosu = str_replace ( '”', '', trim ( $miaosu ) );
-	$dot = mb_strlen( $miaosu ) < $len ? "" : "...";
+	$dot = mb_strlen ( $miaosu ) < $len ? "" : "...";
 	return mb_substr ( trim ( $miaosu ), 0, $len, "utf-8" ) . $dot;
 }
 function generate_key() {
@@ -471,6 +544,7 @@ function getip() {
 			}
 		}
 	}
+	
 	return $ip;
 }
 function get_client_ip() {
@@ -698,79 +772,85 @@ function tstripslashes($string) {
 	}
 	return $string;
 }
-if ( ! function_exists('template'))
-{
-function template($file, $tpldir = '') {
-	global $setting;
-	// strstr($setting['wap_domain'], $_SERVER['HTTP_HOST'])
-	if (is_mobile ()) {
-		if ($setting ['app_useragnet']) {
-			
-			// 判断是否来自app端代理请求
-			$useragent = $_SERVER ['HTTP_USER_AGENT'];
-			if (strstr ( $useragent, $setting ['app_useragnet'] )) {
-				$tpldir = $setting ['app_template'];
+if (! function_exists ( 'template' )) {
+	function template($file, $tpldir = '') {
+		global $setting;
+		$tmp_dir=$tpldir;
+		
+		if (is_mobile ()) {
+			if ($setting ['app_useragnet']) {
+				
+				// 判断是否来自app端代理请求
+				$useragent = $_SERVER ['HTTP_USER_AGENT'];
+				if (strstr ( $useragent, $setting ['app_useragnet'] )) {
+					$tpldir = $setting ['app_template'];
+				} else {
+					if ($tpldir == '') {
+						$tpldir = $setting ['tpl_wapdir'];
+					}
+				}
 			} else {
 				if ($tpldir == '') {
 					$tpldir = $setting ['tpl_wapdir'];
 				}
 			}
 		} else {
-			if ($tpldir == '') {
+			if ($tpldir == '')
+				$tpl_dir = $setting ['tpl_dir'];
+		}
+		//if (! empty ( config_item ( 'mobile_domain' ) ) && $_SERVER ['SERVER_NAME']) {
+			if (strstr ( trim ( config_item ( 'mobile_domain' ) ), $_SERVER ['SERVER_NAME'] )) {
 				$tpldir = $setting ['tpl_wapdir'];
 			}
+		//}
+			
+			if(strstr($setting ['tpl_dir'],'responsive_')){
+				$tpldir=$setting ['tpl_dir'];
+				
+			}
+		$querystring = isset ( $_SERVER ['REQUEST_URI'] ) ? $_SERVER ['REQUEST_URI'] : '';
+		$querystring = str_replace ( '.html', '', $querystring );
+		$querystring = str_replace ( '/?', '', $querystring );
+		$querystring = str_replace ( '/index.php?', '', $querystring );
+		$querystring = trim ( $querystring, '/' );
+		$querystring_arr = explode ( '/', $querystring );
+		if (is_array ( $querystring_arr )) {
+			
+			if (strpos ( $querystring_arr [0], 'admin_' ) !== FALSE) {
+				$tpldir = 'admin';
+			}
 		}
-	} else {
-		if ($tpldir == '')
-			$tpl_dir = $setting ['tpl_dir'];
-	}
-	if (strstr ( trim ( config_item ( 'mobile_domain' ) ), $_SERVER ['SERVER_NAME'] )) {
-		$tpldir = $setting ['tpl_wapdir'];
-	}
-	
-	$querystring = isset ( $_SERVER ['REQUEST_URI'] ) ? $_SERVER ['REQUEST_URI'] : '';
-	$querystring = str_replace ( '.html', '', $querystring );
-	$querystring = str_replace ( '/?', '', $querystring );
-	$querystring = str_replace ( '/index.php?', '', $querystring );
-	$querystring = trim ( $querystring, '/' );
-	$querystring_arr = explode ( '/', $querystring );
-	if (is_array ( $querystring_arr )) {
-		
-		if (strpos ( $querystring_arr [0], 'admin_' ) !== FALSE) {
-			$tpldir = 'admin';
-		}
-	}
-	$tpldir = ('' == $tpldir) ? $tpl_dir : $tpldir;
-	if (strpos ( $file, '/' ) != FALSE) {
-		$filetmp = explode ( '/', $file );
-		$dirfile = $file;
-		$file = $filetmp [count ( $filetmp ) - 1];
-		$tplfile = APPPATH . '/views/' . $tpldir . '/' . $dirfile . TMP_PREX;
-	} else {
-		$tplfile = APPPATH . '/views/' . $tpldir . '/' . $file . TMP_PREX;
-	}
-	
-	$objfile = FCPATH . '/data/view/' . $tpldir . '_' . $file . '.tpl' . TMP_PREX;
-	if ('default' != $tpldir && ! is_file ( $tplfile )) {
+		$tpldir = ('' == $tpldir) ? $tpl_dir : $tpldir;
 		if (strpos ( $file, '/' ) != FALSE) {
 			$filetmp = explode ( '/', $file );
 			$dirfile = $file;
 			$file = $filetmp [count ( $filetmp ) - 1];
-			$tplfile = APPPATH . '/views/default/' . $dirfile . TMP_PREX;
+			$tplfile = APPPATH . '/views/' . $tpldir . '/' . $dirfile . TMP_PREX;
 		} else {
-			$tplfile = APPPATH . '/views/default/' . $file . TMP_PREX;
+			$tplfile = APPPATH . '/views/' . $tpldir . '/' . $file . TMP_PREX;
 		}
 		
-		$objfile = FCPATH . '/data/view/default_' . $file . '.tpl' . TMP_PREX;
-	}
-	
-	if (! file_exists ( $objfile ) || (@filemtime ( $tplfile ) > @filemtime ( $objfile ))) {
+		$objfile = FCPATH . '/data/view/' . $tpldir . '_' . $file . '.tpl' . TMP_PREX;
+		if ('default' != $tpldir && ! is_file ( $tplfile )) {
+			if (strpos ( $file, '/' ) != FALSE) {
+				$filetmp = explode ( '/', $file );
+				$dirfile = $file;
+				$file = $filetmp [count ( $filetmp ) - 1];
+				$tplfile = APPPATH . '/views/default/' . $dirfile . TMP_PREX;
+			} else {
+				$tplfile = APPPATH . '/views/default/' . $file . TMP_PREX;
+			}
+			
+			$objfile = FCPATH . '/data/view/default_' . $file . '.tpl' . TMP_PREX;
+		}
 		
-		require_once (BASEPATH . 'helpers/template_helper.php');
-		parse_template ( $tplfile, $objfile );
+		if (! file_exists ( $objfile ) || (@filemtime ( $tplfile ) > @filemtime ( $objfile ))) {
+			
+			require_once (BASEPATH . 'helpers/template_helper.php');
+			parse_template ( $tplfile, $objfile );
+		}
+		return $objfile;
 	}
-	return $objfile;
-}
 }
 function timeLength($time) {
 	$length = '';
@@ -1079,14 +1159,14 @@ function cpage($num, $perpage, $curpage, $url) {
 			}
 		}
 		
-		$multipage = ($curpage - $offset > 1 && $pages > $page ? '<a  class="n" href="' . $url.'&pageindex=1' . '" >首页</a>' . "\n" : '');
+		$multipage = ($curpage - $offset > 1 && $pages > $page ? '<a  class="n" href="' . $url . '&pageindex=1' . '" >首页</a>' . "\n" : '');
 		
 		if ($curpage > 1) {
 			if ($curpage - 1 == 1) {
 				
-				$multipage = $multipage . '<a href="' .  $url.'&pageindex=1'  . '"  class="n">上一页</a>' . "\n";
+				$multipage = $multipage . '<a href="' . $url . '&pageindex=1' . '"  class="n">上一页</a>' . "\n";
 			} else {
-				$multipage = $multipage . '<a href="' .  $url.'&pageindex=' . ($curpage - 1) . '"  class="n">上一页</a>' . "\n";
+				$multipage = $multipage . '<a href="' . $url . '&pageindex=' . ($curpage - 1) . '"  class="n">上一页</a>' . "\n";
 			}
 		} else {
 		}
@@ -1094,14 +1174,12 @@ function cpage($num, $perpage, $curpage, $url) {
 		for($i = $from; $i <= $to; $i ++) {
 			if ($i == 1) {
 				
-				
-				$multipage .= $i == $curpage ? "<strong>$i</strong>\n" : '<a href="' . $url.'&pageindex=1' . '">' . $i . '</a>' . "\n";
+				$multipage .= $i == $curpage ? "<strong>$i</strong>\n" : '<a href="' . $url . '&pageindex=1' . '">' . $i . '</a>' . "\n";
 			} else {
-				$multipage .= $i == $curpage ? "<strong>$i</strong>\n" : '<a href="' . $url.'&pageindex=' . $i . '">' . $i . '</a>' . "\n";
+				$multipage .= $i == $curpage ? "<strong>$i</strong>\n" : '<a href="' . $url . '&pageindex=' . $i . '">' . $i . '</a>' . "\n";
 			}
 		}
-		$multipage .= ($curpage < $pages ? '<a class="n" href="' . $url.'&pageindex=' . ($curpage + 1)  . '">下一页</a>' . "\n" : '') . ($to < $pages ? '<a class="n" href="' .  $url.'&pageindex=' . $pages . '" >最后一页</a>' . "\n" : '');
-		
+		$multipage .= ($curpage < $pages ? '<a class="n" href="' . $url . '&pageindex=' . ($curpage + 1) . '">下一页</a>' . "\n" : '') . ($to < $pages ? '<a class="n" href="' . $url . '&pageindex=' . $pages . '" >最后一页</a>' . "\n" : '');
 	}
 	
 	return $multipage;
@@ -1181,7 +1259,6 @@ function page($num, $perpage, $curpage, $operation, $ajax = 0) {
 }
 // sql 组合
 function getwheresql($table, $where, $tbprex) {
-
 	return "select count(*) as num from " . $tbprex . $table . " where $where ";
 }
 // 返回数组中的值
@@ -1206,37 +1283,37 @@ function assoc_unique($arr, $key) {
 	return $arr;
 }
 /**
-
-* 代码高亮
-
-* @date: 2019年4月20日 下午6:35:43
-
-* @author: 61703
-
-* @param: $GLOBALS
-
-* @return:
-
-*/
-function codehightline($str){
-	$newct=str_replace('<pre class="brush:php;toolbar:false">', '<pre ><code >', $str);
-	$newct=str_replace('<pre class="brush:java;toolbar:false">', '<pre ><code >', $newct);
-	$newct=str_replace('<pre class="brush:html;toolbar:false">', '<pre ><code >', $newct);
-	$newct=str_replace('<pre class="brush:js;toolbar:false">', '<pre ><code >', $newct);
+ *
+ * 代码高亮
+ *
+ * @date: 2019年4月20日 下午6:35:43
+ *
+ * @author : 61703
+ *        
+ * @param : $GLOBALS        	
+ *
+ * @return :
+ *
+ *
+ */
+function codehightline($str) {
+	$newct = str_replace ( '<pre class="brush:php;toolbar:false">', '<pre ><code >', $str );
+	$newct = str_replace ( '<pre class="brush:java;toolbar:false">', '<pre ><code >', $newct );
+	$newct = str_replace ( '<pre class="brush:html;toolbar:false">', '<pre ><code >', $newct );
+	$newct = str_replace ( '<pre class="brush:js;toolbar:false">', '<pre ><code >', $newct );
 	
-	$newct=str_replace('</pre">', '</code></pre>', $newct);
+	$newct = str_replace ( '</pre">', '</code></pre>', $newct );
 	return $newct;
 }
-//熊掌号推送
-function xiongzhangtuisong($urls){
+// 熊掌号推送
+function xiongzhangtuisong($urls) {
 	return false;
 	global $setting;
 	$urls = array ();
 	
-
-	if (trim ( $setting['xiongzhang_settinghistoryapi'] ) != '' && $setting['xiongzhang_settinghistoryapi'] != null) {
+	if (trim ( $setting ['xiongzhang_settinghistoryapi'] ) != '' && $setting ['xiongzhang_settinghistoryapi'] != null) {
 		
-		$api = $setting['xiongzhang_settinghistoryapi'];
+		$api = $setting ['xiongzhang_settinghistoryapi'];
 		
 		$ch = curl_init ();
 		$options = array (
@@ -1245,8 +1322,8 @@ function xiongzhangtuisong($urls){
 				CURLOPT_RETURNTRANSFER => true,
 				CURLOPT_POSTFIELDS => implode ( "\n", $urls ),
 				CURLOPT_HTTPHEADER => array (
-						'Content-Type: text/plain'
-				)
+						'Content-Type: text/plain' 
+				) 
 		);
 		curl_setopt_array ( $ch, $options );
 		$result = json_decode ( curl_exec ( $ch ), true );
@@ -1912,16 +1989,15 @@ function filter_outer($content) {
 	$html->clear ();
 	return $content;
 }
-function filter_link($content){
+function filter_link($content) {
 	if (! function_exists ( 'file_get_html' )) {
 		require_once (BASEPATH . 'helpers/simple_html_dom_helper.php');
 	}
 	$html = str_get_html ( $content );
 	$ret = $html->find ( 'a' );
 	foreach ( $ret as $a ) {
-	
-			$a->outertext = $a->innertext;
 		
+		$a->outertext = $a->innertext;
 	}
 	$content = $html->save ();
 	$html->clear ();
@@ -1995,7 +2071,6 @@ function isimage($extname) {
  *        	需要裁剪的高
  */
 function imagecropper($source_path, $dst, $target_width, $target_height) {
-
 	$source_info = getimagesize ( $source_path );
 	
 	$source_width = $source_info [0];
@@ -2023,14 +2098,14 @@ else {
 		$source_x = 0;
 		$source_y = 0;
 	}
-	ini_set('memory_limit', '500M'); 
+	ini_set ( 'memory_limit', '500M' );
 	switch ($source_mime) {
 		case 'image/gif' :
 			$source_image = imagecreatefromgif ( $source_path );
 			break;
 		
 		case 'image/jpeg' :
-		
+			
 			$source_image = imagecreatefromjpeg ( $source_path );
 			break;
 		
@@ -2042,7 +2117,7 @@ else {
 			return false;
 			break;
 	}
-	unlink($source_path);
+	unlink ( $source_path );
 	$target_image = imagecreatetruecolor ( $target_width, $target_height );
 	$cropped_image = imagecreatetruecolor ( $cropped_width, $cropped_height );
 	
@@ -2258,16 +2333,14 @@ function array_per_fields($array, $field) {
 	return $values;
 }
 function highlight($content, $words, $highlightcolor = 'red') {
-
-	
 	$wordlist = explode ( " ", $words );
 	foreach ( $wordlist as $hightlightword ) {
 		if (strlen ( $content ) < 1 || strlen ( $hightlightword ) < 1) {
 			return $content;
 		}
-		$content=str_replace($hightlightword, "<font color=red>$hightlightword</font>", $content);
+		$content = str_replace ( $hightlightword, "<font color=red>$hightlightword</font>", $content );
 		
-		//$content = preg_replace ( "/$hightlightword/is", "<font color=red>\\0</font>", $content );
+		// $content = preg_replace ( "/$hightlightword/is", "<font color=red>\\0</font>", $content );
 	}
 	return $content;
 }

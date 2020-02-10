@@ -115,6 +115,7 @@ class Category_model extends CI_Model {
 	//		}
 	//		return $categrorytree;
 	//	}
+
 	/**
 	 * 获得分类树
 	 *
@@ -122,23 +123,23 @@ class Category_model extends CI_Model {
 	 * @return string
 	 */
 	function get_categrory_tree($type = 1,$iscourse=0) {
-       global $category;
-		$allcategory = $category;
-
+		$allcategory = $this->category;
+	
 		$categrorytree = '';
 		if($type!=1&&$type!=2){
 			$type=1;
 		}
+		
 		foreach ( $allcategory as $key => $category1 ) {
 			if ($type == 1) {
 				if ($category1 ['pid'] == 0 && $category1 ['isuseask'] == 1&&$category1 ['iscourse']==$iscourse) {
-					$categrorytree .= "<option value=\"{$category1['id']}\">{$category1['name']}</option>";
+					$categrorytree .= "<option grade=\"1\" pid=\"0\" value=\"{$category1['id']}\">{$category1['name']}</option>";
 					$categrorytree .= $this->get_child_tree ( $allcategory, $category1['id'], 1,$iscourse );
 				}
 			}
 			if ($type == 2) {
 				if ($category1['pid'] == 0 && $category1['isusearticle'] == 1&&$category1 ['iscourse']==$iscourse) {
-					$categrorytree .= "<option value=\"{$category1['id']}\">{$category1['name']}</option>";
+					$categrorytree .= "<option grade=\"1\" pid=\"0\" value=\"{$category1['id']}\">{$category1['name']}</option>";
 					$categrorytree .= $this->get_child_tree ( $allcategory, $category1['id'], 1 );
 				}
 			}
@@ -149,9 +150,11 @@ class Category_model extends CI_Model {
 
 	function get_child_tree($allcategory, $pid, $depth = 1,$iscourse=0) {
 		$childtree = '';
+	
 		foreach ( $allcategory as $key => $category ) {
 			if ($pid == $category ['pid']&&$category['iscourse']==$iscourse) {
-				$childtree .= "<option value=\"{$category['id']}\">";
+				
+				$childtree .= "<option grade=\"{$category['grade']}\" pid=\"{$category['pid']}\" value=\"{$category['id']}\">";
 				$depthstr = str_repeat ( "--", $depth );
 				$childtree .= $depth ? "&nbsp;&nbsp;|{$depthstr}&nbsp;{$category['name']}</option>" : "{$category['name']}</option>";
 				$childtree .= $this->get_child_tree ( $allcategory, $category ['id'], $depth + 1 );
@@ -488,7 +491,9 @@ class Category_model extends CI_Model {
 		$this->db->query ( "DELETE FROM `" . $this->db->dbprefix . "question` WHERE `cid` IN ($cids)" );
 		$this->db->query ( "DELETE FROM `" . $this->db->dbprefix . "topic` WHERE `articleclassid` IN ($cids)" );
 		$this->db->query ( "DELETE FROM `" . $this->db->dbprefix . "articlecomment` WHERE `tid` IN  (SELECT id FROM `" . $this->db->dbprefix . "topic` WHERE `articleclassid` IN ($cids))" );
-
+		$this->db->query ( "DELETE FROM `" . $this->db->dbprefix . "course_lesson` WHERE `courseid` IN ($cids)" );
+		$this->db->query ( "DELETE FROM `" . $this->db->dbprefix . "coursecomment` WHERE `courseid` IN ($cids)" );
+		$this->db->query ( "DELETE FROM `" . $this->db->dbprefix . "course_comment` WHERE `courseid` IN ($cids)" );
 		
 	}
 
