@@ -5,8 +5,8 @@ error_reporting(E_ALL ^ E_NOTICE);
 error_reporting(E_ALL ^ E_WARNING);
 ini_set ( 'date.timezone', 'Asia/Shanghai' );
 define('WHATSNS_ROOT', dirname(__FILE__).'/../');
-define('ASK2_VERSION', '4.1');
-define('ASK2_RELEASE', '20191210');
+define('WHATSNS_VERSION', '4.1');
+define('WHATSNS_RELEASE', '20191210');
 define('APPPATH', WHATSNS_ROOT.'./application/');
 define('CHARSET', 'UTF-8');
 define('DBCHARSET', 'utf8');
@@ -147,9 +147,13 @@ class Install  {
 		mysqli_query($con,"set names utf8");
 
 		mysqli_query($con,"DELETE FROM `".$dbpre."user` WHERE `uid`=1");
+		
 		mysqli_query($con,"INSERT INTO `".$dbpre."user` SET `uid`=1,`introduction`='".$introduction."',`signature`='".$signature."',`username`='".$username."', `password`='".md5($password)."',`email`='".$email."',`groupid`=1,`credits`=200,`credit1`=100,`credit2`=100,`regip`='".$_SERVER["REMOTE_ADDR"]."'" );
+		
 		mysqli_query($con,"DELETE FROM `".$dbpre."setting` WHERE `k`='auth_key'");
-		mysqli_query($con,"INSERT INTO `".$dbpre."setting` SET `k`='auth_key',`v`='".$this->generate_key()."'");	
+		
+		mysqli_query($con,"INSERT INTO `".$dbpre."setting` SET `k`='auth_key',`v`='".$this->generate_key()."'");
+		
 		mysqli_close($con);
 		$message['code']=200;
 		$message['msg']="超级管理员创建成功";
@@ -323,6 +327,7 @@ class Install  {
 	
 	*/
 	function initdb(){
+		
 		$data = json_decode ( urldecode ( $_POST ['ajax'] ), TRUE );
 		$message=array();
 		$ip=trim($data['ip']);
@@ -683,8 +688,11 @@ class Install  {
 		return $hash;
 	}
 	function generate_key() {
+		
 		$random = $this->random(32);
-		$info = md5($_SERVER['SERVER_SOFTWARE'].$_SERVER['SERVER_NAME'].$_SERVER['SERVER_ADDR'].$_SERVER['SERVER_PORT'].$_SERVER['HTTP_USER_AGENT'].time());
+	
+		$info = md5($random.time());
+			
 		$return = '';
 		for($i=0; $i<64; $i++) {
 			$p = intval($i/2);
@@ -803,17 +811,17 @@ class Install  {
 	function config_edit($dbhost,$dbuser,$dbpwd,$dbname,$tablepre) {
 		extract($GLOBALS, EXTR_SKIP);
 		
-	
+		
 		//保存数据库信息
-		$version = ASK2_VERSION;
+		$version = WHATSNS_VERSION;
 		$versiondate = date ( "Ymd" );
 		$config = "<?php \r\n";
 		$config .= "defined('BASEPATH') OR exit('No direct script access allowed');\r\n";
 		$config .= '$active_group' . " = 'default';\r\n";
 		$config .= '$query_builder' . "  = TRUE;\r\n";
-		$config .= "define('ASK2_CHARSET', 'UTF-8');\r\n";
-		$config .= "define('ASK2_VERSION', '$version');\r\n";
-		$config .= "define('ASK2_RELEASE', '$versiondate');\r\n";
+		$config .= "defined('ASK2_CHARSET') OR define('ASK2_CHARSET', 'UTF-8');\r\n";
+		$config .= "defined('ASK2_VERSION') OR define('ASK2_VERSION', '$version');\r\n";
+		$config .= "defined('ASK2_RELEASE') OR define('ASK2_RELEASE', '$versiondate');\r\n";
 		
 		if (! file_exists (  $file_path = APPPATH . 'config' . DIRECTORY_SEPARATOR . 'database.php' )) {
 			$message['code']=201;
@@ -821,10 +829,14 @@ class Install  {
 			echo json_encode($message);
 			exit();
 		}
+	//	if(strstr($_SERVER['SERVER_SOFTWARE'],'IIS')){
+		//	$file_path="../application/config/database.php";
+			
+	//	}
 
+		include $file_path;
+		
 
-		include ($file_path);
-	
 		$database=$db[$active_group];
 
 		$database['hostname']=$dbhost;
@@ -834,7 +846,7 @@ class Install  {
 		$database['char_set']=DBCHARSET;
 		$database['dbprefix']=$tablepre;
 		$strdata = $config . "$" . "db['default'] =" . var_export ( $database, true ) . ";\n?>";
-
+	
 		$fp = fopen(APPPATH . 'config/database.php', 'w');
 		fwrite($fp, $strdata);
 		fclose($fp);
