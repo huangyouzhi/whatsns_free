@@ -1614,7 +1614,7 @@ class User extends CI_Controller {
 		include template ( 'scorelist' );
 	}
 	function activelist() {
-		$cid = intval ( $this->uri->segment ( 3 ) ) ? $this->uri->segment ( 3 ) : 'all'; // 分类id
+		$cid = intval ( $this->uri->segment ( 3 ) ) ? intval($this->uri->segment ( 3 )) : 'all'; // 分类id
 		$status = null !== $this->uri->segment ( 4 ) ? $this->uri->segment ( 4 ) : 'all'; // 排序
 		
 		if ($cid != 'all') {

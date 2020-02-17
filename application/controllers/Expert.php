@@ -18,7 +18,7 @@ class Expert extends CI_Controller {
 		$navtitle = "问题专家";
 		$seo_description = $this->setting['site_name']."汇聚知名专家，在线帮您一对一解决问题。";
 		$seo_keywords = "专家咨询,认证专家,专家解答";
-		$cid = intval ( $this->uri->segment ( 3 ) ) ? $this->uri->segment ( 3 ) : 'all'; //分类id
+		$cid = intval ( $this->uri->segment ( 3 ) ) ? intval($this->uri->segment ( 3 )) : 'all'; //分类id
 		$status = null!== $this->uri->segment ( 4 ) ? $this->uri->segment ( 4 ) : 'all'; //排序
 
 
