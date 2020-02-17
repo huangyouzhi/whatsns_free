@@ -63,20 +63,6 @@
             </ul>
         </div>
 
-
-
- {if $setting['openwxpay']==1}
-
-        <div class="tabs-group">
-            <div class="title">条件:</div>
-            <ul class="content clearfix">
-                <li {if $status=='all'}class="active" {/if}><a class="nav-link tag" href="{url expert/default/$category['id']/all}">全部</a></li>
-                <li {if $status=='1'}class="active" {/if}><a class="nav-link tag" href="{url expert/default/$category['id']/1}">付费</a></li>
-                <li {if $status=='2'}class="active" {/if}><a class="nav-link tag" href="{url expert/default/$category['id']/2}">免费</a></li>
-
-            </ul>
-        </div>
-           {/if}
     </div>
  </div>
    <div class="mod-b-wrapper">
@@ -100,7 +86,7 @@ $expert['author_has_vertify']!=false}<i class="fa fa-vimeo v_person   " data-tog
                                 <div class="separate"></div>
                                 <a class="innerBox" target="_self"><span>{$expert['supports']}</span><i>获赞</i></a>
                                 <div class="separate"></div>
-                                <a class="innerBox" target="_self"><span>{$expert['followers']}</span><i>粉丝</i></a>
+                                <a class="innerBox" target="_self"><span>{eval echo $this->user_model->adoptpercent ( $expert );}%</span><i>采纳率</i></a>
                             </div>
                             <div class="btns">
                                 <a  {if $user['uid']==0} href="javascript:login()" {else} href="{url question/add/$expert[uid]}" {/if}   {if $expert['mypay']>0} data-placement="bottom" data-toggle="tooltip" data-original-title="付费{$expert['mypay']}元咨询" {/if} class="tiwen-btn" target="_self">向他提问</a>
