@@ -14,14 +14,14 @@ background:none;
 <!--内容部分--->
 <div class="content-body" style="margin-top:20px;">
 <div class="container bg-white " style="background: #fff;padding:10px;">
-<div class="alert alert-warning">网站积分来源获取明细表,实际情况根据站长后台设置，"-"表示扣分。</div>
+<div class="alert alert-warning">网站积分来源获取明细表,实际情况根据站长后台设置，"-"表示{$caifuzhiname}。</div>
  <table class="layui-table">
 
          <thead>
     <tr>
       <th  class="smalltxt" align="center">参数名称</th>
       <th align="center">经验值</th>
-      <th align="center">财富值</th>
+      <th align="center">{$caifuzhiname}</th>
     </tr>
   </thead>
     <tbody>

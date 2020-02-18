@@ -32,11 +32,3 @@
 </div>
 <!--{template footer}-->
 
-
-<div class="col-xs-7  aside">
-   <!--{template user_menu}-->
-</div>
-
-  </div>
-</div>
-<!--{template footer}-->

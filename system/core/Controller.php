@@ -137,7 +137,7 @@ class CI_Controller {
 			$_fix=substr($_fix,0,strrpos($_fix,'?'));
 		}
 
-		if(strstr ( $url, 'index.php?' )||$this->uri->rsegments [1]=='rule'||$this->uri->rsegments [1]=='user'||$this->uri->rsegments [1]=='appstore'||$this->uri->rsegments [1]=='custom'||$this->uri->rsegments [1]=='pay'||$this->uri->rsegments [1]=='ebank'||$this->uri->rsegments [1]=='api_user'||strstr ( $this->uri->rsegments [1], 'app_' )){
+		if(strstr ( $url, 'index.php?' )||$this->uri->rsegments [1]=='appstore'||$this->uri->rsegments [1]=='custom'||$this->uri->rsegments [1]=='pay'||$this->uri->rsegments [1]=='ebank'||$this->uri->rsegments [1]=='api_user'||strstr ( $this->uri->rsegments [1], 'app_' )){
 			
 		}else{
 				// 判断是否是首页

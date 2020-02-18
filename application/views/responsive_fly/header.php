@@ -1,7 +1,7 @@
 {template meta}
 <div class="fly-header layui-bg-black">
   <div class="layui-container">
-    <a class="fly-logo" href="/">
+    <a class="fly-logo" href="{SITE_URL}">
       <img src="{$setting['site_logo']}" alt="{$setting['site_name']}">
     </a>
     <ul class="layui-nav fly-nav layui-hide-xs">

@@ -91,12 +91,12 @@
         
           {if $_SESSION['authinfo'] }
           <div class="layui-form-item mar-t10">
-                <button class="layui-btn" id="regsubmit"   lay-submit>注册并绑定账号</button>
+                <div class="layui-btn" id="regsubmit"   lay-submit>注册并绑定账号</div>
               </div>
             
     {else}
      <div class="layui-form-item mar-t10">
-                <button class="layui-btn" id="regsubmit"    lay-submit>立即注册</button>
+                <div class="layui-btn" id="regsubmit"    lay-submit>立即注册</div>
               </div>
               
      
@@ -132,6 +132,15 @@ layui.use(['jquery', 'layer'], function(){
 	  $("#verifycode").click(function(){
 		  updatecode();
 	  })
+	  function check_phone(_phone){
+
+			 if(!(/^1(1|2|3|4|5|6|7|8|9)\d{9}$/.test(_phone))){ 
+			       
+			        return false; 
+			    }else{
+			    	return true;
+			    }
+		}
 	  function cheklogin(){
 
 	       

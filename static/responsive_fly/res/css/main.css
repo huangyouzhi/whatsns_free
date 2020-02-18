@@ -683,3 +683,9 @@
     font-size: 15px;
     color: #ff6600;
 }
+.wangEditor-txt li,.detail li{
+	list-style: inherit;
+}
+.detail ol,.detail ul{
+	padding-left:20px;
+}

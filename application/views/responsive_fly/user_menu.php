@@ -23,6 +23,12 @@
         我的消息
       </a>
     </li>
+      <li class="layui-nav-item {if $regular=='user/invatelist'}layui-this{/if}">
+      <a href="{url user/invatelist}">
+        <i class="layui-icon layui-icon-friends"></i>
+        邀请推广
+      </a>
+    </li>
   </ul>
     <div class="site-tree-mobile layui-hide">
     <i class="layui-icon">&#xe602;</i>

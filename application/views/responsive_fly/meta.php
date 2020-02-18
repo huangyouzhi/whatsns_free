@@ -21,6 +21,7 @@
 <link rel="stylesheet"	href="{SITE_URL}static/responsive_fly/res/layui/css/layui.css">
 <link rel="stylesheet"	href="{SITE_URL}static/responsive_fly/res/css/global.css">
 <link rel="stylesheet"	href="{SITE_URL}static/responsive_fly/res/css/main.css">
+<script src="{SITE_URL}static/js/jquery-1.11.3.min.js" type="text/javascript"></script>
 <script src="{SITE_URL}static/responsive_fly/res/layui/layui.js"></script>
 
     <script type="text/javascript">

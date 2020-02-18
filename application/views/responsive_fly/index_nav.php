@@ -11,8 +11,8 @@
       <li class="layui-hide-xs layui-hide-sm layui-show-md-inline-block"><span class="fly-mid"></span></li> 
       {if $user['uid']}
       <!-- 用户登入后显示 -->
-      <li class="layui-hide-xs layui-hide-sm layui-show-md-inline-block"><a href="{url user/ask}">我发表的问题</a></li> 
-      <li class="layui-hide-xs layui-hide-sm layui-show-md-inline-block"><a href="{url attention/question}">我收藏的问题</a></li> 
+      <li class="layui-hide-xs layui-hide-sm layui-show-md-inline-block"><a href="{url user/ask}">我的发表</a></li> 
+      <li class="layui-hide-xs layui-hide-sm layui-show-md-inline-block"><a href="{url attention/question}">我的关注</a></li> 
     {/if}
     </ul> 
     

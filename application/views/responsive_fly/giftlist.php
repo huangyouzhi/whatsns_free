@@ -64,10 +64,10 @@
 <div class="layui-col-md4">
    <!--{if $user['uid']}-->
    <div class="fly-panel">
-        <h3 class="fly-panel-title">我的财富值</h3>
+        <h3 class="fly-panel-title">我的{$caifuzhiname}</h3>
          <div class="layui-card-body">
-                    <p>当前财富值:<img style="position:relative;top:-2px;" src="{SITE_URL}static/css/default/gold.gif"><font color="#FF6600">{$user['credit2']}</font></p>
-                    <p class="font13 text-color-hui"><a href="{url rule/index}" target="_blank">如何获得财富?</a></p>
+                    <p>当前{$caifuzhiname}:<i class="layui-icon layui-icon-diamond font13 mar-r3"></i><font color="#FF6600">{$user['credit2']}</font></p>
+                    <p class="font13 text-color-hui"><a href="{url rule/index}" target="_blank">如何获{$caifuzhiname}?</a></p>
          
          </div>
       </div>
@@ -85,7 +85,7 @@
 
     
    <div class="fly-panel">
-        <h3 class="fly-panel-title">财富榜</h3>
+        <h3 class="fly-panel-title">{$caifuzhiname}榜</h3>
          <div class="layui-card-body">
               <!--{eval $weekuserlist=$this->fromcache('alluserlist');}-->
                 <!--{loop $weekuserlist $index $alluser}-->
@@ -93,7 +93,7 @@
                    
                  <div class="displayblock"> <a href="{url user/space/$alluser['uid']}" target="_blank" class=" fl" >
                   <img class="defaultavatar" src="{eval echo get_avatar_dir({$alluser['uid']});}"/> <span >{$alluser['username']} </span></a>
-                  <a title="{$alluser['credit2']}财富值" class="   fr">
+                  <a title="{$alluser['credit2']}{$caifuzhiname}" class="   fr">
                    <span class="layui-badge layui-bg-orange">{$alluser['credit2']}{$caifuzhiname}</span></a>
                  
 </div>  
@@ -218,10 +218,10 @@ layui.use('form', function(){
             return false;
     }
     if (credit > usercredit){
-    	layer.msg("抱歉!您的财富值不够!");
+    	layer.msg("抱歉!您的{$caifuzhiname}不够!");
             return false;
     }
-    if(!confirm("确定兑换该礼品？完成兑换后会消耗您"+credit+"财富值!")){
+    if(!confirm("确定兑换该礼品？完成兑换后会消耗您"+credit+"{$caifuzhiname}!")){
         return false;
     }
     document.getElementById("gid").value=id;

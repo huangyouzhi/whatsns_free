@@ -211,6 +211,7 @@ layui.use([ 'layer'], function(){
 
 
             if (bytes($.trim(qtitle)) < 8 || bytes($.trim(qtitle)) > 100) {
+      		  $("#asksubmit").removeClass("layui-btn-disabled");
             	layer.msg("问题标题长度不得少于4个字，不能超过50字！");
 
                 $("#qtitle").focus();
@@ -226,7 +227,7 @@ layui.use([ 'layer'], function(){
             }
             offerscore += parseInt(selectsocre);
             if (offerscore > $user['credit2']) {
-      
+      		  $("#asksubmit").removeClass("layui-btn-disabled");
            	 layer.msg("你的财富值不够!")
                     return false;
             }
@@ -238,7 +239,8 @@ layui.use([ 'layer'], function(){
            	 if(typeof testEditor != "undefined"){
               	  var tmptxt=$.trim(testEditor.getMarkdown());
               	  if(tmptxt==''){
-              		  alert("回答内容不能为空");
+              		  $("#asksubmit").removeClass("layui-btn-disabled");
+              		  layer.msg("回答内容不能为空");
               		  return;
               	  }
               	  eidtor_content= testEditor.getHTML();
@@ -309,7 +311,7 @@ layui.use([ 'layer'], function(){
                },
                //成功返回之后调用的函数
                success:function(data){
-             
+            	   $("#asksubmit").removeClass("layui-btn-disabled");
                	var data=eval("("+data+")");
                   if(data.message=='ok'){
                 	  submitfalse=true;

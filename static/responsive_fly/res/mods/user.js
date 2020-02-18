@@ -87,7 +87,7 @@ layui.define(['laypage', 'fly', 'element', 'flow'], function(exports){
   		layer.msg("手机号码有误");  
   		 return false;
   	}
-    $.post(g_site_url+"index.php?user/getsmscode", {phone: _phone,type:'reg'}, function(flag) {
+    $.post(geturl("user/getsmscode"), {phone: _phone,type:'reg'}, function(flag) {
   	   flag=$.trim(flag);
     if(flag==1){
     	var _timecount=60;
@@ -715,7 +715,7 @@ if(postsubmiting){
     })
 }
 var adoptanswer=false;
-$("#adoptbtn").click(function(){
+$(".jieda-accept").click(function(){
 	if(adoptanswer){
 		
 		return false;
