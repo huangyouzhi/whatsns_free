@@ -36,12 +36,16 @@ $.noConflict()
            {if $navtitle=='编辑问题'}  {eval echo htmlspecialchars_decode(htmlspecialchars_decode($question['description']));} {/if}
 
              {if $this->uri->segment ( 1 )!='question'}
-  {eval echo  replacewords(html_entity_decode($topic['describtion']));}
+  {eval echo  replacewords($topic['describtion']);}
              {/if}
            {if $user['groupid']==1||$user['uid']==$answer['authorid']&&$this->uri->segment ( 2 )=='editanswer'&&$this->uri->segment ( 1 )=='question'}    {eval  echo htmlspecialchars_decode($answer['content']);} {/if}
 
  {/if}
             </textarea>
+            <div style="margin:10px auto;position:relative;">
+            <input id="upvedio" type="file" onchange="uploadVedio(this)" accept="video/*" capture="camcorder" style="position:absolute;width:70px;left:0px;top:3px;cursor:pointer;opacity:0;">
+	<span style="color:#0084ff;font-size: 13px;" class="uploadvedio">本地上传视频</span>
+	</div>
 </div>
 <script type="text/javascript">
 var testeditor='999';
@@ -65,9 +69,7 @@ var editor=null;
 	                           'eraser',
 	                     
 	                           'quote',
-	                         
-	                  
-	                          
+	                           'emotion',	                 	                          
 	                           '|',
 	                           'img',
 	                       
@@ -78,9 +80,67 @@ var editor=null;
 
 		    // 将全屏时z-index修改为20000
 		   // editor.config.zindex =-1;
+		 
 	    editor.create();
 	    $(".wangEditor-container").css("z-index","1");
+	    $(".wangEditor-txt").css("height","auto");
+	    function uploadVedio(file){
+	    	
+	   	 if (file.files && file.files[0])
+	        {
+	
+	   	     $(".uploadvedio").html("视频上传中....");
+	   		 $("#upvedio").attr("disabled","disabled");
+	   		  var type = "file";
+	   		  var ischeck=0;
+	   		
+	   		    var formData = new FormData();
+	   		    formData.append(type, $("#upvedio")[0].files[0]);
+	   		 formData.append("addvedio",0);
+		
+	   	  
+	   		    $.ajax({
+	   		        type: "POST",
+	   		        url: '{url attach/uploadvedio}',
+	   		        data: formData,
+	   		        processData: false,
+	   		        contentType: false,
+	   		        //返回数据的格式
+	   	            datatype: "json",//"xml", "html", "script", "json", "jsonp", "text".
+	   	            beforeSend: function () {
 
-	 
+	   	                ajaxloading("提交中...");
+	   	             },
+	   		        success: function (data) {
+	   		    
+	   		     	var data=eval("("+data+")");
+	   			        if(data.code==200){
+	   			         var _strinfo=data.fileurl;
+	   			        
+	   			   	  $(".wangEditor-txt").append(	'<video style="max-width:100%;" controls>	    <source src="'+_strinfo+'" type="video/mp4"> 	  </video>');
+	   			   
+	   			        }else{
+	   			        	alert(data.msg)
+	   			        }
+	   			        
+	   		        
+	   		          
+	   		        },
+	   	             complete: function () {
+	   	            	 $(".uploadvedio").html("本地上传视频");
+	   	            	 $("#upvedio").removeAttr("disabled");
+	   	                 removeajaxloading();
+	   	              },
+	   	             //调用出错执行的函数
+	   	             error: function(){
+	   	              removeajaxloading();
+	   	            	 $("#upvedio").removeAttr("disabled");
+	   	                 //请求出错处理
+	   	            	 alert("上传出错");
+	   	             }
+	   		    });
+	        }
+	   }
 	   
 	</script>
+	

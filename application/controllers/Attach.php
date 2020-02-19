@@ -5,7 +5,7 @@ defined ( 'BASEPATH' ) or exit ( 'No direct script access allowed' );
 class Attach extends CI_Controller {
 	var $whitelist;
 	function __construct() {
-		$this->whitelist = "upimg,markdownimg";
+		$this->whitelist = "upimg,markdownimg,uploadvedio";
 		parent::__construct ();
 		$this->load->model ( 'attach_model' );
 
@@ -211,6 +211,120 @@ class Attach extends CI_Controller {
 			
 		}
 	}
+	/**
+	 *
+	 * 上传视频
+	 *
+	 * @date: 2020年2月13日 下午6:22:30
+	 *
+	 * @author : 61703
+	 *
+	 * @param
+	 *        	: variable
+	 *
+	 * @return :
+	 *
+	 */
+	function uploadvedio() {
+		if(!$this->user['uid']){
+			$message['code']=201;
+			$message['msg']="请先登录";
+			echo json_encode($message);
+			exit();
+		}
+		if (! $_POST) {
+			$message['code']=201;
+			$message['msg']="请上传mp4文件";
+			echo json_encode($message);
+			exit();
+		}
+	
+	
+		if ($_FILES ["file"]) {
+			$extname = strtolower ( extname ( $_FILES ["file"] ["name"] ) );
+			if ($extname == 'mp4') {
+				if ($_FILES['file']['error'] > 0) {
+					$message['code']=201;
+					$message['msg']="请上传mp4文件";
+					echo json_encode($message);
+					exit();
+				}
+				
+				$path =  "data/upload";
+				mkdir($path);
+				// 如果是mp4允许上传
+				$fileName = date("Ymd")."_".md5 ( uniqid ( microtime ( true ), true ) ) . '.' . $extname;
+				$basefile=$path. '/'.$fileName;
+				$destName = FCPATH .$path . DIRECTORY_SEPARATOR . $fileName;
+				if (! move_uploaded_file ( $_FILES["file"]['tmp_name'], $destName )) {
+					$message['code']=201;
+					$message['msg']="上传视频失败";
+					echo json_encode($message);
+					exit();
+				}
+				$url= SITE_URL."data/upload/".$fileName;
+				if($checkyun){
+					try {
+						require_once STATICPATH . 'js/neweditor/php/Config.php';
+						if (Config::OPEN_OSS) {
+							
+							require_once STATICPATH . 'js/neweditor/php/up.php';
+							if (Common::getOpenoss () == '1') {
+								
+								$filepath = uploadFile ( Common::getOssClient (), Common::getBucketName (), $basefile, $destName );
+								if ($filepath != 'error') {
+								
+									
+									unlink($destName);
+									$message['code']=200;
+									$message['msg']="上传视频成功";
+									$message['fileurl']=$filepath;
+									echo json_encode($message);
+									exit();
+									
+								}else{
+									$message['code']=201;
+									$message['msg']="上传视频出错";
+									$message['fileurl']=$filepath;
+									echo json_encode($message);
+									exit();
+								}
+							}
+						}
+						
+					} catch ( Exception $e ) {
+						$message['code']=201;
+						$message['msg']="上传视频出错";
+						$message['fileurl']=$filepath;
+						echo json_encode($message);
+						exit();
+					}
+					
+					
+				}
+			
+				$message['code']=200;
+				$message['msg']="上传视频成功";
+				$message['fileurl']=$url;
+				echo json_encode($message);
+				exit();
+				
+			} else {
+				$message['code']=201;
+				$message['msg']="上传视频出错";
+				$message['fileurl']=$filepath;
+				echo json_encode($message);
+				exit();
+			}
+		} else {
+			$message['code']=201;
+			$message['msg']="文件不存在";
+			$message['fileurl']=$filepath;
+			echo json_encode($message);
+			exit();
+		}
+	}
+	
 	/**
 	
 	* wangeditor上传图片
