@@ -242,10 +242,10 @@ class Attach extends CI_Controller {
 	
 		if ($_FILES ["file"]) {
 			$extname = strtolower ( extname ( $_FILES ["file"] ["name"] ) );
-			if ($extname == 'mp4') {
+			if ($extname == 'mp4'||$extname == 'mov') {
 				if ($_FILES['file']['error'] > 0) {
 					$message['code']=201;
-					$message['msg']="请上传mp4文件";
+					$message['msg']="请上传mp4/mov文件";
 					echo json_encode($message);
 					exit();
 				}
@@ -263,7 +263,7 @@ class Attach extends CI_Controller {
 					exit();
 				}
 				$url= SITE_URL."data/upload/".$fileName;
-				if($checkyun){
+			
 					try {
 						require_once STATICPATH . 'js/neweditor/php/Config.php';
 						if (Config::OPEN_OSS) {
@@ -300,8 +300,7 @@ class Attach extends CI_Controller {
 						exit();
 					}
 					
-					
-				}
+			
 			
 				$message['code']=200;
 				$message['msg']="上传视频成功";
@@ -311,15 +310,15 @@ class Attach extends CI_Controller {
 				
 			} else {
 				$message['code']=201;
-				$message['msg']="上传视频出错";
-				$message['fileurl']=$filepath;
+				$message['msg']=$extname."格式不支持";
+			
 				echo json_encode($message);
 				exit();
 			}
 		} else {
 			$message['code']=201;
 			$message['msg']="文件不存在";
-			$message['fileurl']=$filepath;
+		
 			echo json_encode($message);
 			exit();
 		}

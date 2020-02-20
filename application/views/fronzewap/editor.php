@@ -43,7 +43,7 @@ $.noConflict()
  {/if}
             </textarea>
             <div style="margin:10px auto;position:relative;">
-            <input id="upvedio" type="file" onchange="uploadVedio(this)" accept="video/*" capture="camcorder" style="position:absolute;width:70px;left:0px;top:3px;cursor:pointer;opacity:0;">
+            <input id="upvedio" type="file" onchange="uploadVedio(this)" accept="video/*"  style="position:absolute;width:70px;left:0px;top:3px;cursor:pointer;opacity:0;">
 	<span style="color:#0084ff;font-size: 13px;" class="uploadvedio">本地上传视频</span>
 	</div>
 </div>
