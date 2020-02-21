@@ -32,6 +32,8 @@
             <td  width="10%">操作者</td>
         </tr>
         <!--{loop $wordlist $word}-->
+      
+
         <tr>
             <td class="altbg2"><input type="checkbox" name="id[]" value="{$word['id']}"/><input type="hidden" name="wid[]" value="{$word['id']}" /></td>
             <td class="altbg2"><input type="text" name="find[]" class="txt" value="{$word['find']}"/></td>
@@ -45,10 +47,10 @@
             <td class="altbg2"><input type="text" name="replacement[]" class="txt"  /></td>
             <td class="altbg2">&nbsp;</td>
         </tr>
-        <tr class="altbg1"><td colspan="4" class="altbg1"  align="left"><input type="submit" name="submit" class="button"  value="添&nbsp;加" /></td></tr>
+        <tr class="altbg1"><td colspan="4" class="altbg1"  align="left"><input type="submit" name="submit" class="button"  value="操作" title="删除，更新，添加" /></td></tr>
         <!--{if $departstr}-->
         <tr class="smalltxt">
-            <td class="altbg2" colspan="4" align="right"><div class="scott">{$departstr}</div></td>
+            <td class="altbg2" colspan="4" align="right"><div class="pages">{$departstr}</div></td>
         </tr>
         <!--{/if}-->
     </table>

@@ -11,7 +11,10 @@ class Keywords_model extends CI_Model {
 		$wordlist = array ();
 		$query = $this->db->query ( "SELECT * FROM " . $this->db->dbprefix . "keywords  ORDER BY `id` DESC LIMIT $start,$limit" );
 		foreach ( $query->result_array () as $word ) {
-
+			$word['find']=str_replace("\"","&#34;",$word['find']);
+			$word['find'] = str_replace( "'", "&#39;",$word['find']);
+			$word['replacement']=str_replace("\"","&#34;",$word['replacement']);
+			$word['replacement'] = str_replace( "'", "&#39;",$word['replacement']);
 			$word ['num'] = 0;
 			$wordlist [] = $word;
 		}

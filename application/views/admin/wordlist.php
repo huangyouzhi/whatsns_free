@@ -23,7 +23,7 @@
         <tr class="header">
             <td  width="10%"><input class="checkbox" value="chkall" id="chkall" onclick="checkall('id[]')" type="checkbox" name="chkall"><label for="chkall">删除</label></td>
             <td  width="40%">不良词语</td>
-            <td  width="40%">替换为</td>操作者
+            <td  width="40%">替换为</td>
             <td  width="10%">操作者</td>
         </tr>
         <!--{loop $wordlist $word}-->
@@ -40,10 +40,10 @@
             <td class="altbg2"><input type="text" name="replacement[]" class="txt"  /></td>
             <td class="altbg2">&nbsp;</td>
         </tr>
-        <tr class="altbg1"><td colspan="4" class="altbg1"  align="left"><input type="submit" name="submit" class="button"  value="添&nbsp;加" /></td></tr>
+        <tr class="altbg1"><td colspan="4" class="altbg1"  align="left"><input type="submit" name="submit" class="button"  value="操作"  title="删除，更新，添加" /></td></tr>
         <!--{if $departstr}-->
         <tr class="smalltxt">
-            <td class="altbg2" colspan="4" align="right"><div class="scott">{$departstr}</div></td>
+            <td class="altbg2" colspan="4" align="right"><div class="pages">{$departstr}</div></td>
         </tr>
         <!--{/if}-->
     </table>
