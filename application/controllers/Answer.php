@@ -3,9 +3,8 @@
 defined ( 'BASEPATH' ) or exit ( 'No direct script access allowed' );
 
 class Answer extends CI_Controller {
-	var $whitelist;
+
 	function __construct() {
-		$this->whitelist = "deletecomment";//方法名英文逗号隔开
 		parent::__construct ();
 		$this->load->model ( 'answer_model' );
 		$this->load->model ( 'answer_comment_model' );
@@ -49,39 +48,7 @@ class Answer extends CI_Controller {
 				$quser = $this->user_model->get_by_uid ( $question ['authorid'] );
 				global $setting;
 				$mpurl = SITE_URL . $setting ['seo_prefix'] . $viewurl . $setting ['seo_suffix'];
-				//回答的时候如果在微信里，就微信推送通知
-
-
-				$wx = $this->fromcache ( 'cweixin' );
-
-				if ($wx ['appsecret'] != '' && $wx ['appsecret'] != null && $wx ['winxintype'] != 2) {
-
-					$appid = $wx ['appid'];
-					$appsecret = $wx ['appsecret'];
-
-					require FCPATH . '/lib/php/jssdk.php';
-					$jssdk = new JSSDK ( $appid, $appsecret );
-
-					if ($quser ['openid'] != '' && $quser ['openid'] != null) {
-						$url = url( 'question/view/' . $qid);
-
-						$text = "您的问题[$title]有新回答(对方继续回答)，<a href='$url'>请点击查看详情!</a>";
-					
-						$description = "具体点击查看详情";
-						if (! $this->setting ['weixin_tpl_huida']) {
-							$returnmesage = $jssdk->sendtexttouser ( $quser ['openid'], $text );
-						} else {
-							$question ['answers'] = intval ( $question ['answers'] ) + 1;
-							$returnmesage = $jssdk->sendanswertpltouser ( $quser ['openid'], $this->setting ['weixin_tpl_huida'], $url, "您好，您的回答有新回复，请及时查看。", $title, $description, $question ['answers'] . "人", "点击查看详情，满意回复请选择最佳答案" );
-						}
-
-					}
-
-				}
-				//极光推送
-				$url=url('question/view/' . $qid);
-				jpushmsg("您的问题[$title]有新回答(对方继续回答)", $question ['authorid'],"对方继续回答",$url);
-				
+			
 				//发送邮件通知
 				$subject = "问题[".$title."]有新回答(对方继续回答)！";
 				$message = $this->input->post ( 'content' ) . '<p>现在您可以点击<a swaped="true" target="_blank" href="' . $mpurl . '">查看最新回复</a>。</p>';
@@ -115,37 +82,7 @@ class Answer extends CI_Controller {
 				$this->doing_model->add ( $this->user ['uid'], $this->user ['username'], 6, $qid, $this->input->post ( 'content' ), $answer ['id'], $answer ['authorid'], $answer ['content'] );
 				$auser = $this->user_model->get_by_uid ( $answer ['authorid'] );
 				global $setting;
-				$mpurl = SITE_URL . $setting ['seo_prefix'] . $viewurl . $setting ['seo_suffix'];
-				$wx = $this->fromcache ( 'cweixin' );
-
-				if ($wx ['appsecret'] != '' && $wx ['appsecret'] != null && $wx ['winxintype'] != 2) {
-
-					$appid = $wx ['appid'];
-					$appsecret = $wx ['appsecret'];
-
-					require FCPATH . '/lib/php/jssdk.php';
-					$jssdk = new JSSDK ( $appid, $appsecret );
-
-					if ($auser ['openid'] != '' && $auser ['openid'] != null) {
-
-						$url = SITE_URL . $this->setting ['seo_prefix'] . $viewurl . $this->setting ['seo_suffix'];
-						$text = "您回答的问题[$title]有新回答(对方继续追问)，<a href='$url'>请点击查看详情!</a>";
-					
-						$description = "具体点击查看详情";
-						if (! $this->setting ['weixin_tpl_huida']) {
-							$returnmesage = $jssdk->sendtexttouser ( $auser ['openid'], $text );
-						} else {
-							$question ['answers'] = intval ( $question ['answers'] ) + 1;
-							$returnmesage = $jssdk->sendanswertpltouser ( $auser ['openid'], $this->setting ['weixin_tpl_huida'], $url, "您好，您的回答作者有新追问，请及时查看。", $title, $description, $question ['answers'] . "人", "点击查看详情" );
-						}
-
-					}
-
-				}
-				//极光推送
-				$url=url('question/view/' . $qid);
-				jpushmsg("您回答的问题[$title]有新回答(对方继续追问)", $answer['authorid'],"对方继续追问",$url);
-				
+				$mpurl = SITE_URL . $setting ['seo_prefix'] . $viewurl . $setting ['seo_suffix'];			
 				//发送邮件通知
 				$subject = "您回答的问题[".$title."]有新回答(对方继续追问)！";
 				$message = $this->input->post ( 'content' ) . '<p>现在您可以点击<a swaped="true" target="_blank" href="' . $mpurl . '">查看最新回复</a>。</p>';
@@ -175,24 +112,21 @@ class Answer extends CI_Controller {
 		include template ( "appendanswer" );
 	}
 
-	
 	function ajaxviewcomment() {
-		
 		$answerid = intval ( $this->uri->segment ( 3 ) );
 		$commentlist = $this->answer_comment_model->get_by_aid ( $answerid, 0, 50 );
 		$commentstr = '<li class="loading">暂无评论 :)</li>';
-		$_answer=$this->db->get_where('answer',array('id'=>$answerid))->row_array();
-		$qid=$_answer['qid'];
-		$_question=$this->db->get_where('question',array('id'=>$qid))->row_array();
 		if ($commentlist) {
 			$commentstr = "";
-			
+
 			foreach ( $commentlist as $comment ) {
-				$admin_control='';
-				
-				if($this->user ['groupid'] <=3||$this->user ['uid']==$comment['authorid']){
-					$admin_control = '<span class="span-line">|</span><a href="javascript:void(0)" onclick="deletecomment({commentid},{answerid});">删除</a>' ;
-					
+				$admin_control = ($this->user ['grouptype'] == 1) ? '<span class="span-line">|</span><a href="javascript:void(0)" onclick="deletecomment({commentid},{answerid});">删除</a>' : '';
+				if($comment['ishidden']==1){
+					$viewurl = "javascript:void(0)";
+					$target='';
+				}else{
+					$target='target="_blank"';
+					$viewurl = url ( 'user/space/' . $comment ['authorid'] );
 				}
 				
 				$reply_control = ($this->user ['uid'] != $comment ['authorid']) ? '<span class="span-line">|</span><a href="javascript:void(0)" onclick="replycomment(' . $comment ['authorid'] . ',' . $comment ['aid'] . ');">回复</a>' : '';
@@ -200,18 +134,7 @@ class Answer extends CI_Controller {
 					$admin_control = str_replace ( "{commentid}", $comment ['id'], $admin_control );
 					$admin_control = str_replace ( "{answerid}", $comment ['aid'], $admin_control );
 				}
-				if($_question['hidden']==1&&$comment ['authorid']==$_question['authorid']){
-					$comment ['author']="匿名用户";
-					$viewurl = '';
-					$comment ['avatar']=SITE_URL."static/css/default/avatar.gif";
-					$commentstr .= '<li><div class="other-comment am-margin-top-sm"><a id="comment_author_' . $comment ['authorid'] . '" class="pic"><img width="30" height="30" src="' . $comment ['avatar'] . '"></a><p  class="am-margin-0"><a  title="' . $comment ['author'] . '" >' . $comment ['author'] . '</a>：' . $comment ['content'] . '</p></div><div class="replybtn"><span class="times">' . $comment ['format_time'] . '</span>' . $reply_control . '' . $admin_control . '</div></li>';
-					
-				}else{
-					$viewurl = url ( 'user/space/' . $comment ['authorid'] );
-					$commentstr .= '<li><div class="other-comment am-margin-top-sm"><a id="comment_author_' . $comment ['authorid'] . '" href="' . $viewurl . '" title="' . $comment ['author'] . '"  class="pic"><img width="30" height="30" src="' . $comment ['avatar'] . '"  onmouseover="pop_user_on(this, \'' . $comment ['authorid'] . '\', \'\');"  onmouseout="pop_user_out();"></a><p  class="am-margin-0"><a href="' . $viewurl . '" title="' . $comment ['author'] . '" target="_blank">' . $comment ['author'] . '</a>：' . $comment ['content'] . '</p></div><div class="replybtn"><span class="times">' . $comment ['format_time'] . '</span>' . $reply_control . '' . $admin_control . '</div></li>';
-					
-				}
-				
+				$commentstr .= '<li><div class="other-comment am-margin-top-sm"><a id="comment_author_' . $comment ['authorid'] . '" href="' . $viewurl . '" title="' . $comment ['author'] . '" '.$target.' class="pic"><img width="30" height="30" src="' . $comment ['avatar'] . '"  ></a><p  class="am-margin-0"><a href="' . $viewurl . '" title="' . $comment ['author'] . '" '.$target.'>' . $comment ['author'] . '</a>：' . $comment ['content'] . '</p></div><div class="replybtn"><span class="times">' . $comment ['format_time'] . '</span>' . $reply_control . '' . $admin_control . '</div></li>';
 			}
 		}
 		exit ( $commentstr );
@@ -265,14 +188,7 @@ class Answer extends CI_Controller {
 
 	function deletecomment() {
 		if (null !== $this->input->post ( 'commentid' )) {
-			
 			$commentid = intval ( $this->input->post ( 'commentid' ) );
-			$_comment=$this->db->get_where('answer_comment',array('id'=>$commentid))->row_array();
-			if($this->user['groupid']>3){
-				if($_comment['authorid']!=$this->user['uid']){
-					exit ( '不能删除非自己的评论' );
-				}
-			}
 			$answerid = intval ( $this->input->post ( 'answerid' ) );
 			$this->answer_comment_model->remove ( $commentid, $answerid );
 			exit ( '1' );

@@ -21,7 +21,27 @@ class Answer_comment_model extends CI_Model {
 		$query = $this->db->select ( '*' )->from ( 'answer_comment' )->where ( array ('aid' => $aid ) )->order_by ( 'time DESC' )->limit ( $limit, $start )->get ();
 
 		foreach ( $query->result_array () as $comment ) {
+			$comment ['ishidden'] =0;
 			$comment ['avatar'] = get_avatar_dir ( $comment ['authorid'] );
+			//根据回答id查询当前回答
+			$answer=$this->db->get_where('answer',array('id'=>$comment['aid'] ))->row_array();
+			if($answer){
+				//获取当前问题id
+				$qid=$answer['qid'];
+				//查询当前问题
+				$question=$this->db->get_where('question',array('id'=>$qid ))->row_array();
+				if($question){
+					if($question['hidden']==1&&$comment['authorid']==$question['authorid']){
+						//判断是否匿名
+						$comment['ishidden'] =1;
+						$comment['author'] ="匿名用户";
+						$comment ['avatar'] = get_avatar_dir ( 0);
+						$comment ['authorid']=0;
+					}
+					
+				}
+			}
+		
 			$comment ['format_time'] = tdate ( $comment ['time'] );
 			$comment ['content'] = checkwordsglobal ( $comment ['content'] );
 			$commentlist [] = $comment;
