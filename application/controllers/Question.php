@@ -2897,7 +2897,7 @@ class Question extends CI_Controller {
 			exit ();
 		}
 		
-		if ($this->user ['grouptype'] != 1) {
+		if ($this->user ['grouptype'] != 1&&$this->user['credit1']<$this->setting['jingyan']) {
 			if (strtolower ( trim ( $this->input->post ( 'code' ) ) ) != $this->user_model->get_code ()) {
 				
 				$message ['message'] = "验证码错误!";
