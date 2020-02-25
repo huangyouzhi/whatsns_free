@@ -275,14 +275,7 @@ class User extends CI_Controller {
 			exit ();
 		}
 		
-		// $message ['code'] = 200;
-		// $message ['result'] = '测试图片!';
-		// echo json_encode ( $message );
-		// exit();
-		$uploadpath = 'data/attach/vertify/';
-		if (! is_dir ( $uploadpath )) {
-			mkdir ( $uploadpath );
-		}
+	
 		
 		$this->load->model ( "vertify_model" );
 		$vertify = $this->vertify_model->get_by_uid ( $uid );
@@ -301,72 +294,50 @@ class User extends CI_Controller {
 				}
 			}
 		}
+		$uploadpath = 'data/attach/vertify/';
+		if (! is_dir ( $uploadpath )) {
+			mkdir ( $uploadpath );
+		}
 		checkattack ( $_POST ['zhaopian1'] );
-		$img = $_POST ['zhaopian1'];
-		$file = '';
-		if ($img != SITE_URL . $vertify ['zhaopian1']) {
-			preg_match ( '/^(data:\s*image\/(\w+);base64,)/', $img, $result );
-			if (strpos ( $img, 'jpeg' )) {
-				$img = str_replace ( 'data:image/jpeg;base64,', '', $img );
-			} else {
-				$img = str_replace ( 'data:image/png;base64,', '', $img );
-			}
-			$img = str_replace ( ' ', '+', $img );
-			$data = base64_decode ( $img );
-			$radname = $uid . "_1";
-			
-			$type = $result [2]; // 获取图片的类型jpg png等
-			$file = $uploadpath . $radname . '.' . $type;
+		$file = $_POST ['zhaopian1'];
+		if(empty($file)){
+			$message ['code'] = 300;
+			$message ['result'] = "附件一认证图片不能为空";
+			echo json_encode ( $message );
+			exit ();
+		}
+		$fileext=strtolower(pathinfo( parse_url($file)['path'] )['extension']);
+		$filetype = array (
+				"png",
+				"jpg",
+				"jpeg"
+		);
+		if (! in_array ( $fileext, $filetype )) {
+			$message ['code'] = 300;
+			$message ['result'] = "文件格式只允许为png,jpg,jpeg";
+			echo json_encode ( $message );
+			exit ();
+		}
+		checkattack ( $_POST ['zhaopian2'] );
+		$file2 = $_POST ['zhaopian2'];
+
+		if (!empty($file2)) {
+			$file2ext=strtolower(pathinfo( parse_url($file2)['path'] )['extension']);
 			$filetype = array (
 					"png",
 					"jpg",
-					"jpeg" 
+					"jpeg"
 			);
-			if (! in_array ( $type, $filetype )) {
+			if (! in_array ( $file2ext, $filetype )) {
 				$message ['code'] = 300;
 				$message ['result'] = "文件格式只允许为png,jpg,jpeg";
 				echo json_encode ( $message );
 				exit ();
 			}
-			$success = file_put_contents ( $file, $data );
-		} else {
-			$file = $vertify ['zhaopian1'];
-		}
-		
-		checkattack ( $_POST ['zhaopian2'] );
-		$img2 = $_POST ['zhaopian2'];
-		
-		$file2 = '';
-		if ($img2 != '') {
-			if ($img2 != SITE_URL . $vertify ['zhaopian2']) {
-				preg_match ( '/^(data:\s*image\/(\w+);base64,)/', $img2, $result );
-				
-				if (strpos ( $img2, 'jpeg' )) {
-					$img2 = str_replace ( 'data:image/jpeg;base64,', '', $img2 );
-				} else {
-					$img2 = str_replace ( 'data:image/png;base64,', '', $img2 );
-				}
-				$img2 = str_replace ( ' ', '+', $img2 );
-				$data1 = base64_decode ( $img2 );
-				$radname = $uid . "_2";
-				
-				$type = $result [2]; // 获取图片的类型jpg png等
-				$file2 = $uploadpath . $radname . '.' . $type;
-				$filetype = array (
-						"png",
-						"jpg",
-						"jpeg" 
-				);
-				if (! in_array ( $type, $filetype )) {
-					$message ['code'] = 300;
-					$message ['result'] = "文件格式只允许为png,jpg,jpeg";
-					echo json_encode ( $message );
-					exit ();
-				}
-				$success = file_put_contents ( $file2, $data1 );
-			} else {
-				$file2 = $vertify ['zhaopian2'];
-			}
+			
+	
+		}else{
+			$file2 = $vertify ['zhaopian2'];
 		}
 		
 		$type = intval ( $this->input->post ( 'type' ) );

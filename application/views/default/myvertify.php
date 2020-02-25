@@ -89,9 +89,10 @@
 
 							<a class="btn btn-mini btn-default">上传附件</a>
 
-							<p class="text-hui">请提交对应的身份证或者组织机构代码证件扫描</p>
-							<input  {if $vertify['status']==0}disabled{/if} name="attach1" type="file" class="fujianfule  collapse" onchange="previewImage(this)">
-					  <img src='{if isset($vertify['zhaopian1'])}{SITE_URL}{$vertify['zhaopian1']}{/if}' id="vertify_img1" class="vertify_img {if isset($vertify['zhaopian1'])&&$vertify['zhaopian1']==''}hide{/if}"/>
+							<p class="text-hui">请提交对应的身份证图片或者营业执照证件扫描电子版图片，<span style="color:red;">最大3M,jpg,png格式</span></p>
+						<input  {if $vertify['status']==0}disabled{/if} name="attach1" type="file" id="upimgfile" class="fujianfule  collapse" accept="image/*" onchange="uploadvertify(this)">
+					     <p class="upimgtip"></p>
+					  <img src='{if isset($vertify['zhaopian1'])}{$vertify['zhaopian1']}{eval echo "?rand=".rand(1,1000);}{/if}' id="vertify_img1" class="vertify_img {if isset($vertify['zhaopian1'])&&$vertify['zhaopian1']==''}hide{/if}"/>
           </div>
         </div>
                <div class="form-group">
@@ -100,9 +101,10 @@
 
 							<a class="btn btn-mini btn-default">上传附件</a>
 
-							<p class="text-hui">其它证明材料(图片格式)</p>
-							<input  {if $vertify['status']==0}disabled{/if} name="attach2" type="file" class="fujianfule  collapse" onchange="previewImage1(this)">
-					  <img src='{if isset($vertify['zhaopian2'])}{SITE_URL}{$vertify['zhaopian2']}{/if}' id="vertify_img2"  class="vertify_img {if isset($vertify['zhaopian2'])&&$vertify['zhaopian2']==''}hide{/if}"/>
+							<p class="text-hui">其它证明材料(图片格式)，<span style="color:red;">最大3M,jpg,png格式</span></p>
+							<input  {if $vertify['status']==0}disabled{/if} name="attach2" type="file" id="upimgfile2" class="fujianfule  collapse" accept="image/*" onchange="uploadvertify2(this)">
+					     <p class="upimgtip2"></p>
+					  <img src='{if isset($vertify['zhaopian2'])}{$vertify['zhaopian2']}{eval echo "?rand=".rand(1,1000);}{/if}' id="vertify_img2"  class="vertify_img {if isset($vertify['zhaopian2'])&&$vertify['zhaopian2']==''}hide{/if}"/>
           </div>
         </div>
 
@@ -134,6 +136,27 @@
 {if $vertify['status']!=0}
 <script>
 
+//图片大小验证
+function verificationPicFile(file) {
+    var fileSize = 0;
+    var fileMaxSize = 1024*3;//3M
+    var filePath = file.value;
+    if(filePath){
+        fileSize =file.files[0].size;
+        var size = fileSize / 1024;
+        if (size > fileMaxSize) {
+            alert("文件大小不能大于3M！");
+            file.value = "";
+            return false;
+        }else if (size <= 0) {
+            alert("文件大小不能为0M！");
+            file.value = "";
+            return false;
+        }
+    }else{
+        return false;
+    }
+}
 //类型切换
 $("#vertify_form .vertify_type").click(function(){
 	var _val=$(this).val();
@@ -148,7 +171,116 @@ $("#vertify_form .vertify_type").click(function(){
 		break;
 	}
 })
+ function uploadvertify(file){
+	    	
+	   	 if (file.files && file.files[0])
+	        {
+	   		verificationPicFile(file);
+	   	     $(".upimgtip").html("图片上传中....");
+	   		 $("#upimgfile").attr("disabled","disabled");
+	   		  var type = "wangEditorMobileFile";
+	   		  var ischeck=0;
+	   		
+	   		    var formData = new FormData();
+	   		    formData.append(type, $("#upimgfile")[0].files[0]);
+	   		 formData.append("addimg",0);
+		
+	   	  
+	   		    $.ajax({
+	   		        type: "POST",
+	   		        url: '{url attach/upimg}',
+	   		        data: formData,
+	   		        processData: false,
+	   		        contentType: false,
+	   		        //返回数据的格式
+	   	            datatype: "text",//"xml", "html", "script", "json", "jsonp", "text".
+	   	            beforeSend: function () {
 
+	   	                ajaxloading("提交中...");
+	   	             },
+	   		        success: function (data) {
+	   		         $("#upimgfile").removeAttr("disabled");
+	   		     if(data.indexOf('error')==0){
+	   		    	
+                   alert(data.replace('error|',''));
+                   return false;
+	   		     }else{
+	   		    	$("#vertify_img1").attr("src",data).removeClass("hide");
+	   		     }
+	   		         
+	   		        
+	   		          
+	   		        },
+	   	             complete: function () {
+	   	            	 $(".upimgtip").html("");
+	   	            	 $("#upimgfile").removeAttr("disabled");
+	   	                 removeajaxloading();
+	   	              },
+	   	             //调用出错执行的函数
+	   	             error: function(){
+	   	              removeajaxloading();
+	   	            	 $("#upimgfile").removeAttr("disabled");
+	   	                 //请求出错处理
+	   	            	 alert("上传出错");
+	   	             }
+	   		    });
+	        }
+	   }
+function uploadvertify2(file){
+	
+  	 if (file.files && file.files[0])
+       {
+  		verificationPicFile(file);
+  	     $(".upimgtip2").html("图片上传中....");
+  		 $("#upimgfile2").attr("disabled","disabled");
+  		  var type = "wangEditorMobileFile";
+  		  var ischeck=0;
+  		
+  		    var formData = new FormData();
+  		    formData.append(type, $("#upimgfile2")[0].files[0]);
+  		 formData.append("addimg",0);
+	
+  	  
+  		    $.ajax({
+  		        type: "POST",
+  		        url: '{url attach/upimg}',
+  		        data: formData,
+  		        processData: false,
+  		        contentType: false,
+  		        //返回数据的格式
+  	            datatype: "text",//"xml", "html", "script", "json", "jsonp", "text".
+  	            beforeSend: function () {
+
+  	                ajaxloading("提交中...");
+  	             },
+  		        success: function (data) {
+  		         $("#upimgfile2").removeAttr("disabled");
+  		     if(data.indexOf('error')==0){
+  		    	
+              alert(data.replace('error|',''));
+              return false;
+  		     }else{
+  		    	$("#vertify_img2").attr("src",data).removeClass("hide");
+  		     }
+  		         
+  		        
+  		          
+  		        },
+  	             complete: function () {
+  	            	 $(".upimgtip2").html("");
+  	            	 $("#upimgfile2").removeAttr("disabled");
+  	                 removeajaxloading();
+  	              },
+  	             //调用出错执行的函数
+  	             error: function(){
+  	              removeajaxloading();
+  	            	 $("#upimgfile2").removeAttr("disabled");
+  	                 //请求出错处理
+  	            	 alert("上传出错");
+  	             }
+  		    });
+       }
+  }
 //提交资料
 function submitvertify(){
 	//认证类型
@@ -216,110 +348,6 @@ function submitvertify(){
 	ajaxpost(_posturl,data,success);
 }
 
-//图片上传预览    IE是用了滤镜。
-function previewImage(file)
-{
-  var MAXWIDTH  = 260;
-  var MAXHEIGHT = 180;
-
-  if (file.files && file.files[0])
-  {
-
-
-      var reader = new FileReader();
-      reader.onload = function(evt){
-
-    	  var canvas=document.createElement("canvas");
-          var ctx=canvas.getContext("2d");
-          var image=new Image();
-          image.src=evt.target.result;
-          image.onload=function(){
-              var cw=image.width;
-              var ch=image.height;
-              var w=image.width;
-              var h=image.height;
-              canvas.width=w;
-              canvas.height=h;
-              if(cw>800&&cw>ch){
-                  w=800;
-                  h=(800*ch)/cw;
-                  canvas.width=w;
-                  canvas.height=h;
-              }
-              if(ch>800&&ch>cw){
-                  h=800;
-                  w=(800*cw)/ch;
-                  canvas.width=w;
-                  canvas.height=h;
-
-              }
-
-              ctx.drawImage(image,0,0,w,h);
-              var _src=canvas.toDataURL("image/png",1);
-              console.log(_src);
-
-    	 $("#vertify_img1").attr("src",_src).removeClass("hide");
-
-
-      }
-      }
-      reader.readAsDataURL(file.files[0]);
-  }
-
-
-}
-//图片上传预览    IE是用了滤镜。
-function previewImage1(file)
-{
-  var MAXWIDTH  = 260;
-  var MAXHEIGHT = 180;
-
-  if (file.files && file.files[0])
-  {
-
-
-      var reader = new FileReader();
-      reader.onload = function(evt){
-
-    	  var canvas=document.createElement("canvas");
-          var ctx=canvas.getContext("2d");
-          var image=new Image();
-          image.src=evt.target.result;
-          image.onload=function(){
-              var cw=image.width;
-              var ch=image.height;
-              var w=image.width;
-              var h=image.height;
-              canvas.width=w;
-              canvas.height=h;
-              if(cw>800&&cw>ch){
-                  w=800;
-                  h=(800*ch)/cw;
-                  canvas.width=w;
-                  canvas.height=h;
-              }
-              if(ch>800&&ch>cw){
-                  h=800;
-                  w=(800*cw)/ch;
-                  canvas.width=w;
-                  canvas.height=h;
-
-              }
-
-              ctx.drawImage(image,0,0,w,h);
-              var _src=canvas.toDataURL("image/png",1);
-              console.log(_src);
-
-    	 $("#vertify_img2").attr("src",_src).removeClass("hide");
-
-
-      }
-      }
-      reader.readAsDataURL(file.files[0]);
-  }
-
-
-}
 </script>
 {/if}
  <div class="modal fade" id="myLgModal">
