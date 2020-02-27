@@ -389,7 +389,9 @@ function uc_user_login($username, $password, $isuid = 0, $checkques = 0, $questi
 	$return = call_user_func(UC_API_FUNC, 'user', 'login', array('username'=>$username, 'password'=>$password, 'isuid'=>$isuid, 'checkques'=>$checkques, 'questionid'=>$questionid, 'answer'=>$answer, 'ip' => $ip));
 	return UC_CONNECT == 'mysql' ? $return : uc_unserialize($return);
 }
-
+function uc_update_uid_byusername($username, $uid) {
+	return call_user_func(UC_API_FUNC, 'user', 'update_uid_byusername', array('uid'=>$uid, 'username'=>$username));
+}
 function uc_user_synlogin($uid) {
 	$uid = intval($uid);
 	if(@include UC_ROOT.'./data/cache/apps.php') {

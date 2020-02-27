@@ -42,6 +42,10 @@
 
             <h6>第三方登录</h6>
             <ul>
+			    <!--{if $wxbrower}-->
+                <li><a class="weixin" href="{url plugin_weixin/wxauth}"><i class="fa fa-wechat"></i></a></li>
+                <!--{/if}-->
+				
                 <!--{if $setting['sinalogin_open']}-->
                 <li><a class="weibo" href="{SITE_URL}plugin/sinalogin/index.php"><i class="fa fa-weibo"></i></a></li>
                 <!--{/if}-->
@@ -115,24 +119,30 @@ $("#login_submit").bind("click",function(event){
 		data=$.trim(data);
 		
 		if(data.indexOf('ok|')>=0){
+				
 				var datastrs=data.split('|');
-				$("body").append(datastrs);
+			console.log(datastrs[1])
+			document.write("<div style='font-size:15px;margin-top:100px;font-weight:900;'><center>登录成功!</center></div>"+datastrs[1]);
 				data='login_ok';
 			}
+		
         	 el.loading("hide");
+        
             if(data=='login_ok'){
 
             	keepuserinfo();
 
-
-
-
-             	var _forward="{$forward}"; //user/logout
+ 		var _forward="{$forward}"; //user/logout
+          
+               setTimeout(function(){
+              
              	if(_auth==1||_forward.indexOf('user/getphonepass')>=0||_forward.indexOf('user/getpass')>=0||_forward.indexOf('user/logout')>=0||_forward.indexOf('user/checkemail')>=0){
              		window.location.href="{url index}";
              	}else{
              		window.location.href="{$forward}";
              	}
+               },1500)
+             
 
 
 
@@ -176,6 +186,8 @@ el2=$.tips({
 
         //调用出错执行的函数
         error: function(){
+        	console.log("异常")
+        	  el.loading("hide");
             //请求出错处理
         }
     });

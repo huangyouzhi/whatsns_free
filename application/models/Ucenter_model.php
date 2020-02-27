@@ -56,11 +56,14 @@ class Ucenter_model extends CI_Model {
 		include FCPATH . 'data/ucconfig.inc.php';
 		! defined ( 'UC_API' ) && define ( 'UC_API', '1' );
 		require_once FCPATH . 'uc_client/client.php';
+			
 		$tuser = $this->user_model->get_by_username ( $username );
 		$ucenter_user = uc_get_user ( $username );
+			
 		if (! $ucenter_user && ($tuser ['username'] == $username && md5 ( trim ( $password ) ) == $tuser ['password'])) {
 
 			$uid = uc_user_register ( $tuser ['username'], $password, $tuser ['email'] );
+			
 			if ($this->setting ["ucenter_setuid_byask"]) {
 				uc_update_uid_byusername ( $tuser ['username'], $tuser ['uid'] );
 				$uid = $tuser ['uid'];
@@ -163,8 +166,16 @@ class Ucenter_model extends CI_Model {
 		} else {
 
 			if ($this->setting ["ucenter_setuid_byask"]) {
-				$uid = $this->user_model->add ( $username, $password, $email );
-				uc_update_uid_byusername ( $username, $uid );
+				$tbuid = $this->user_model->add ( $username, $password, $email );
+				if($uid>$tbuid){
+					//如果uc那边的uid比问答的uid大，那么就同步uc的
+					$this->db->where(array('uid'=>$tbuid))->update('user',array('uid'=>$uid));
+				$uid=$tbuid;
+				}else{
+					//如果问答的uid比uc的大就同步问答的
+						uc_update_uid_byusername ( $username, $uid );
+				}
+			
 			} else {
 				$this->user_model->add ( $username, $password, $email, $uid );
 			}
