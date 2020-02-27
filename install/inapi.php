@@ -6,7 +6,7 @@ error_reporting(E_ALL ^ E_WARNING);
 ini_set ( 'date.timezone', 'Asia/Shanghai' );
 define('WHATSNS_ROOT', dirname(__FILE__).'/../');
 define('WHATSNS_VERSION', '4.1');
-define('WHATSNS_RELEASE', '20191210');
+define('WHATSNS_RELEASE', '20200227');
 define('APPPATH', WHATSNS_ROOT.'./application/');
 define('CHARSET', 'UTF-8');
 define('DBCHARSET', 'utf8');
