@@ -2071,6 +2071,14 @@ function isimage($extname) {
  *        	需要裁剪的高
  */
 function imagecropper($source_path, $dst, $target_width, $target_height) {
+		$httpxieyi=strtolower(substr($source_path,0,7));
+	$httpsxieyi=strtolower(substr($source_path,0,8));
+	if(!file_exists($source_path)){
+		//非站内图片，看看外部图片格式
+		if($httpxieyi!='http://'&&$httpsxieyi!='https://'){
+			exit("非正常图片地址");
+		}
+	}
 	$source_info = getimagesize ( $source_path );
 	
 	$source_width = $source_info [0];
