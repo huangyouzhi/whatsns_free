@@ -47,7 +47,7 @@ class Plugin_weixin extends CI_Controller {
 			$get_user_info_url = "https://api.weixin.qq.com/cgi-bin/user/info?access_token=$access_token&openid=$openid&lang=zh_CN";
 			// $row=$weixin->get_user_info($res['openid']);
 			$userinfo = $this->getJson ( $get_user_info_url );
-		
+
 			if ($userinfo ['errcode'] == '40001' || $oauth2 ['errcode'] == '40029') {
 				$refreshtoken = "https://api.weixin.qq.com/sns/oauth2/refresh_token?appid=$appid&grant_type=refresh_token&refresh_token=$refresh_token ";
 				$oauth2 = $this->getJson ( $refreshtoken );
@@ -67,34 +67,11 @@ class Plugin_weixin extends CI_Controller {
 				} else {
 					$this->weixin_info_model->f_insert ( $userinfo );
 				}
-				session_start();
 				//如果存在登录用户就直接绑定
                 if($this->user['uid']){
                 	$this->db->set ( 'openid',$userinfo['openid']  );
                 	$this->db->where_in ( 'uid', $this->user ['uid'] );
                 	$this->db->update ( 'user' );
-                	
-                	if($_SESSION['logintime']){
-                		//如果存在，写入状态
-                		$message['code']=2000;
-                		$message['openid']=$openid;
-                		$message['logintime']=$_SESSION['logintime'];
-                		$message['msg']="扫码登录成功 √";
-                		//写入订单文件
-                		$yearmonth = gmdate ( 'Ym', $_SERVER ['REQUEST_TIME'] );
-                		$logdir = FCPATH . '/data/logs/';
-                		if (! is_dir ( $logdir ))
-                			mkdir ( $logdir, 0777 );
-                			$logfile = $logdir . $yearmonth . '_' . $_SESSION['logintime'] . '.php';
-                			if ($fp = @fopen ( $logfile, 'w' )) {
-                				@flock ( $fp, 2 );
-                				fwrite ( $fp, "<?php\nreturn " . var_export ( $message, true ) . ";\n?>" );
-                				fclose ( $fp );
-                			}
-                			unset($_SESSION['logintime']);
-                			
-                	}
-                	
                 	$this->message ( '绑定成功!', 'user/mycategory' );
                 	exit();
                 }
@@ -102,74 +79,75 @@ class Plugin_weixin extends CI_Controller {
 
 				$hduid = $_tmp_user ['uid'];
 				if (! $_tmp_user) {
-					
-					
-					if($_SESSION['logintime']){
-						//如果存在，写入状态
-						$message['code']=2002;
-						$message['logintime']=$_SESSION['logintime'];
-						$message['msg']="请先在微信端完成注册在刷新页面打开微信扫一扫";
-						//写入订单文件
-						$yearmonth = gmdate ( 'Ym', $_SERVER ['REQUEST_TIME'] );
-						$logdir = FCPATH . '/data/logs/';
-						if (! is_dir ( $logdir ))
-							mkdir ( $logdir, 0777 );
-							$logfile = $logdir . $yearmonth . '_' . $_SESSION['logintime'] . '.php';
-							if ($fp = @fopen ( $logfile, 'w' )) {
-								@flock ( $fp, 2 );
-								fwrite ( $fp, "<?php\nreturn " . var_export ( $message, true ) . ";\n?>" );
-								fclose ( $fp );
-							}
-							unset($_SESSION['logintime']);
+                  if($this->setting['weixinregset']){
+						//如果开启了扫码直接注册
+						$openid=$userinfo['openid'] ;
+						$nickname = preg_replace_callback('/./u',function(array $match){
+							return strlen($match[0]) >= 4 ? '' : $match[0];
+						},$userinfo['nickname']);
 							
-					}
-					
-					$rurl = url("account/bindregister");
+							$nickname=trim($nickname);
+							if(!empty($nickname)){
+								$tempusernickname=$this->db->get_where('user',array('username'=>$nickname))->row_array();
+								
+								
+							}
+							
+							$insertuser=array(
+									'username'=>$nickname,
+									'password'=>md5(strtolower(random(8))),
+									'openid'=>$openid,
+									'regtime'=>time(),
+									'lastlogin'=>time(),
+									'regip'=>getip()
+								
+									
+							);
+							$this->db->insert('user',$insertuser);
+							$hduid=$this->db->insert_id();
+							$this->credit ( $hduid, $this->setting ['credit1_register'], $this->setting ['credit2_register'] ); // 注册增加积分
+							if(empty($nickname)){
+								$nickname="用户".$hduid;
+								$this->db->where(array('uid'=>$hduid))->update('user',array('username'=>$nickname));
+							}
+							if($tempusernickname){
+								$nickname=$nickname.$hduid;
+								$this->db->where(array('uid'=>$hduid))->update('user',array('username'=>$nickname));
+							}
+							$this->load->model ( "doing_model" );
+							$this->doing_model->add ( $hduid, $nickname, 12, $hduid, "欢迎您注册了".$this->setting ['site_name'] );
+							$hduid = intval ( $hduid );
+							
+							$avatardir = "/data/avatar/";
+							$extname = 'jpg';
+							$upload_tmp_file = FCPATH . '/data/tmp/user_avatar_' . $hduid . '.' . $extname;
+							$hduid = abs ( $hduid );
+							$hduid = sprintf ( "%09d", $hduid );
+							$dir1 = $avatardir . substr ( $hduid, 0, 3 );
+							$dir2 = $dir1 . '/' . substr ( $hduid, 3, 2 );
+							$dir3 = $dir2 . '/' . substr ( $hduid, 5, 2 );
+							(! is_dir ( FCPATH . $dir1 )) && forcemkdir ( FCPATH . $dir1 );
+							(! is_dir ( FCPATH . $dir2 )) && forcemkdir ( FCPATH . $dir2 );
+							(! is_dir ( FCPATH . $dir3 )) && forcemkdir ( FCPATH . $dir3 );
+							
+							$smallimg = $dir3 . "/small_" . $hduid . '.' . $extname;
+							$smallimgdir = $dir3 . "/";
+							// get_remote_image($userinfo['headimgurl'],FCPATH . $smallimgdir."small_" . $hduid . '.' . $extname);
+							$this->getImage($userinfo['headimgurl'],"small_" . $hduid . '.' . $extname, FCPATH . $smallimgdir, array('jpg','jpeg','png', 'gif'));
+							
+					}else{
+                    	$rurl = url("account/bindregister");
 
 					header ( "Location:$rurl" );
+                  }
+				
 
 		// $hduid=$_ENV['user']->weixinadd($userinfo['nickname'],'123456',$userinfo['openid']);
 				}
-				$hduid = intval ( $hduid );
-				$avatardir = "/data/avatar/";
-				$extname = 'jpg';
-				$upload_tmp_file = FCPATH . '/data/tmp/user_avatar_' . $hduid . '.' . $extname;
-				$hduid = abs ( $hduid );
-				$hduid = sprintf ( "%09d", $hduid );
-				$dir1 = $avatardir . substr ( $hduid, 0, 3 );
-				$dir2 = $dir1 . '/' . substr ( $hduid, 3, 2 );
-				$dir3 = $dir2 . '/' . substr ( $hduid, 5, 2 );
-				(! is_dir ( FCPATH . $dir1 )) && forcemkdir ( FCPATH . $dir1 );
-				(! is_dir ( FCPATH . $dir2 )) && forcemkdir ( FCPATH . $dir2 );
-				(! is_dir ( FCPATH . $dir3 )) && forcemkdir ( FCPATH . $dir3 );
-
-				$smallimg = $dir3 . "/small_" . $hduid . '.' . $extname;
-				$smallimgdir = $dir3 . "/";
-				// get_remote_image($userinfo['headimgurl'],FCPATH . $smallimgdir."small_" . $hduid . '.' . $extname);
-				//$this->getImage($userinfo['headimgurl'],"small_" . $hduid . '.' . $extname, FCPATH . $smallimgdir, array('jpg','jpeg','png', 'gif'));
+	
 				$cookietime = 2592000;
 				$this->user_model->refresh ( $hduid, 1, $cookietime );
 
-				if($_SESSION['logintime']){
-					//如果存在，写入状态
-					$message['code']=2000;
-					$message['openid']=$openid;
-					$message['logintime']=$_SESSION['logintime'];
-					$message['msg']="扫码登录成功 √";
-					$yearmonth = gmdate ( 'Ym', $_SERVER ['REQUEST_TIME'] );
-					$logdir = FCPATH . '/data/logs/';
-					if (! is_dir ( $logdir ))
-						mkdir ( $logdir, 0777 );
-						$logfile = $logdir . $yearmonth . '_' . $_SESSION['logintime'] . '.php';
-						if ($fp = @fopen ( $logfile, 'w' )) {
-							@flock ( $fp, 2 );
-							fwrite ( $fp, "<?php\nreturn " . var_export ( $message, true ) . ";\n?>" );
-							fclose ( $fp );
-						}
-						unset($_SESSION['logintime']);
-						
-				}
-				
 				$this->message ( '登陆成功!', 'index' );
 			} else {
 				$this->message ( '授权出错,请重新授权!' );
@@ -180,44 +158,13 @@ class Plugin_weixin extends CI_Controller {
 			$this->message ( '授权出错,没有CODE,请重新授权!' );
 		}
 	}
-	function ajaxrequestresult() {
-		$message = array ();
-		$logdir = FCPATH . '/data/logs/';
-		$yearmonth = gmdate ( 'Ym', $_SERVER ['REQUEST_TIME'] );
-		$logfile = $logdir . $yearmonth . '_' . $_POST ['name'] . '.php';
-		if (! file_exists ( $logfile )) {
-			$message ['code'] = 2005;
-			$message ['logintime'] = time();
-			$message ['msg'] = "请打开微信扫一扫";
-			// $message ['filename'] = $logfile;
-		} else {
-			$message=include ($logfile);
-			if($message['code']==2000){
-				//登录并删掉登录文件
-				$openid=$message['openid'];
-				$_tmp_user = $this->user_model->get_by_openid ($openid );
-				
-				$hduid = $_tmp_user['uid'];
-				$cookietime = 2592000;
-				$this->user_model->refresh ( $hduid, 1, $cookietime );
-				unlink($logfile);
-			}
-		}
-		echo json_encode ( $message );
-		exit ();
-	}
 	//pc端扫码
 	function openauth() {
+		$appid = $this->setting['wechat_appid'];
+		$url = url ( "plugin_weixin/loginauth" );
+		$url = "https://open.weixin.qq.com/connect/qrconnect?appid=$appid&redirect_uri=$url&response_type=code&scope=snsapi_login&state=1&connect_redirect=1#wechat_redirect";
 
-		$time=time();
-		$qrcode=url("plugin_weixin/wxauth/$time");
-		
-		include template('pcwxlogin');
-// 		$appid = $this->setting['wechat_appid'];
-// 		$url = url ( "plugin_weixin/loginauth" );
-// 		$url = "https://open.weixin.qq.com/connect/qrconnect?appid=$appid&redirect_uri=$url&response_type=code&scope=snsapi_login&state=1&connect_redirect=1#wechat_redirect";
-
-// 		header ( 'location:' . $url );
+		header ( 'location:' . $url );
 	}
 	function loginauth() {
 		$code = $_GET ['code'];
@@ -267,7 +214,64 @@ class Plugin_weixin extends CI_Controller {
 
 			$hduid = $_tmp_user ['uid'];
 			if (! $_tmp_user) {
-				$token_arr ['access_token'] = $token;
+              if($this->setting['weixinregset']){
+						//如果开启了扫码直接注册
+						$openid=$user_info['openid'] ;
+						$nickname = preg_replace_callback('/./u',function(array $match){
+							return strlen($match[0]) >= 4 ? '' : $match[0];
+						},$user_info['nickname']);
+							
+							$nickname=trim($nickname);
+							if(!empty($nickname)){
+								$tempusernickname=$this->db->get_where('user',array('username'=>$nickname))->row_array();
+								
+								
+							}
+							
+							$insertuser=array(
+									'username'=>$nickname,
+									'password'=>md5(strtolower(random(8))),
+									'openid'=>$user_info['openid'],
+									'regtime'=>time(),
+									'lastlogin'=>time(),
+									'regip'=>getip()
+								
+									
+							);
+							$this->db->insert('user',$insertuser);
+							$hduid=$this->db->insert_id();
+							$this->credit ( $hduid, $this->setting ['credit1_register'], $this->setting ['credit2_register'] ); // 注册增加积分
+							if(empty($nickname)){
+								$nickname="用户".$hduid;
+								$this->db->where(array('uid'=>$hduid))->update('user',array('username'=>$nickname));
+							}
+							if($tempusernickname){
+								$nickname=$nickname.$hduid;
+								$this->db->where(array('uid'=>$hduid))->update('user',array('username'=>$nickname));
+							}
+							$this->load->model ( "doing_model" );
+							$this->doing_model->add ( $hduid, $nickname, 12, $hduid, "欢迎您注册了".$this->setting ['site_name'] );
+							$hduid = intval ( $hduid );
+							
+							$avatardir = "/data/avatar/";
+							$extname = 'jpg';
+							$upload_tmp_file = FCPATH . '/data/tmp/user_avatar_' . $hduid . '.' . $extname;
+							$hduid = abs ( $hduid );
+							$hduid = sprintf ( "%09d", $hduid );
+							$dir1 = $avatardir . substr ( $hduid, 0, 3 );
+							$dir2 = $dir1 . '/' . substr ( $hduid, 3, 2 );
+							$dir3 = $dir2 . '/' . substr ( $hduid, 5, 2 );
+							(! is_dir ( FCPATH . $dir1 )) && forcemkdir ( FCPATH . $dir1 );
+							(! is_dir ( FCPATH . $dir2 )) && forcemkdir ( FCPATH . $dir2 );
+							(! is_dir ( FCPATH . $dir3 )) && forcemkdir ( FCPATH . $dir3 );
+							
+							$smallimg = $dir3 . "/small_" . $hduid . '.' . $extname;
+							$smallimgdir = $dir3 . "/";
+							// get_remote_image($userinfo['headimgurl'],FCPATH . $smallimgdir."small_" . $hduid . '.' . $extname);
+							$this->getImage($user_info['headimgurl'],"small_" . $hduid . '.' . $extname, FCPATH . $smallimgdir, array('jpg','jpeg','png', 'gif'));
+							
+					}else{
+                $token_arr ['access_token'] = $token;
 				$token_arr ['uid'] = $user_info ['openid'];
 				$token_arr ['username'] = $user_info ['nickname'];
 				$token_arr ['gender'] = $user_info ['sex'];
@@ -277,6 +281,9 @@ class Plugin_weixin extends CI_Controller {
 				$_SESSION ['authinfo'] = $token_arr;
 				header ( "Location:" . url ( 'user/login' ) . "?oauth_provider=WeixinProvider&code=" . time () );
 				exit ();
+                
+              }
+				
 			}
 			$hduid = intval ( $hduid );
 			$cookietime = 2592000;
@@ -296,53 +303,9 @@ class Plugin_weixin extends CI_Controller {
 		if (empty ( $wx ['appsecret'] ) || empty ( $wx ['appid'] )) {
 			exit ( "公众号配置中 appid和appsecret没有填写，创建菜单必须认证公众号!" );
 		}
-		$logintime = $this->uri->rsegments [3]!=null ? intval ( $this->uri->rsegments [3] ):0; // 接收时间戳
-		
-		if($logintime!=0){
-			if((time()-$logintime)>60){
-				$this->message("扫码登录超时，请刷新电脑端网页二维码");
-			}
-			$message['code']=2001;
-			$message['logintime']=$logintime;
-			$message['msg']="等待用户登录";
-		
-			$yearmonth = gmdate ( 'Ym', $_SERVER ['REQUEST_TIME'] );
-			$logdir = FCPATH . '/data/logs/';
-			if (! is_dir ( $logdir ))
-				mkdir ( $logdir, 0777 );
-				$logfile = $logdir . $yearmonth . '_' . $logintime . '.php';
-				if ($fp = @fopen ( $logfile, 'w' )) {
-					@flock ( $fp, 2 );
-					fwrite ( $fp, "<?php\nreturn " . var_export ( $message, true ) . ";\n?>" );
-					fclose ( $fp );
-				}
-				session_start();
-				$_SESSION['logintime']=$logintime;
-				
-		}
+
 		$appid = $wx ['appid'];
 		$appsecret = $wx ['appsecret'];
-		if(empty($appsecret)){
-			if($logintime!=0){
-				$message['code']=2006;
-				$message['logintime']=$logintime;
-				$message['msg']="网站还未配置微信登录参数";
-				
-				$yearmonth = gmdate ( 'Ym', $_SERVER ['REQUEST_TIME'] );
-				$logdir = FCPATH . '/data/logs/';
-				if (! is_dir ( $logdir ))
-					mkdir ( $logdir, 0777 );
-					$logfile = $logdir . $yearmonth . '_' . $logintime . '.php';
-					if ($fp = @fopen ( $logfile, 'w' )) {
-						@flock ( $fp, 2 );
-						fwrite ( $fp, "<?php\nreturn " . var_export ( $message, true ) . ";\n?>" );
-						fclose ( $fp );
-					}
-					session_start();
-					$_SESSION['logintime']=$logintime;
-					
-			}
-		}
 		$rurl = url("plugin_weixin/login");
 		$url = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=$appid&redirect_uri=$rurl&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect";
 
@@ -354,40 +317,24 @@ class Plugin_weixin extends CI_Controller {
 		}
 		//获取文件原文件名
 		$defaultFileName = basename ( $url );
-		//获取文件类型
-		// $suffix = substr(strrchr($url,'.'), 1);
-		//if(!in_array($suffix, $fileType)){
-		// return false;
-		// }
-		//设置保存后的文件名
-		//  $filename = $filename == '' ? time().rand(0,9).'.'.$suffix : $defaultFileName;
-
-
-		//获取远程文件资源
-		if ($type) {
-			$ch = curl_init ();
-			$timeout = 5;
-			curl_setopt ( $ch, CURLOPT_URL, $url );
-			curl_setopt ( $ch, CURLOPT_RETURNTRANSFER, 1 );
-			curl_setopt ( $ch, CURLOPT_CONNECTTIMEOUT, $timeout );
-			$file = curl_exec ( $ch );
-			curl_close ( $ch );
-		} else {
-			ob_start ();
-			readfile ( $url );
-			$file = ob_get_contents ();
-			ob_end_clean ();
-		}
-		//设置文件保存路径
-		// $dirName = $dirName.'/'.date('Y', time()).'/'.date('m', time()).'/'.date('d',time()).'/';
+		
+		
+		
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_URL, $url);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+		curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 30);
+		$file = curl_exec($ch);
+		curl_close($ch);
+		
 		if (! file_exists ( $dirName )) {
 			mkdir ( $dirName, 0777, true );
 		}
-		//保存文件
-		$res = fopen ( $dirName . $filename, 'w' );
-		fwrite ( $res, $file );
-		fclose ( $res );
-		return "{'fileName':$filename, 'saveDir':$dirName}";
+		
+		
+		$resource = fopen($dirName . $filename, 'a');
+		fwrite($resource, $file);
+		fclose($resource);
 	}
 	function getJson($url) {
 		$curl = curl_init ();

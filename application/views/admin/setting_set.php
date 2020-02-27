@@ -18,7 +18,12 @@
 					<input class="" type="checkbox" {if $setting['needlogin']==1}checked{/if} name="needlogin" />勾选启用禁止游客访问模式，网站需登录才能访问
 					</td>
 				</tr>
-				
+				     <tr>
+					<td class="altbg1" width="45%"><b>第三方授权登录<label class="label" style="margin-left:3px;">新</label>:</b><br><span class="smalltxt">授权是否自动注册如果无网站账号</span></td>
+					<td class="altbg2">
+					<input class="" type="checkbox" {if $setting['weixinregset']==1}checked{/if} name="weixinregset" />勾选启用将应用设置(请在高级管理菜单中设置第三方登录信息)
+					</td>
+				</tr>
 					      <tr>
 					<td class="altbg1" width="45%"><b>前端注册是否需要邀请码:</b><br><span class="smalltxt">开启邀请码注册后只要邀请的人才能成功注册</span></td>
 					<td class="altbg2">
@@ -32,16 +37,7 @@
 					</td>
 				</tr>
 				
-                 <tr class="hide">
-					<td class="altbg1 " width="45%"><b>是否将文章外链图片本地化:</b><br><span class="smalltxt">此设置仅支持没有设置防盗链的图片本地化</span></td>
-					<td class="altbg2">
-					<input class="" type="checkbox"  name="loaclimage" />本地化
-					</td>
-				</tr>
-					<tr>
-					<td class="altbg1" width="45%"><b>专家付费认证金额（元）:</b><br><span class="smalltxt">0表示免费，如果需要付费认证请设置金额大于0</span></td>
-					<td class="altbg2"><input class="form-control shortinput" type="text" value="{$setting['vertifyjine']}" name="vertifyjine" /></td>
-				</tr>
+             
 						<tr>
 					<td class="altbg1" width="45%"><b>是否只允许专家发布文章:</b><br><span class="smalltxt">开启后文章只允许专家才有权限发布</span></td>
 					<td class="altbg2">
@@ -76,24 +72,8 @@
 					<td class="altbg2"><input class="form-control shortinput" type="text" value="{$setting['cansetcatnum']}" name="cansetcatnum" /></td>
 				</tr>
 			
-					<tr>
-					<td class="altbg1" width="45%"><b>移动端打赏金额:</b><br><span class="smalltxt">默认0.1元，可以设置合适的打赏金额，不超过200元</span></td>
-					<td class="altbg2"><input class="form-control shortinput" type="text" value="{$setting['mobile_shang']}" name="mobile_shang" /></td>
-				</tr>
-				<tr>
-					<td class="altbg1" width="45%"><b>提现额度设置:</b><br><span class="smalltxt">微信官方要求不低于1块钱，平台可以设置更高金额要求</span></td>
-					<td class="altbg2"><input class="form-control shortinput" type="text" value="{$setting['tixianjine']}" name="tixianjine" /></td>
-				</tr>
-				<tr>
-					<td class="altbg1" width="45%"><b>提现手续费:</b><br><span class="smalltxt">输入0.01-1之间数字，0.01表示一个点手续费</span></td>
-					<td class="altbg2"><input class="form-control shortinput" type="text" value="{$setting['tixianfeilv']}" name="tixianfeilv" /></td>
-				</tr>
-						<tr>
-					<td class="altbg1" width="45%"><b>是否开启微信语音本地化mp3:</b><br><span class="smalltxt">安装教程地址：https://www.ask2.cn/article-14730.html ，需在linux下安装，window服务不要勾选</span></td>
-					<td class="altbg2">
-					<input class="" type="checkbox" {if $setting['mobile_localyuyin']==1}checked{/if} name="mobile_localyuyin" />开启微信语音转本地mp3（需安装开启，别手贱)
-					</td>
-				</tr>
+				
+					
 				
 				<tr>
 					<td class="altbg1" width="45%"><b>是否允许重复提问:</b><br><span class="smalltxt">如果标题一样视为同一个问题，不允许入库，默认是不支持重复标题提问</span></td>
@@ -107,10 +87,7 @@
 					<input class="" type="checkbox" {if $setting['opensinglewindow']==1}checked{/if} name="opensinglewindow" />开启单窗口打开模式
 					</td>
 				</tr>
-				<tr>
-					<td class="altbg1" width="45%"><b>悬赏金额提问采纳过期时间:</b><br><span class="smalltxt">如果过期还没采纳系统自动采纳,默认24小时，设置为0代表24小时后过期</span></td>
-					<td class="altbg2"><input type="number" class=" shortinput " {if $setting['question_outtime']} value="{$setting['question_outtime']}" {else} value="24"  {/if}name="question_outtime" />小时</td>
-				</tr>
+			
 				<tr>
 					<td class="altbg1" width="45%"><b>前台首页顶置数目:</b><br><span class="smalltxt">默认3条，不建议很多，首页顶置内容功能属于社交版，其它模板配置无效</span></td>
 					<td class="altbg2"><input class="form-control shortinput" type="text" value="{$setting['list_topdatanum']}" name="list_topdatanum" /></td>
@@ -138,19 +115,13 @@
         </tr>
 						  <tr>
             <td class="altbg1" width="45%"><b>开启百度分词:</b><br>
-                <span class="smalltxt">默认不开启，开启百度分词后会调用百度分词接口生成若干关键词</span></td>
+                <span class="smalltxt">开启后站内网页采集插件将调用此分词接口自动生成内容标签</span></td>
             <td class="altbg2">
                 <input class="radio inline" type="radio" {if 0==$setting['baidufenci']}checked{/if} value="0" name="baidufenci" >&nbsp;不开启&nbsp;&nbsp;
              <input class="radio inline" type="radio" {if 1==$setting['baidufenci']}checked{/if} value="1" name="baidufenci" >&nbsp;开启分词&nbsp;&nbsp;
             </td>
         </tr>
-           <tr>
-            <td class="altbg1" width="45%"><b>微信端首页分享图片:</b><br>
-                <span class="smalltxt">微信要求分享图片尺寸200*200，否则超出部分显示看不到</span></td>
-            <td class="altbg2"><input type="text" readonly class="form-control" value="{if isset($setting['share_index_logo'])}$setting['share_index_logo']{/if}" name="file_upload_indexlogo">
-              <input id="file_upload" name="file_upload_indexlogo" type="file"/>
-            </td>
-        </tr>
+    
           <tr>
             <td class="altbg1" width="45%"><b>微信公众号二维码:</b><br>
                 <span class="smalltxt">上传二维码后，用户可以在用户中心-用户钱包页面关注公众号</span></td>

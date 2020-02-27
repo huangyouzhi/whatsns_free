@@ -12,6 +12,7 @@ class Admin_totalset extends ADMIN_Controller {
 	function index() {
 		if (null!== $this->input->post ('submit') ) {
 			$this->setting ['needlogin'] = $this->input->post ('needlogin') == 'on' ? 1 : 0;
+			$this->setting ['weixinregset'] = $this->input->post ('weixinregset') == 'on' ? 1 : 0;
 			$this->setting ['needinvatereg'] = $this->input->post ('needinvatereg') == 'on' ? 1 : 0;
 			$this->setting ['waterset'] = $this->input->post ('waterset') == 'on' ? 1 : 0;
 			$this->setting ['loaclimage'] = $this->input->post ('loaclimage') == 'on' ? 1 : 0;
