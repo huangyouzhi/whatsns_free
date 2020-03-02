@@ -5,7 +5,7 @@ use AlibabaCloud\Client\Exception\ClientException;
 use AlibabaCloud\Client\Exception\ServerException;
 /**
  * 请求接口返回内容
- * 
+ *
  * @param string $url
  *        	[请求的URL地址]
  * @param string $params
@@ -66,21 +66,21 @@ function aliyunsms($phonenum, $tmpcode, $code) {
 		echo $e->getErrorMessage () . PHP_EOL;
 	}
 }
-function aliyunregsms($phonenum, $tmpcode, $sitename,$username,$password) {
+function aliyunregsms($phonenum, $tmpcode, $sitename, $username, $password) {
 	global $setting;
 	AlibabaCloud::accessKeyClient ( $setting ['aliyunsmskey'], $setting ['aliyunsmsaccessSecret'] )->regionId ( 'cn-hangzhou' )->asDefaultClient ();
 	
 	try {
 		$result = AlibabaCloud::rpc ()->product ( 'Dysmsapi' )->
 		// ->scheme('https') // https | http
-		version ( '2017-05-25' )->action ( 'SendSms' )->method ( 'POST' )->host ( 'dysmsapi.aliyuncs.com' )->options ( [
-				'query' => [
+		version ( '2017-05-25' )->action ( 'SendSms' )->method ( 'POST' )->host ( 'dysmsapi.aliyuncs.com' )->options ( [ 
+				'query' => [ 
 						'RegionId' => "cn-hangzhou",
 						'PhoneNumbers' => $phonenum,
 						'SignName' => $setting ['aliyunsmssign'],
 						'TemplateCode' => $tmpcode,
-						'TemplateParam' => "{\"sitename\":\"$sitename\",\"username\":\"$username\",\"password\":\"$password\"}"
-				]
+						'TemplateParam' => "{\"sitename\":\"$sitename\",\"username\":\"$username\",\"password\":\"$password\"}" 
+				] 
 		] )->request ();
 		$smsresult = $result->toArray ();
 		return $smsresult;
@@ -199,18 +199,19 @@ function dz_segment($title = '', $content = '', $encode = 'utf-8') {
 	}
 }
 /**
-
-* 生成指定个数得随机字符
-
-* @date: 2019年10月15日 上午9:14:33
-
-* @author: 61703
-
-* @param: $GLOBALS
-
-* @return:
-
-*/
+ *
+ * 生成指定个数得随机字符
+ *
+ * @date: 2019年10月15日 上午9:14:33
+ *
+ * @author : 61703
+ *        
+ * @param : $GLOBALS        	
+ *
+ * @return :
+ *
+ *
+ */
 function getRandChar($length) {
 	$str = null;
 	$strPol = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz";
@@ -279,47 +280,47 @@ function get_cid_dir($cid, $type = 'big') {
 	return base_url () . '/static/images/defaulticon.jpg';
 }
 /**
-
-* 获取栏目地址
-
-* @date: 2019年9月24日 上午9:19:08
-
-* @author: 61703
-
-* @param: $userdir 如果设置位true，表示优先使用目录做url不使用分类id
-
-* @return:
-
-*/
-function getcaturl($catid,$url,$userdir=true){
-	if(file_exists(FCPATH."data/cache/category.php")){
-		$category=include FCPATH."data/cache/category.php";
+ *
+ * 获取栏目地址
+ *
+ * @date: 2019年9月24日 上午9:19:08
+ *
+ * @author : 61703
+ *        
+ * @param : $userdir
+ *        	如果设置位true，表示优先使用目录做url不使用分类id
+ *        	
+ * @return :
+ *
+ *
+ */
+function getcaturl($catid, $url, $userdir = true) {
+	if (file_exists ( FCPATH . "data/cache/category.php" )) {
+		$category = include FCPATH . "data/cache/category.php";
 	}
-
-	//$catid=intval($catid);
 	
-	$cat=$category[$catid];
-
-	if($cat){
-		if(!empty($cat['dir'])&&$userdir){
-			//如果分类栏目不能为空，则使用栏目拼音代替分类id
-			$url=str_replace('#id#', $cat['dir'], $url);
-		}else{
-			$url=str_replace('#id#', $cat['id'], $url);
+	// $catid=intval($catid);
+	
+	$cat = $category [$catid];
+	
+	if ($cat) {
+		if (! empty ( $cat ['dir'] ) && $userdir) {
+			// 如果分类栏目不能为空，则使用栏目拼音代替分类id
+			$url = str_replace ( '#id#', $cat ['dir'], $url );
+		} else {
+			$url = str_replace ( '#id#', $cat ['id'], $url );
 		}
-	}else{
-		$url=str_replace('#id#', $catid, $url);
+	} else {
+		$url = str_replace ( '#id#', $catid, $url );
 	}
-	return url($url);
+	return url ( $url );
 }
 /* 伪静态和html纯静态可以同时存在 */
 function url($var, $url = '') {
 	global $setting;
 	$_fix = '';
 	
-	if (strstr ( $var, 'seo/index' ) ||strstr ( $var, 'ask/index' ) ||strstr ( $var, 'category/view' ) || strstr ( $var, 'topic/catlist' )) { // 去掉文章栏目和问题栏目的url尾巴
-		
-	
+	if (strstr ( $var, 'seo/index' ) || strstr ( $var, 'ask/index' ) || strstr ( $var, 'category/view' ) || strstr ( $var, 'topic/catlist' )) { // 去掉文章栏目和问题栏目的url尾巴
 	} else {
 		$_fix = $setting ['seo_suffix'];
 	}
@@ -775,7 +776,7 @@ function tstripslashes($string) {
 if (! function_exists ( 'template' )) {
 	function template($file, $tpldir = '') {
 		global $setting;
-		$tmp_dir=$tpldir;
+		$tmp_dir = $tpldir;
 		
 		if (is_mobile ()) {
 			if ($setting ['app_useragnet']) {
@@ -798,16 +799,15 @@ if (! function_exists ( 'template' )) {
 			if ($tpldir == '')
 				$tpl_dir = $setting ['tpl_dir'];
 		}
-		//if (! empty ( config_item ( 'mobile_domain' ) ) && $_SERVER ['SERVER_NAME']) {
-			if (strstr ( trim ( config_item ( 'mobile_domain' ) ), $_SERVER ['SERVER_NAME'] )) {
-				$tpldir = $setting ['tpl_wapdir'];
-			}
-		//}
-			
-			if(strstr($setting ['tpl_dir'],'responsive_')){
-				$tpldir=$setting ['tpl_dir'];
-				
-			}
+		// if (! empty ( config_item ( 'mobile_domain' ) ) && $_SERVER ['SERVER_NAME']) {
+		if (strstr ( trim ( config_item ( 'mobile_domain' ) ), $_SERVER ['SERVER_NAME'] )) {
+			$tpldir = $setting ['tpl_wapdir'];
+		}
+		// }
+		
+		if (strstr ( $setting ['tpl_dir'], 'responsive_' )) {
+			$tpldir = $setting ['tpl_dir'];
+		}
 		$querystring = isset ( $_SERVER ['REQUEST_URI'] ) ? $_SERVER ['REQUEST_URI'] : '';
 		$querystring = str_replace ( '.html', '', $querystring );
 		$querystring = str_replace ( '/?', '', $querystring );
@@ -2071,21 +2071,20 @@ function isimage($extname) {
  *        	需要裁剪的高
  */
 function imagecropper($source_path, $dst, $target_width, $target_height) {
-	
-	$httpxieyi=strtolower(substr($source_path,0,7));
-	$httpsxieyi=strtolower(substr($source_path,0,8));
-	if(!file_exists($source_path)){
-		//非站内图片，看看外部图片格式
-		if($httpxieyi!='http://'&&$httpsxieyi!='https://'){
-			exit("非正常图片地址");
-		}else{
+	$httpxieyi = strtolower ( substr ( $source_path, 0, 7 ) );
+	$httpsxieyi = strtolower ( substr ( $source_path, 0, 8 ) );
+	$controlleradmin = substr ( ROUTE_A, 0, 5 );
+	if (! file_exists ( $source_path )) {
+		
+		// 非站内图片，看看外部图片格式
+		if ($httpxieyi != 'http://' && $httpsxieyi != 'https://' && $controlleradmin != 'admin') {
+			exit ( "非正常图片地址" );
+		} else {
 			$source_info = getimagesize ( $source_path );
 		}
-	}else{
+	} else {
 		$source_info = getimagesize ( $source_path );
 	}
-	
-
 	
 	$source_width = $source_info [0];
 	$source_height = $source_info [1];
