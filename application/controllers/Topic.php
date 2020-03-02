@@ -919,7 +919,8 @@ class Topic extends CI_Controller {
 		$commentlist = $this->articlecomment_model->list_by_tid ( $tid, 1, $startindex, $pagesize );
 		
 		$commentrownum = returnarraynum ( $this->db->query ( getwheresql ( "articlecomment", " tid=$tid AND state=1 ", $this->db->dbprefix ) )->row_array () );
-		
+			//更新评论数
+		$this->db->where(array('id'=>$tid))->update('topic',array('articles'=>$commentrownum));
 		$departstr = page ( $commentrownum, $pagesize, $page, "topic/getone/$topicid" );
 		// if(is_mobile()){
 		// include template('getonetopic','wap');
