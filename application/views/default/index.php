@@ -88,7 +88,7 @@ color: #3280fc;
 						target="_blank">[全部]</a>
 				</h4>
 				<ul class="ask-q-list">
-					{eval $newquestionlist=$this->getlistbysql("select id,title,time from ".$this->db->dbprefix."question where status in(1,2,6) and answers>=2 order by time desc limit 0,10");}
+					{eval $newquestionlist=$this->getlistbysql("select id,title,time from ".$this->db->dbprefix."question where status in(1,2,6) and answers>=1 order by time desc limit 0,10");}
 					 					
 					{loop $newquestionlist $question}
 					<li><a class="gellipsis" href="{url question/view/$question['id']}">
