@@ -55,6 +55,18 @@ $route['translate_uri_dashes'] = FALSE;
 $route['index'] = 'index/index';//对首页重写
 $route['index/index'] = 'Whatsns/index';//对首页重写
 $route['article-(:num)'] = 'Topic/getone/$1';//对文章重写
+//问题库列表重写
+$route['ask'] = 'Ask/index';//对问题库列表重写
+$route['ask/(:any)'] = 'Ask/index/$1';//对问题库列表重写--分类
+$route['ask/(:any)/(:any)'] = 'Ask/index/$1/$2';//对问题库列表重写--分类/排序
+$route['ask/(:any)/(:any)/(:num)'] = 'Ask/index/$1/$2/$3';//对问题库列表重写--分类/排序/分页
+
+
+//文章栏目库列表重写
+$route['article'] = 'Seo/index';//对文章栏目库列表重写
+$route['article/(:any)'] = 'Seo/index/$1';//对文章栏目库列表重写--分类
+$route['article/(:any)/(:any)'] = 'Seo/index/$1/$2';//对文章栏目库列表重写--分类/排序
+$route['article/(:any)/(:any)/(:num)'] = 'Seo/index/$1/$2/$3';//对文章栏目库列表重写--分类/排序/分页
 $route['article-(:num)/(:num)'] = 'Topic/getone/$1/$2';//对文章重写
 $route['cat-(:num)'] = 'Topic/catlist/$1';//对文章分类重写
 $route['cat-(:num)/(:num)'] = 'Topic/catlist/$1/$2';//对文章分类重写
