@@ -64,7 +64,16 @@ $uid = $user ['uid'];
 if ($user) {
 	add_auth ( $token, $openid, $uid );
 	refresh ( $user );
-	header ( "Location:" . SITE_URL );
+	if (! isset ( $_SESSION )) {
+		session_start ();
+	}
+	if(isset($_SESSION ['forward'])){
+		header("Location:".$_SESSION ['forward']);
+	}else{
+		$forward = isset ( $_SERVER ['HTTP_REFERER'] ) ? $_SERVER ['HTTP_REFERER'] : SITE_URL;
+		header ( "Location:" . $forward );
+	}
+	
 	exit ();
 } else {
 	if (! $setting ['allow_register']) {
@@ -125,8 +134,16 @@ if ($user) {
 				$smallimg = $dir3 . "/small_" . $hduid . '.' . $extname;
 				$smallimgdir = $dir3 . "/";
 				getImage($userinfo['figureurl_qq_2'],"small_" . $hduid . '.' . $extname, ASK2_ROOT . $smallimgdir, array('jpg','jpeg','png', 'gif'));
+				if (! isset ( $_SESSION )) {
+					session_start ();
+				}
+				if(isset($_SESSION ['forward'])){
+					header("Location:".$_SESSION ['forward']);
+				}else{
+					$forward = isset ( $_SERVER ['HTTP_REFERER'] ) ? $_SERVER ['HTTP_REFERER'] : SITE_URL;
+					header ( "Location:" . $forward );
+				}
 				
-				header ( "Location:" . SITE_URL );
 				exit ();
 			}else{
 				exit("账号授权失败");
@@ -262,21 +279,21 @@ function getImage($url, $filename = '', $dirName, $fileType, $type = 0) {
 	}
 	//获取文件原文件名
 	$defaultFileName = basename ( $url );
-
-
-		
-		$ch = curl_init();
-		curl_setopt($ch, CURLOPT_URL, $url);
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-		curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 30);
-		$file = curl_exec($ch);
-		curl_close($ch);
-
+	
+	
+	
+	$ch = curl_init();
+	curl_setopt($ch, CURLOPT_URL, $url);
+	curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+	curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 30);
+	$file = curl_exec($ch);
+	curl_close($ch);
+	
 	if (! file_exists ( $dirName )) {
 		mkdir ( $dirName, 0777, true );
 	}
 	
-
+	
 	$resource = fopen($dirName . $filename, 'a');
 	fwrite($resource, $file);
 	fclose($resource);

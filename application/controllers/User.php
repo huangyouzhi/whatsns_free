@@ -858,6 +858,7 @@ class User extends CI_Controller {
 			session_start ();
 		}
 		$_SESSION ['logintokenid'] = md5 ( time () );
+		$_SESSION ['forward'] =$forward;
 		include template ( 'login' );
 	}
 	
@@ -2020,6 +2021,7 @@ class User extends CI_Controller {
 			session_start ();
 		}
 		$_SESSION ['logintokenid'] = md5 ( time () );
+		$_SESSION['forward'] = $forward;
 		include template ( "poplogin" );
 	}
 	/**

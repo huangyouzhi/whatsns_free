@@ -86,9 +86,15 @@ if ($token_arr) {
 		add_auth ( $token, $openid, $uid );
 		
 		refresh ( $user );
-		
-		// echo SITE_URL;exit();
-		header ( "Location:" . SITE_URL );
+		if (! isset ( $_SESSION )) {
+			session_start ();
+		}
+		if(isset($_SESSION ['forward'])){
+			header("Location:".$_SESSION ['forward']);
+		}else{
+			$forward = isset ( $_SERVER ['HTTP_REFERER'] ) ? $_SERVER ['HTTP_REFERER'] : SITE_URL;
+			header ( "Location:" . $forward );
+		}
 		exit ();
 	} else {
 		
@@ -154,7 +160,15 @@ if ($token_arr) {
 						'gif' 
 				) );
 				
-				header ( "Location:" . SITE_URL );
+				if (! isset ( $_SESSION )) {
+					session_start ();
+				}
+				if(isset($_SESSION ['forward'])){
+					header("Location:".$_SESSION ['forward']);
+				}else{
+					$forward = isset ( $_SERVER ['HTTP_REFERER'] ) ? $_SERVER ['HTTP_REFERER'] : SITE_URL;
+					header ( "Location:" . $forward );
+				}
 				exit ();
 			} else {
 				exit ( "账号授权失败" );
