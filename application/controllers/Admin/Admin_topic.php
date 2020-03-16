@@ -428,7 +428,7 @@ class Admin_topic extends ADMIN_Controller {
 		if (null !== $this->input->post ( 'tid' )) {
 			$this->load->model ( "doing_model" );
 			if(is_array($this->input->post ( 'tid' ))){
-				$this->topic_model->vertify ( $tids );
+				$tids = implode ( ',', $this->input->post ( 'tid' ) );
 				$this->topic_model->vertify ( $tids );
 				
 			    //审核通过插入动态
