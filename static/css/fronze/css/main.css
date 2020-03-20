@@ -280,7 +280,7 @@ color: transparent;
 }
 
 .article .article-content *{
-    max-width: 100%;
+    max-width: 100% !important;
 }
 .article .art-font{
     font-size: 20px;
@@ -730,39 +730,6 @@ pre{
 	white-space: normal;  
 word-break: break-all;  
 }
-
-pre {
-	display: block;
-	padding: 9.5px;
-	margin: 0 0 10px;
-	font-size: 13px;
-	line-height: 1.42857;
-	word-break: break-all;
-	word-wrap: break-word;
-	color: #333;
-	background-color: #f5f5f5;
-	border: 1px solid #ccc;
-	border-radius: 4px
-}
-
-pre code {
-	padding: 0;
-	font-size: inherit;
-	color: inherit;
-	white-space: pre-wrap;
-	background-color: transparent;
-	border-radius: 0
-}
-
-.pre-scrollable {
-	max-height: 340px;
-	overflow-y: scroll
-}
-.hljs, pre {
-    background: #f6f6f6;
-    color: #657b83;
-    -webkit-text-size-adjust: none;
-}
 .bar_top{
 
     position: fixed;
@@ -1138,7 +1105,7 @@ float: right;
 	
 }
 .f-addarticle .editor_container {
-    height: 240px;
+
     background-color: #fff;
     text-align: left;
     box-shadow: none;
@@ -2271,7 +2238,7 @@ h2 {
     vertical-align: middle;
 }
 .imgthumbbig{
-	
+
 	overflow:hidden;
 }
 .imgthumbbig img{
@@ -2766,7 +2733,7 @@ width: 15px;
     position: relative;
     top: 3px;
     margin-right: 2px;
-    background-size: 20% 80%;
+    background-size: 25% 80%;
 
 }
 .my-favorite a.caina{
@@ -2776,7 +2743,7 @@ width: 15px;
     position: relative;
     top: 3px;
     margin-right: 2px;
-    background-size: 23% 80%;
+    background-size: 28% 80%;
 
 }
 .my-favorite a.zan{
@@ -2786,7 +2753,18 @@ width: 15px;
     position: relative;
     top: 3px;
     margin-right: 2px;
-    background-size: 23% 80%;
+    background-size: 28% 80%;
+
+}
+.my-favorite a.kc{
+width: 15px;
+    height: 25px;
+    background: url(images/kc.png) no-repeat 50% top;
+position: relative;
+    top: 3px;
+    margin-right: 2px;
+    background-size: 40% 80%;
+    background-position-y: -5px;
 
 }
 .profile .head-v:after {
@@ -3567,7 +3545,7 @@ transform:translateZ(1px);
 	z-index: 999999999;
 }
 .ui-footer{
-	z-index:0;
+	z-index:1;
 }
 .fa-yao{
 	    width: 18px;
@@ -3625,4 +3603,125 @@ hr {
     box-sizing: content-box;
     height: 0;
     overflow: visible;
+}
+.entry-info {
+ clear:both;
+ font-size: 14px;
+    padding-bottom: 10px;
+    color: #999;
+}
+ .entry-info .dot {
+    margin: 0 6px;
+    color: #ccc;
+}
+.entry-info {
+    padding-bottom: 10px;
+    color: #999;
+}
+.entry-info a {
+    color: #999;
+}
+.entry-copyright {
+    margin-top: 30px;
+    padding: 15px;
+    font-size: 13px;
+    line-height: 1.6;
+    color: #999;
+    border: 1px solid #efefef;
+    background: #fbfbfb;
+    border-radius: 3px;
+}
+.entry-copyright p {
+    margin-bottom: 8px!important;
+    text-indent: 0!important;
+}
+
+.entry .entry-content p {
+    margin-bottom: 20px;
+    margin-bottom: 1.66667rem;
+    line-height: 1.8;
+}
+
+.entry-copyright p:last-child {
+    margin-bottom: 0!important;
+}
+.entry-copyright .reportques{
+	color:#8590a6;
+}
+.entry-bar .meta-item {
+    position: relative;
+    display: inline-block;
+    padding: 0 10px;
+    overflow: hidden;
+    vertical-align: top;
+    transition: all .3s ease-out 0s;
+}
+.entry-bar .info-item.share .mobile {
+    display: block;
+    line-height: 30px;
+    background: #3ca5f6;
+    color: #fff;
+    border-radius: 3px;
+}
+.entry-bar .info-item.share .mobile .fa {
+    vertical-align: top;
+    line-height: 30px;
+    font-size: 14px;
+    margin-right: 2px;
+}
+
+.entry-bar .info-item {
+    position: relative;
+    display: inline-block;
+    margin-right: 15px;
+    padding-left: 15px;
+    color: #ccc;
+    line-height: 30px;
+}
+.entry-bar .info-item.share {
+    float: left;
+    margin-right: 0;
+    padding-left: 0;
+    vertical-align: top;
+}
+.entry-bar .info {
+    float: none!important;
+}
+.pull-right {
+    float: right!important;
+}
+
+.entry-bar {
+    height: 60px;
+    margin: 30px -20px;
+}
+.entry-bar .info-item a {
+    color: #ccc;
+    text-decoration: none;
+}
+.entry-bar .meta-item {
+    position: relative;
+    display: inline-block;
+    padding: 0 10px;
+    overflow: hidden;
+    vertical-align: top;
+    transition: all .3s ease-out 0s;
+}
+
+.entry-bar-inner {
+    padding: 15px 30px;
+    background: #fff;
+    background: hsla(0,0%,100%,.92);
+    border-top: 1px solid transparent;
+    transition: all .3s ease-out 0s;
+}
+.entry-bar-inner {
+    padding: 15px 20px;
+}
+.entry-bar .info-item.meta {
+    margin: 0;
+    float: right;
+}
+.entry-bar .meta {
+    padding-left: 0;
 }

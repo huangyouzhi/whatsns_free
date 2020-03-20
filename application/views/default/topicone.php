@@ -3,6 +3,8 @@
 <link rel="stylesheet" media="all" href="{SITE_URL}static/css/widescreen/css/greendetail.css?v1.1" />
 <link rel="stylesheet" media="all" href="{SITE_URL}static/css/widescreen/css/widescreendetail.css?v1.1" />
    <script type="text/javascript" src="{SITE_URL}static/js/jquery.qrcode.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="{SITE_URL}static/js/poster/poster.css">
+  <script type="text/javascript" src="{SITE_URL}static/js/poster/haibao.js"></script>
 
 <div class="scrollshow position-inf" style="display: none;">
    <div class="fix-hnav posd" style="display: block;">
@@ -61,6 +63,7 @@
 
          <a  class="share-circle" data-toggle="tooltip"  target="_self" data-original-title="分享到qq" href="javascript:shareqq()"   title="分享到QQ"><i class="fa fa-qq"></i></a>
 
+ <a  class="" data-toggle="tooltip"  target="_self" data-original-title="生成海报" href="javascript:showposter('{SITE_URL}',$topicone['id'],'article')"   title="生成海报" style="margin-left: 10px;font-size:12px;"><span class=""><i style="margin-right: 5px;font-size:18px;position:relative;top:3px;" class="fa fa-share-alt"></i></span>生成海报</a>
 
   <script type="text/javascript">
 

@@ -1,4 +1,7 @@
 <!--{template header}-->
+<link rel="stylesheet" type="text/css" href="{SITE_URL}static/js/wangeditor/pcwangeditor/css/wangEditor.min.css">
+  <link rel="stylesheet" type="text/css" href="{SITE_URL}static/js/poster/poster.css">
+  <script type="text/javascript" src="{SITE_URL}static/js/poster/haibao.js"></script>
 {eval $hidefooter=true;}
 
 <script>
@@ -80,7 +83,9 @@ var topiclink="{url topic/getone/$topicone['id']}";
 
             </ul>
 
- <span class="ui-nowrap  " style="margin-top:1rem"> 发布时间:{$topicone['viewtime']}</span>
+<div class="entry-info">  <span>{eval echo date('Y年n月d日 H:i',$topicone['timespan'])}</span> <span class="dot">•</span> <a href="{eval echo url('topic/catlist/'.$cat_model['id']);}" rel="category tag">来自:{$cat_model['name']}</a>  <span class="dot">•</span> <span>阅读 {$topicone['views']}</span></div>
+    
+
 
     <!--{if $user['grouptype']==1||$user['uid']==$topicone['authorid']}-->
  <span class="ui-nowrap  " onclick="show_questionoprate()"  style="margin-top:.8rem;margin-left:5px;font-size:12px;"><i class="fa fa-gear " style="font-size:14px;position;relative;top:1px;margin:0 2px;"></i>管理</span>
@@ -111,43 +116,25 @@ var topiclink="{url topic/getone/$topicone['id']}";
                 </p>
                     {/if}
 
-            <div class="c_btns">
-              <!--{if $isfollowarticle}-->
-              <a href="{url favorite/delfavoratearticle/$topicone['id']}">     <div class="btnhassoucang">
-               已收藏文章
-               </div></a>
-              
-          
-                  <!--{else}-->
-                    <a href="{url favorite/topicadd/$topicone['id']}">      <div class="btnsoucang">
-               收藏文章
-               </div></a>
-                   
-                   <!--{/if}-->
-                   {if 9!=$question['status']}
-                   {if $user['uid']==0}
-                  <div class="btnwirteans" onclick="window.location.href='{url user/login}'">
-                                                                写评论
-               </div>
-               {else}
-                   <div class="btnwirteans" >
-               写评论
-               </div>
-               {/if}
-                 {/if}
-            </div>
-  <div class="show-foot">
-            {if $topicone['articleclassid']}<p>本文章来自话题:<a href="{url cat-$cat_model['id']}" >{$cat_model['name']}</a>
-
-             <a class="reportques" onclick="openinform(0,'{$topicone['title']}',{$topicone['id']})"  id="report-modal">举报文章</a>
-             </p>{/if}
-                       
+             <div class="entry-copyright"><p>发布者：{$topicone['author']}，转载请注明出处：<span>{eval echo url('topic/getone/'.$topicone['id']);}</span></p>
+  如果此文侵权可以 ：<a class="reportques" onclick="openinform(0,'{$topicone['title']}',{$topicone['id']})"  id="report-modal">举报文章</a>
              
-            </div>
+  </div>
        
     </div>
 
  
+  <div class="entry-bar">
+ <div class="entry-bar-inner clearfix" >
+ <div class="info pull-right">
+ <div class="info-item meta"> 
+ <a class="meta-item j-heart" href="{url favorite/topicadd/$topicone['id']}" >
+ <i class="fa fa-heart"></i> <span class="data">{$topicone['likes']}</span></a> 
+  <a class="meta-item" onclick="$('.comment-area').focus();"><i class="fa fa-comments"></i> 
+  <span class="data">{$topicone['articles']}</span></a></div>
+  <div class="info-item share"> 
+  <a class="meta-item mobile j-mobile-share" href="javascript:showposter('{SITE_URL}',$topicone['id'],'article');" ><i class="fa fa-share-alt"></i> 生成海报</a> 
+  </div></div></div></div>
 </article>
  <section class="article-jingxuan ui-panel" style="overflow: visible;clear: both;">
         <h2 class="ui-txt-warning"  style="overflow: visible;">相关推荐</h2>
