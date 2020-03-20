@@ -239,6 +239,20 @@ class CI_Controller {
 		$user ['avatar'] = get_avatar_dir ( $user ['uid'] );
 		
 		$user = $this->user = array_merge ( $user, $this->usergroup [$user ['groupid']] );
+					if ($user ['uid']) {
+			// 如果用户登录，且携带邀请被邀请注册的邀请码，则自动成为被邀请人
+			// frominvatecode
+			if (! isset ( $user ['frominvatecode'] )) {
+				// 如果不存在则绑定
+				if (! isset ( $_SESSION )) {
+					session_start ();
+				}
+				if (isset ( $_SESSION ['invatecode'] ) && $user ['invatecode'] != $_SESSION ['invatecode']) {
+					$this->user_model->updateinvatecode ( $user ['uid'], $_SESSION ['invatecode'] );
+					unset ( $_SESSION ['invatecode'] );
+				}
+			}
+		}
 	}
 	/**
 	 *

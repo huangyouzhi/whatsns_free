@@ -840,6 +840,7 @@ class User extends CI_Controller {
 		}
 		$_SESSION ['registrtokenid'] = md5 ( time () );
 		$invatecode = strip_tags ( $this->uri->segment ( 3 ) );
+		$_SESSION ['invatecode'] = $invatecode;
 		include template ( 'register' );
 	}
 	function login() {
