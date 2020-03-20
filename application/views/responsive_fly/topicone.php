@@ -3,6 +3,8 @@
  <!-- 首页导航 --> 
 {template index_nav}
 <link rel="stylesheet" type="text/css" href="{SITE_URL}static/js/wangeditor/pcwangeditor/css/wangEditor.min.css">
+        <link rel="stylesheet" type="text/css" href="{SITE_URL}static/js/poster/poster.css">
+  <script type="text/javascript" src="{SITE_URL}static/js/poster/haibao.js"></script>
 <div class="layui-container">
   <div class="layui-row layui-col-space15">
     <div class="layui-col-md8 content detail">
@@ -38,12 +40,15 @@
            
              <!--{/if}-->
   <!--{/if}-->
+
           </div>
           <span class="fly-list-nums"> 
             <a href="#comment"><i class="iconfont" title="评论">&#xe60c;</i> {$topicone['articles']}</a>
             <i class="iconfont" title="人气">&#xe60b;</i> {$topicone['views']}
           </span>
         </div>
+	  	  <a  class="layui-btn layui-btn-danger  layui-btn-sm" style="margin-left:0px;margin-bottom:10px;"  target="_self" href="javascript:showposter('{SITE_URL}',$topicone['id'],'article')"   title="生成海报" style="font-size:12px;"><span class=""><i style="margin-left: 5px;font-size:18px;position:relative;top:0px;margin-bottom:15px;" class="layui-icon layui-icon-share"></i></span>生成海报</a>
+        
         <div class="detail-about">
           <a class="fly-avatar" href="{url user/space/$topicone['authorid']}">
             <img src="{$member['avatar']}" alt="{$topicone['author']}">

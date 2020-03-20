@@ -22,7 +22,10 @@
 	color: #a65018;
 	text-align: center
 }
+.fly-header {
 
+    z-index: 1;
+}
 @media (min-width:992px) {
 	.whatsns-share-bg .top_tips {
 		display: none!important
