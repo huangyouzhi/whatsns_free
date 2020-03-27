@@ -337,7 +337,11 @@ class User extends CI_Controller {
 			
 	
 		}else{
-			$file2 = $vertify ['zhaopian2'];
+				if(!empty($vertify ['zhaopian2'])){
+				$file2 = $vertify ['zhaopian2'];
+			}else{
+				$file2='';
+			}
 		}
 		
 		$type = intval ( $this->input->post ( 'type' ) );
