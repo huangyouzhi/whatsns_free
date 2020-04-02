@@ -22,8 +22,7 @@
         <span class="ws_s_au_bref_item current"><a href="{url topic/search}?word={$word}">文章</a></span>
         <span class="ws_s_au_bref_item"><a href="{url user/search}?word={$word}">用户</a></span>
         <span class="ws_s_au_bref_item"><a href="{url category/search}?word={$word}">话题</a></span>
-<span class="ws_s_au_bref_item "><a href="{url kecheng/search}?word={$word}">课程</a></span>
-<span class="ws_s_au_bref_item "><a href="{url kecheng/searchcomment}?word={$word}">课程评论</a></span>
+
 
     </div>
    <!--列表部分-->
