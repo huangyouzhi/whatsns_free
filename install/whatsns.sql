@@ -35,8 +35,8 @@ CREATE TABLE `whatsns_user_invateanswer` (
 
 CREATE TABLE `whatsns_tag` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `tagname` varchar(255) NOT NULL DEFAULT '' COMMENT '标签名称',
-  `tagalias` varchar(255) NOT NULL DEFAULT '' COMMENT '标签别名',
+  `tagname` varchar(100) NOT NULL DEFAULT '' COMMENT '标签名称',
+  `tagalias` varchar(150) NOT NULL DEFAULT '' COMMENT '标签别名',
   `tagfisrtchar` varchar(20) NOT NULL DEFAULT '' COMMENT '标签首字母',
   `tagimage` varchar(255) DEFAULT NULL COMMENT '标签缩略图',
   `tagquestions` int(11) NOT NULL DEFAULT '0' COMMENT '标签问题数',
@@ -63,7 +63,7 @@ CREATE TABLE `whatsns_tag_item` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `tagid` int(11) NOT NULL DEFAULT '0' COMMENT '标签id',
   `typeid` int(11) NOT NULL DEFAULT '0' COMMENT '类型id 文章或者问题表的主键id',
-  `itemtype` varchar(255) NOT NULL DEFAULT '' COMMENT 'question或者article',
+  `itemtype` varchar(100) NOT NULL DEFAULT '' COMMENT 'question或者article',
   `time` int(11) NOT NULL DEFAULT '0' COMMENT '添加时间',
   `uid` int(11) NOT NULL DEFAULT '1' COMMENT '创建者',
   `cid` int(11) NOT NULL DEFAULT '1' COMMENT '分类话题id',

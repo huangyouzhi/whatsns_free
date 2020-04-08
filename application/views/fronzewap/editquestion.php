@@ -113,7 +113,13 @@ $(".txt_taginput").on(" input propertychange",function(){
 					 
 			           $(".tagsearch").append('<div class="tagitem" tagid="'+result.taglist[i].id+'">'+_msg+'</div>');
 				}
-				$(".tagsearch").show();
+				if(result.taglist.length>0){
+					$(".tagsearch").show();
+				}else{
+					
+					$(".tagsearch").hide();
+				
+				}
 				$(".tagsearch .tagitem").click(function(){
 					var _tagname=$.trim($(this).html());
 					var _tagid=$.trim($(this).attr("tagid"));
