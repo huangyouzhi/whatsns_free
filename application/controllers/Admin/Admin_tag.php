@@ -58,7 +58,7 @@ class Admin_tag extends ADMIN_Controller {
 	
 	*/
 	function updatedata(){
-		$pagesize=500;//只同步匹配前200条问题
+		$pagesize=2000;//只同步匹配前200条问题
 		$tagalias=$_POST['tagalias'];
 		$tag=$this->tag_model->get_by_tagalias($tagalias);
 		if(!$tag){
@@ -67,16 +67,26 @@ class Admin_tag extends ADMIN_Controller {
 			exit("标签不存在");
 		}else{
 			//通过标签查询问题
-			$this->load->model ( "question_model" );
+		
 			$word=trim($tag['tagname']);
 			
-			$questionlist = $this->question_model->search_title ( $word, "1,2,6,9", 0, 0, $pagesize );
-			
-			
-			
-			$id=$tag['id'];
-			foreach ( $questionlist as $question ) {
-				$qid=$question['id'];
+		
+				$id=$tag['id'];
+					$query=$this->db->
+			where_in('status',explode ( ",", "1,2,6,9" ))
+			->group_start() //左括号
+			->like('title',$word)
+			->or_like('description', $word)
+			->group_end() //右括号
+			->order_by("time desc")
+			->limit($pagesize, 0)->get('question');
+			$questionlist=array();
+		if($query){
+			$questionlist=$query->result_array () ;
+		}
+			$datas=array();
+			foreach ($questionlist as $question ) {
+						$qid=$question['id'];
 				$data=array(
 						'tagid' => $id,
 						'typeid' =>$qid ,
@@ -87,19 +97,25 @@ class Admin_tag extends ADMIN_Controller {
 				);
 				$tagquestion = $this->db->query ( "SELECT tagid,itemtype,typeid FROM " . $this->db->dbprefix . "tag_item WHERE tagid=$id and itemtype='question' and typeid=$qid " )->row_array ();
 				if (!$tagquestion) {
-					$this->db->insert ( 'tag_item', $data );
+						array_push($datas,$data);
+				
 				}
-			
 			}
-			
+				$this->db->insert_batch ( 'tag_item', $datas );
+		
 	
 		
-			//通过标签查询文章
-			$this->load->model ( "topic_model" );
-			$topiclist = $this->topic_model->get_bylikename ( $word, 0, $pagesize );
+		
+		
 			
-			foreach ($topiclist as $topic){
-				$tid=$topic['id'];
+			$query = $this->db->order_by ( '  viewtime desc ' )->get_where ( 'topic', "concat(`title`,`describtion`) like '%$word%' ", $pagesize, 0 );
+			$topiclist=array();
+			if($query){
+			$topiclist=	$query->result_array () ;
+			}
+			$datas=array();
+			foreach ($topiclist as $topic ) {
+						$tid=$topic['id'];
 				$data=array(
 						'tagid' => $id,
 						'typeid' => $topic['id'] ,
@@ -110,11 +126,11 @@ class Admin_tag extends ADMIN_Controller {
 				);
 				$tagtopic= $this->db->query ( "SELECT tagid,itemtype,typeid FROM " . $this->db->dbprefix . "tag_item WHERE tagid=$id and itemtype='article' and typeid=$tid " )->row_array ();
 				if (!$tagtopic) {
-					$this->db->insert ( 'tag_item', $data );
+					array_push($datas,$data);
+					
 				}
-			
 			}
-			
+		$this->db->insert_batch ( 'tag_item', $datas );
 	
 			$qnum=count($questionlist);
 			$anum=count($topiclist);
@@ -122,80 +138,97 @@ class Admin_tag extends ADMIN_Controller {
 		}
 	}
 	function tongbudatatag(){
-		$pagesize=500;
+		$pagesize=20;
+			$pagemaxsize=500;
 		//获取站内标签总数
-		$rownum = returnarraynum ( $this->db->query ( getwheresql ( 'tag', " 1=1 ", $this->db->dbprefix ) )->row_array () );
-		
+		//$rownum = returnarraynum ( $this->db->query ( getwheresql ( 'tag', " 1=1 ", $this->db->dbprefix ) )->row_array () );
+	
 		//分页处理标签同步
-		$pages = @ceil ( $rownum / $pagesize );
+	//	$pages = @ceil ( $rownum / $pagesize );
 		
-		for($i=1;$i<=$pages;$i++){
-			$startindex = ($i - 1) * $pagesize;
+	
+			$startindex = intval($_POST['pageindex']);
 			//分页提取标签
 			$taglist = $this->tag_model->getalltaglist ( $startindex, $pagesize );
 		
 			foreach ($taglist as $tag){
 				//通过标签查询问题
-				$this->load->model ( "question_model" );
-				$word=trim($tag['tagname']);
-				
 		
-				$questionlist = $this->question_model->search_title ( $word, "1,2,6,9", 0, $startindex, $pagesize );
-				
+			$word=trim($tag['tagname']);
 			
-				
+		
 				$id=$tag['id'];
-				foreach ($questionlist as $question ) {
-					$qid=$question['id'];
-					$data=array(
-							'tagid' => $id,
-							'typeid' =>$qid ,
-							'cid' =>$question['cid'],
-							'itemtype'=>'question',
-							'time'=>time(),
-							'uid'=>$question['authorid']
-					);
-					$tagquestion = $this->db->query ( "SELECT tagid,itemtype,typeid FROM " . $this->db->dbprefix . "tag_item WHERE tagid=$id and itemtype='question' and typeid=$qid " )->row_array ();
-					if (!$tagquestion) {
-						$this->db->insert ( 'tag_item', $data );
-					}
+					$query=$this->db->
+			where_in('status',explode ( ",", "1,2,6,9" ))
+			->group_start() //左括号
+			->like('title',$word)
+			->or_like('description', $word)
+			->group_end() //右括号
+			->order_by("time desc")
+			->limit($pagemaxsize, 0)->get('question');
+			$questionlist=array();
+		if($query){
+			$questionlist=$query->result_array () ;
+		}
+			$datas=array();
+			$dataids=array();
+			foreach ($questionlist as $question ) {
+						$qid=$question['id'];
+				$data=array(
+						'tagid' => $id,
+						'typeid' =>$qid ,
+						'cid' =>$question['cid'],
+						'itemtype'=>'question',
+						'time'=>time(),
+						'uid'=>$question['authorid']
+				);
+					array_push($dataids,$id);
+				//$tagquestion = $this->db->query ( "SELECT tagid,itemtype,typeid FROM " . $this->db->dbprefix . "tag_item WHERE tagid=$id and itemtype='question' and typeid=$qid " )->row_array ();
+			//	if (!$tagquestion) {
+						array_push($datas,$data);
+				
+			//	}
+			}
+				$this->db->where(array('itemtype'=>'question'))->where_in("tagid",$dataids)->delete("tag_item");
+				$this->db->insert_batch ( 'tag_item', $datas );
+		
+	
+		
+		
+		
+			
+			$query = $this->db->order_by ( '  viewtime desc ' )->get_where ( 'topic', "concat(`title`,`describtion`) like '%$word%' ", $pagemaxsize, 0 );
+			$topiclist=array();
+			if($query){
+			$topiclist=	$query->result_array () ;
+			}
+			$datas=array();
+			$dataids=array();
+			foreach ($topiclist as $topic ) {
+						$tid=$topic['id'];
+				$data=array(
+						'tagid' => $id,
+						'typeid' => $topic['id'] ,
+						'cid' =>$topic['articleclassid'],
+						'itemtype'=>'article',
+						'time'=>$topic['viewtime'],
+						'uid'=>$topic['authorid']
+				);
+				array_push($dataids,$id);
+			//	$tagtopic= $this->db->query ( "SELECT tagid,itemtype,typeid FROM " . $this->db->dbprefix . "tag_item WHERE tagid=$id and itemtype='article' and typeid=$tid " )->row_array ();
+			//	if (!$tagtopic) {
+					array_push($datas,$data);
 					
-				}
-				
-				
-				
-				//通过标签查询文章
-				$this->load->model ( "topic_model" );
-				$topiclist = $this->topic_model->get_bylikename ( $word, 0, $pagesize );
-				
-				foreach ($topiclist as $topic){
-					$tid=$topic['id'];
-					$data=array(
-							'tagid' => $id,
-							'typeid' => $topic['id'] ,
-							'cid' =>$topic['articleclassid'],
-							'itemtype'=>'article',
-							'time'=>$topic['viewtime'],
-							'uid'=>$topic['authorid']
-					);
-					$tagtopic= $this->db->query ( "SELECT tagid,itemtype,typeid FROM " . $this->db->dbprefix . "tag_item WHERE tagid=$id and itemtype='article' and typeid=$tid " )->row_array ();
-					if (!$tagtopic) {
-						$this->db->insert ( 'tag_item', $data );
-					}
-					
-				}
-				
-				
-				$qnum=count($questionlist);
-				$anum=count($topiclist);
-				
+			//	}
+			}
+			$this->db->where(array('itemtype'=>'article'))->where_in("tagid",$dataids)->delete("tag_item");
+		$this->db->insert_batch ( 'tag_item', $datas );
 			
 			}
-		}
+	
 		$message['code']=200;
-		$message['rownum']=$rownum;
-		$message['pages']=$pages;
-		$message['msg']="内容同步成功";
+	
+		$message['msg']="第".$startindex."页内容同步成功";
 		echo json_encode($message);
 		exit();
 	}
@@ -213,20 +246,21 @@ class Admin_tag extends ADMIN_Controller {
 	
 	*/
 	function tongbutag(){
-		$pagesize=500;
+		$pagesize=20;
 		//获取站内标签总数
-		$rownum = returnarraynum ( $this->db->query ( getwheresql ( 'tag', " 1=1 ", $this->db->dbprefix ) )->row_array () );
+		//$rownum = returnarraynum ( $this->db->query ( getwheresql ( 'tag', " 1=1 ", $this->db->dbprefix ) )->row_array () );
 		
 		//分页处理标签同步
-		$pages = @ceil ( $rownum / $pagesize );
+	//	$pages = @ceil ( $rownum / $pagesize );
 		$tagstr='';
-		for($i=1;$i<=$pages;$i++){
-			$startindex = ($i - 1) * $pagesize;
+	
+			$startindex =intval($_POST['pageindex']);
 			//分页提取标签
 			$taglist = $this->tag_model->getalltaglist ( $startindex, $pagesize );
-			$tagstr.=count($taglist).'***';
+			$tagstr='';
 			foreach ($taglist as $tag){
 				$tagid=$tag['id'];
+				$tagstr=$tagstr.",".$tag['tagname'];
 				//获取标签全部问题数据
 				$qrownum = returnarraynum ( $this->db->query ( getwheresql ( 'tag_item', " tagid=$tagid and itemtype='question' ", $this->db->dbprefix ) )->row_array () );
 				
@@ -244,12 +278,11 @@ class Admin_tag extends ADMIN_Controller {
 				$this->db->where ( 'id', $tagid );
 				$this->db->update ( 'tag', $data );
 			}
-		}
+	
 		$message['code']=200;
 		$message['tagstr']=$tagstr;
-		$message['rownum']=$rownum;
-		$message['pages']=$pages;
-		$message['msg']="标签更新成功";
+	
+		$message['msg']=$tagstr."标签更新成功";
 		echo json_encode($message);
 		exit();
 	}

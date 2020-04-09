@@ -77,17 +77,18 @@
 <script>
 var _count={$pages};
 var _pageindex=1;
+var _pagetagnumindex=1;
 $("#updatetag").click(function(){
 	$("#updatetag").attr("disabled",true); //按钮不可以点击
-	   $("#updatetag").val("同步中...");
-	   $("#updatetag").html("同步中...");
+	   $("#updatetag").val("同步"+_pageindex+"页中...");
+	   $("#updatetag").html("同步"+_pageindex+"页中...");
 	updatetag();
 })
 $("#updatedatatag").click(function(){
 	if(confirm("该设置会将标签去检索问答和文章标题和内容，然后同步匹配到的内容，是否确认执行？")){
 		$("#updatedatatag").attr("disabled",true); //按钮不可以点击
-		   $("#updatedatatag").val("内容同步中...");
-		   $("#updatedatatag").html("内容同步中...");
+		   $("#updatedatatag").val("同步"+_pageindex+"/"+_count+"页中...");
+		   $("#updatedatatag").html("同步"+_pageindex+"/"+_count+"页中...");
 		updatedatatag();
 	}
 	
@@ -97,7 +98,7 @@ function updatedatatag(){
 
 
 
-	var datajson={pages:_count,pageindex:_pageindex};
+	var datajson={pageindex:_pageindex};
 	var url="{url admin_tag/tongbudatatag}";
 
 	 $.ajax({
@@ -106,10 +107,21 @@ function updatedatatag(){
          data:datajson,
         　             datatype :'json',  
          success:function(data) {
-     console.log(data)
-        	 $("#updatedatatag").removeAttr("disabled");
+	var data=eval("("+data+")");
+     console.log(data.msg)
+     if(_pageindex==_count){
+     	$("#updatedatatag").removeAttr("disabled");
              $("#updatedatatag").val("更新完成");
              $("#updatedatatag").html("更新完成");
+             _pageindex=1;
+             return false;
+     }else{
+     		   $("#updatedatatag").val("同步"+_pageindex+"/"+_count+"页中...");
+		   $("#updatedatatag").html("同步"+_pageindex+"/"+_count+"页中...");
+     	++_pageindex;
+     	updatedatatag();
+     }
+        	 
          }
      });
 }
@@ -118,19 +130,31 @@ function updatetag(){
 
 
 
-	var datajson={pages:_count,pageindex:_pageindex};
+	var datajson={pages:_count,pageindex:_pagetagnumindex};
 	var url="{url admin_tag/tongbutag}";
 
 	 $.ajax({
          type: "POST",
          url: url,
          data:datajson,
-        　             datatype :'json',  
+        　  datatype :'json',  
          success:function(data) {
-     console.log(data)
-        	 $("#updatetag").removeAttr("disabled");
+         	var data=eval("("+data+")");
+     console.log(data.msg)
+      if(_pagetagnumindex==_count){
+     	$("#updatetag").removeAttr("disabled");
              $("#updatetag").val("更新完成");
              $("#updatetag").html("更新完成");
+             _pageindex=1;
+             return false;
+     }else{
+     		   $("#updatetag").val("同步"+_pagetagnumindex+"/"+_count+"页中...");
+		   $("#updatetag").html("同步"+_pagetagnumindex+"/"+_count+"页中...");
+     	++_pagetagnumindex;
+     	updatetag();
+     }
+     
+        
          }
      });
 }
