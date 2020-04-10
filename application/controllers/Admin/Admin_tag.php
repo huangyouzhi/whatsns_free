@@ -46,7 +46,7 @@ class Admin_tag extends ADMIN_Controller {
 	}
 	/**
 	
-	* 同步前200条问题和文章
+	* 同步前2000条问题和文章
 	
 	* @date: 2018年12月12日 上午11:32:21
 	
@@ -182,14 +182,14 @@ class Admin_tag extends ADMIN_Controller {
 						'time'=>time(),
 						'uid'=>$question['authorid']
 				);
-					array_push($dataids,$id);
-				//$tagquestion = $this->db->query ( "SELECT tagid,itemtype,typeid FROM " . $this->db->dbprefix . "tag_item WHERE tagid=$id and itemtype='question' and typeid=$qid " )->row_array ();
-			//	if (!$tagquestion) {
+					//array_push($dataids,$id);
+				$tagquestion = $this->db->query ( "SELECT tagid,itemtype,typeid FROM " . $this->db->dbprefix . "tag_item WHERE tagid=$id and itemtype='question' and typeid=$qid " )->row_array ();
+				if (!$tagquestion) {
 						array_push($datas,$data);
 				
-			//	}
+				}
 			}
-				$this->db->where(array('itemtype'=>'question'))->where_in("tagid",$dataids)->delete("tag_item");
+				//$this->db->where(array('itemtype'=>'question'))->where_in("tagid",$dataids)->delete("tag_item");
 				$this->db->insert_batch ( 'tag_item', $datas );
 		
 	
@@ -214,14 +214,14 @@ class Admin_tag extends ADMIN_Controller {
 						'time'=>$topic['viewtime'],
 						'uid'=>$topic['authorid']
 				);
-				array_push($dataids,$id);
-			//	$tagtopic= $this->db->query ( "SELECT tagid,itemtype,typeid FROM " . $this->db->dbprefix . "tag_item WHERE tagid=$id and itemtype='article' and typeid=$tid " )->row_array ();
-			//	if (!$tagtopic) {
+				//array_push($dataids,$id);
+			$tagtopic= $this->db->query ( "SELECT tagid,itemtype,typeid FROM " . $this->db->dbprefix . "tag_item WHERE tagid=$id and itemtype='article' and typeid=$tid " )->row_array ();
+				if (!$tagtopic) {
 					array_push($datas,$data);
 					
-			//	}
+				}
 			}
-			$this->db->where(array('itemtype'=>'article'))->where_in("tagid",$dataids)->delete("tag_item");
+			//$this->db->where(array('itemtype'=>'article'))->where_in("tagid",$dataids)->delete("tag_item");
 		$this->db->insert_batch ( 'tag_item', $datas );
 			
 			}
