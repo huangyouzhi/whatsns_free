@@ -75,20 +75,20 @@
     </table>
 </form>
 <script>
-var _count={$pages};
-var _pageindex=1;
-var _pagetagnumindex=1;
+var _count={$pagestag};
+var _pageindex=0;
+var _pagetagnumindex=0;
 $("#updatetag").click(function(){
 	$("#updatetag").attr("disabled",true); //按钮不可以点击
-	   $("#updatetag").val("同步"+_pageindex+"页中...");
-	   $("#updatetag").html("同步"+_pageindex+"页中...");
+	   $("#updatetag").val("同步"+(_pagetagnumindex+1)+"页中...");
+	   $("#updatetag").html("同步"+(_pagetagnumindex+1)+"页中...");
 	updatetag();
 })
 $("#updatedatatag").click(function(){
 	if(confirm("该设置会将标签去检索问答和文章标题和内容，然后同步匹配到的内容，是否确认执行？")){
 		$("#updatedatatag").attr("disabled",true); //按钮不可以点击
-		   $("#updatedatatag").val("同步"+_pageindex+"/"+_count+"页中...");
-		   $("#updatedatatag").html("同步"+_pageindex+"/"+_count+"页中...");
+		   $("#updatedatatag").val("同步"+(_pageindex+1)+"/"+_count+"页中...");
+		   $("#updatedatatag").html("同步"+(_pageindex+1)+"/"+_count+"页中...");
 		updatedatatag();
 	}
 	
@@ -116,8 +116,8 @@ function updatedatatag(){
              _pageindex=1;
              return false;
      }else{
-     		   $("#updatedatatag").val("同步"+_pageindex+"/"+_count+"页中...");
-		   $("#updatedatatag").html("同步"+_pageindex+"/"+_count+"页中...");
+     		   $("#updatedatatag").val("同步"+(_pageindex+1)+"/"+_count+"页中...");
+		   $("#updatedatatag").html("同步"+(_pageindex+1)+"/"+_count+"页中...");
      	++_pageindex;
      	updatedatatag();
      }
@@ -148,8 +148,8 @@ function updatetag(){
              _pageindex=1;
              return false;
      }else{
-     		   $("#updatetag").val("同步"+_pagetagnumindex+"/"+_count+"页中...");
-		   $("#updatetag").html("同步"+_pagetagnumindex+"/"+_count+"页中...");
+     		   $("#updatetag").val("同步"+(_pagetagnumindex+1)+"/"+_count+"页中...");
+		   $("#updatetag").html("同步"+(_pagetagnumindex+1)+"/"+_count+"页中...");
      	++_pagetagnumindex;
      	updatetag();
      }
