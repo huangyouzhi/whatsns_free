@@ -276,6 +276,18 @@ class Admin_user extends ADMIN_Controller {
 				if ($mypay >= 0) {
 					$this->db->query ( "UPDATE " . $this->db->dbprefix . "user SET mypay='$mypay' WHERE uid=$uid " );
 				}
+						if ($this->setting ["ucenter_open"]) {
+					$this->load->model ( "ucenter_model" );
+					if(empty($email)){
+						$email=$this->user['email'];
+					}
+					$_pwd=$this->input->post ( 'password' );
+					if(!empty($_pwd)){
+						$this->ucenter_model->uppass ( $this->user ['username'], '',$_pwd, $email,1 );
+						
+					}
+					
+				}
 				$message = '用户资料编辑成功!';
 				unset ( $type );
 			}
