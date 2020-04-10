@@ -23,7 +23,7 @@ class Answer_model extends CI_Model {
 			$answer ['format_time'] = tdate ( $answer ['time'] );
 			$answer ['appends'] = $this->get_appends ( $answer ['id'] );
 			$answer ['title'] = checkwordsglobal ( $answer ['title'] );
-			$answer ['content'] = checkwordsglobal ( $answer ['content'] );
+			$answer ['content'] = checkwordsglobal (htmlspecialchars_decode( $answer ['content'] ));
 		}
 		return $answer;
 	}
@@ -59,7 +59,7 @@ class Answer_model extends CI_Model {
 				$bestanswer ['total'] = 0;
 			}
 			$bestanswer ['title'] = checkwordsglobal ( $bestanswer ['title'] );
-			$bestanswer ['content'] = checkwordsglobal ( $bestanswer ['content'] );
+			$bestanswer ['content'] = checkwordsglobal (htmlspecialchars_decode( $bestanswer ['content'] ));
 			$bestanswer ['userinfo'] = array ();
 
 			$query = $this->db->get_where ( 'user', array ('uid' => $bestanswer ['authorid'] ) );
@@ -120,7 +120,7 @@ class Answer_model extends CI_Model {
 			}
 			$answer ['time'] = tdate ( $answer ['time'] );
 			$answer ['ip'] = formatip ( $answer ['ip'] );
-			$answer ['content'] = checkwordsglobal ( $answer ['content'] );
+			$answer ['content'] = checkwordsglobal (htmlspecialchars_decode( $answer ['content']));
 			$answer ['title'] = checkwordsglobal ( $answer ['title'] );
 			$answer ['author_has_vertify'] = get_vertify_info ( $answer ['authorid'] ); //用户是否认证
 			$answer ['author_avartar'] = get_avatar_dir ( $answer ['authorid'] );
@@ -299,7 +299,7 @@ class Answer_model extends CI_Model {
 		foreach ( $query->result_array () as $append ) {
 			$append ['format_time'] = tdate ( $append ['time'] );
 			$append ['avatar'] = get_avatar_dir ( $append ['authorid'] );
-			$append ['content'] = checkwordsglobal ( $append ['content'] );
+			$append ['content'] = checkwordsglobal ( htmlspecialchars_decode($append ['content']) );
 			$appendlist [] = $append;
 		}
 		return $appendlist;
