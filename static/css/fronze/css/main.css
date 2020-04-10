@@ -713,10 +713,10 @@ color: transparent;
 	  background: transparent;
 }
 .ask_detail_content_text *{
-	max-width:100%;
+	    max-width: 100% !important;
 }
 .answerlist *{
-	max-width:100%;
+    max-width: 100% !important;
 }
 #duoshuocomment{
 	padding-left:15px;
