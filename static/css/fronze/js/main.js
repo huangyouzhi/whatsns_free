@@ -390,7 +390,7 @@ function ajaxpost(_url,_data,callback,type){
 
 function check_phone(_phone){
 	
-	if(!(/^1(1|2|3|4|5|7|8|9)\d{9}$/.test(_phone))){ 
+ if(!(/^1(1|2|3|4|5|6|7|8|9)\d{9}$/.test(_phone))){ 
 	       
 	        return false; 
 	    }else{
@@ -419,7 +419,7 @@ if(flag==1){
 	},1000);
 }else{
 	  
-	 if(flag==0){
+ if(flag==0){
 		   alert("平台短信已经关闭");
 	   }else if(flag==2){
 		   alert("手机号没有在网站注册");
@@ -444,7 +444,10 @@ function gosms(_type){
 		 alert("手机号码有误");  
 		 return false;
 	}
-  $.post(g_site_url+"index.php?user/getsmscode", {phone: _phone,type:'reg'}, function(flag) {
+	if(!_type){
+		_type="reg"
+	}
+  $.post(g_site_url+"index.php?user/getsmscode", {phone: _phone,type:_type}, function(flag) {
 	   flag=$.trim(flag);
   if(flag==1){
   	var _timecount=60;
@@ -458,10 +461,10 @@ function gosms(_type){
   		}
   	},1000);
   }else{
-	 if(flag==0){
+ if(flag==0){
 		   alert("平台短信已经关闭");
 	   }else if(flag==2){
-		   alert("手机号没有在网站注册");
+		   alert("手机号已被注册");
 	   }else if(flag==3){
 		   alert("手机号不正确");
 	   }else{
