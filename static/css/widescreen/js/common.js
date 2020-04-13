@@ -219,7 +219,7 @@ function gosms(_type){
  if(flag==0){
 		   alert("平台短信已经关闭");
 	   }else if(flag==2){
-		   alert("手机号没有在网站注册");
+		   alert("手机号在网站已经被注册");
 	   }else if(flag==3){
 		   alert("手机号不正确");
 	   }else{
