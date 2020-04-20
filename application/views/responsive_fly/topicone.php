@@ -14,7 +14,7 @@
         {if $topicone['state']==0}<span class="layui-badge">审核中</span>{/if}
         <a href="{eval echo getcaturl($cat_model['id'],'topic/catlist/#id#');}"><span class="layui-badge layui-bg-green fly-detail-column">{$cat_model['name']}</span></a>
            
-          {eval $tid=$topicone['id']; $topdataarticle=$this->getlistbysql("select id,type,typeid from whatsns_topdata where typeid=$tid and type='topic' limit 0,1");}
+          {eval $tid=$topicone['id']; $topdataarticle=$this->getlistbysql("select id,type,typeid from  ".$this->db->dbprefix."topdata where typeid=$tid and type='topic' limit 0,1");}
           {if count($topdataarticle)}<span class="layui-badge layui-bg-black">置顶</span>{/if}
           {if $topicone['ispc']==1}<span class="layui-badge layui-bg-red">推荐</span>{/if}
            
@@ -40,14 +40,13 @@
            
              <!--{/if}-->
   <!--{/if}-->
-
           </div>
           <span class="fly-list-nums"> 
             <a href="#comment"><i class="iconfont" title="评论">&#xe60c;</i> {$topicone['articles']}</a>
             <i class="iconfont" title="人气">&#xe60b;</i> {$topicone['views']}
           </span>
         </div>
-	  	  <a  class="layui-btn layui-btn-danger  layui-btn-sm" style="margin-left:0px;margin-bottom:10px;"  target="_self" href="javascript:showposter('{SITE_URL}',$topicone['id'],'article')"   title="生成海报" style="font-size:12px;"><span class=""><i style="margin-left: 5px;font-size:18px;position:relative;top:0px;margin-bottom:15px;" class="layui-icon layui-icon-share"></i></span>生成海报</a>
+		  <a  class="layui-btn layui-btn-normal"  target="_self" href="javascript:showposter('{SITE_URL}',$topicone['id'],'article')"   title="生成海报" style="font-size:12px;"><span class=""><i style="margin-right: 5px;font-size:18px;position:relative;top:3px;" class="fa fa-share-alt"></i></span>生成海报</a>
         
         <div class="detail-about">
           <a class="fly-avatar" href="{url user/space/$topicone['authorid']}">

@@ -8,7 +8,7 @@
     <div class="layui-col-md8 content detail">
       <div class="fly-panel detail-box">
  
-        <h1>{$question['title']}</h1>
+      <h1>{$question['title']} <label onclick="doTTS()" class="layui-badge" style="cursor:pointer;"><i class="layui-icon layui-icon-mike" style="margin-left:5px;"></i>语音播放 </label></h1>
         <div class="fly-detail-info">
           {if $question['status']==0}<span class="layui-badge">审核中</span>{/if}
           <a href="{eval echo getcaturl($question['cid'],'category/view/#id#');}"><span class="layui-badge layui-bg-green fly-detail-column">$question['category_name']</span></a>
@@ -17,7 +17,7 @@
                   
           {if $question['status']==1}<span class="layui-badge" style="background-color: #999;">未结</span>{/if}
           {if $question['status']==2}<span class="layui-badge" style="background-color: #5FB878;">已结</span> {/if}
-          {eval $qid=$question['id']; $topdataquestion=$this->getlistbysql("select id,type,typeid from whatsns_topdata where typeid=$qid and type='qid' limit 0,1");}
+          {eval $qid=$question['id']; $topdataquestion=$this->getlistbysql("select id,type,typeid  ".$this->db->dbprefix."topdata where typeid=$qid and type='qid' limit 0,1");}
           {if count($topdataquestion)}<span class="layui-badge layui-bg-black">置顶</span>{/if}
           {if $question['status']==6}<span class="layui-badge layui-bg-red">推荐</span>{/if}
           
@@ -55,7 +55,7 @@
               <cite>匿名用户</cite>
            
             </a>
-            <span>{eval echo tdate($question['time']);}</span>
+            <span class="hide">{eval echo tdate($question['time']);}</span>
           </div>
           {else}
                <a class="fly-avatar" href="{url user/space/$question['authorid']}" {if $user['grouptype']!=1&&$user['uid']!=$question['authorid']&&$question['price']==0}style="top:3px;"{/if}>
@@ -67,7 +67,7 @@
              {if $question['author_has_vertify']} <i class="iconfont icon-renzheng" title="认证信息：{$question['user']['signature']}"></i>{/if}
              
             </a>
-            <span>{eval echo tdate($question['time']);}</span>
+            <span class="hide">{eval echo tdate($question['time']);}</span>
           </div>
           {/if}
           <div class="detail-hits" data-id="123">
@@ -425,6 +425,9 @@
     </div>
   </div>
 </div>
+	<div id="bdtts_div_id">
+		
+		</div>
 <script type="text/javascript">
 <!--{if $setting['code_ask']}-->
 var needcode=1;
@@ -433,5 +436,22 @@ var needcode=0;
   <!--{/if}-->
 	 
 </script>
+		<script type="text/javascript"> 
+
+		{eval $playspeed=5;}
+		function doTTS(){
+			var ttsDiv = document.getElementById('bdtts_div_id');
+			var ttsText = "{$question['title']}";
+			var au1 = '<audio id="tts_autio_id" autoplay="autoplay">';
+			var sss = '<source id="tts_source_id" src="{eval echo urldecode('http%3A%2F%2Ftts.baidu.com%2Ftext2audio%3Flan%3Dzh%26ie%3DUTF-8%26cuid%3D123%26ctp%3D1%26spd%3D'.$playspeed.'%26text%3D');}'+ttsText+'" type="audio/mpeg">';
+			var eee = '<embed id="tts_embed_id" height="0" width="0" src="">';
+			var au2 = '</audio>';
+			ttsDiv.innerHTML = au1 + sss + eee + au2;
+			
+			var ttsAudio = document.getElementById('tts_autio_id');
+			
+			ttsAudio.play();
+		}
+		</script>
  <!-- 公共底部 --> 
 {template footer}
