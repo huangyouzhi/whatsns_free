@@ -287,7 +287,7 @@
       <div class="layui-form-item">
   
     <div class="layui-input-block" style="margin-left: 0px;">
-    <div class="layui-btn">	<input  {if $vertify['status']==0}disabled{/if} name="attach1" type="file" class="fujianfule  collapse" onchange="previewImage(this)">
+    <div class="layui-btn">	<input  {if $vertify['status']==0}disabled{/if} name="attach1" id="upimgfile"  type="file" class="fujianfule  collapse" accept="image/*" onchange="uploadvertify(this)">
 					  </div>
     <p class="text-color-hui mar-t10 mar-b10">请提交对应的身份证或者营业执照证件扫描<span style="color:#FF5722">（必须上传）</span></p>
      <img src='{if isset($vertify['zhaopian1'])}{SITE_URL}{$vertify['zhaopian1']}{/if}' id="vertify_img1" class="vertify_img {if isset($vertify['zhaopian1'])&&$vertify['zhaopian1']==''}hide{/if}"/>
@@ -300,7 +300,7 @@
   
     <div class="layui-input-block" style="margin-left: 0px;">
     <div class="layui-btn layui-btn-normal">
-   	<input  {if $vertify['status']==0}disabled{/if} name="attach2" type="file" class="fujianfule  collapse" onchange="previewImage1(this)">
+   	<input  {if $vertify['status']==0}disabled{/if} name="attach2" type="file" id="upimgfile2"  class="fujianfule  collapse"  accept="image/*" onchange="uploadvertify2(this)">
 					   
 					  </div>
     <p class="text-color-hui mar-t10 mar-b10">其它证明材料,格式jpg,png,jpeg。<span style="color:#1E9FFF!important">（非必需）</span></p>
@@ -463,7 +463,140 @@
     		var _posturl="{url user/ajaxvertify}";
     		ajaxpost(_posturl,data,success);
     	}
+    	//图片大小验证
+    	 window.verificationPicFile=function (file){
+    	
+    	    var fileSize = 0;
+    	    var fileMaxSize = 1024*3;//3M
+    	    var filePath = file.value;
+    	    if(filePath){
+    	        fileSize =file.files[0].size;
+    	        var size = fileSize / 1024;
+    	        if (size > fileMaxSize) {
+    	            alert("文件大小不能大于3M！");
+    	            file.value = "";
+    	            return false;
+    	        }else if (size <= 0) {
+    	            alert("文件大小不能为0M！");
+    	            file.value = "";
+    	            return false;
+    	        }
+    	    }else{
+    	        return false;
+    	    }
+    	}
+    	 window.uploadvertify=function (file){
 
+ 	    	
+    	   	 if (file.files && file.files[0])
+    	        {
+    	   		verificationPicFile(file);
+    	   	     $(".upimgtip").html("图片上传中....");
+    	   		 $("#upimgfile").attr("disabled","disabled");
+    	   		  var type = "wangEditorMobileFile";
+    	   		  var ischeck=0;
+    	   		
+    	   		    var formData = new FormData();
+    	   		    formData.append(type, $("#upimgfile")[0].files[0]);
+    	   		 formData.append("addimg",0);
+    		
+    	   	  
+    	   		    $.ajax({
+    	   		        type: "POST",
+    	   		        url: '{url attach/upimg}',
+    	   		        data: formData,
+    	   		        processData: false,
+    	   		        contentType: false,
+    	   		        //返回数据的格式
+    	   	            datatype: "text",//"xml", "html", "script", "json", "jsonp", "text".
+    	   	            beforeSend: function () {
+
+    	   	             
+    	   	             },
+    	   		        success: function (data) {
+    	   		         $("#upimgfile").removeAttr("disabled");
+    	   		     if(data.indexOf('error')==0){
+    	   		    	
+                       alert(data.replace('error|',''));
+                       return false;
+    	   		     }else{
+    	   		    	$("#vertify_img1").attr("src",data).removeClass("hide");
+    	   		     }
+    	   		         
+    	   		        
+    	   		          
+    	   		        },
+    	   	             complete: function () {
+    	   	            	 $(".upimgtip").html("");
+    	   	            	 $("#upimgfile").removeAttr("disabled");
+    	   	               
+    	   	              },
+    	   	             //调用出错执行的函数
+    	   	             error: function(){
+    	   	           
+    	   	            	 $("#upimgfile").removeAttr("disabled");
+    	   	                 //请求出错处理
+    	   	            	 alert("上传出错");
+    	   	             }
+    	   		    });
+    	        }
+    	   }
+    	 window.uploadvertify2=function (file){
+    
+    	
+      	 if (file.files && file.files[0])
+           {
+      		verificationPicFile(file);
+      	     $(".upimgtip2").html("图片上传中....");
+      		 $("#upimgfile2").attr("disabled","disabled");
+      		  var type = "wangEditorMobileFile";
+      		  var ischeck=0;
+      		
+      		    var formData = new FormData();
+      		    formData.append(type, $("#upimgfile2")[0].files[0]);
+      		 formData.append("addimg",0);
+    	
+      	  
+      		    $.ajax({
+      		        type: "POST",
+      		        url: '{url attach/upimg}',
+      		        data: formData,
+      		        processData: false,
+      		        contentType: false,
+      		        //返回数据的格式
+      	            datatype: "text",//"xml", "html", "script", "json", "jsonp", "text".
+      	            beforeSend: function () {
+
+      	         
+      	             },
+      		        success: function (data) {
+      		         $("#upimgfile2").removeAttr("disabled");
+      		     if(data.indexOf('error')==0){
+      		    	
+                  alert(data.replace('error|',''));
+                  return false;
+      		     }else{
+      		    	$("#vertify_img2").attr("src",data).removeClass("hide");
+      		     }
+      		         
+      		        
+      		          
+      		        },
+      	             complete: function () {
+      	            	 $(".upimgtip2").html("");
+      	            	 $("#upimgfile2").removeAttr("disabled");
+      	           
+      	              },
+      	             //调用出错执行的函数
+      	             error: function(){
+      	          
+      	            	 $("#upimgfile2").removeAttr("disabled");
+      	                 //请求出错处理
+      	            	 alert("上传出错");
+      	             }
+      		    });
+           }
+      }
     	//图片上传预览    IE是用了滤镜。
     	window.previewImage=function (file)
     	{
