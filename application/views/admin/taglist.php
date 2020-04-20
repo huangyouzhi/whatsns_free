@@ -75,7 +75,7 @@
     </table>
 </form>
 <script>
-var _count={$pagestag};
+var _count={$pages};
 var _pageindex=0;
 var _pagetagnumindex=0;
 $("#updatetag").click(function(){
