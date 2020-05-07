@@ -1346,7 +1346,7 @@ class Question extends CI_Controller {
 			}
 		}
 		
-		if (! isset ( $bestanswer['content'] )) {
+		if (! isset ( $bestanswer['content'] )||empty($bestanswer['content'])) {
 			$seo_description = trim(strip_tags ( $question ['description'] ));
 		} else {
 			$seo_description = trim(strip_tags(html_entity_decode($bestanswer['content'])));
