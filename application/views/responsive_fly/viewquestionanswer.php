@@ -17,7 +17,7 @@
                   
           {if $question['status']==1}<span class="layui-badge" style="background-color: #999;">未结</span>{/if}
           {if $question['status']==2}<span class="layui-badge" style="background-color: #5FB878;">已结</span> {/if}
-          {eval $qid=$question['id']; $topdataquestion=$this->getlistbysql("select id,type,typeid from whatsns_topdata where typeid=$qid and type='qid' limit 0,1");}
+          {eval $qid=$question['id']; $topdataquestion=$this->getlistbysql("select id,type,typeid from  ".$this->db->dbprefix."topdata where typeid=$qid and type='qid' limit 0,1");}
           {if count($topdataquestion)}<span class="layui-badge layui-bg-black">置顶</span>{/if}
           {if $question['status']==6}<span class="layui-badge layui-bg-red">推荐</span>{/if}
           
