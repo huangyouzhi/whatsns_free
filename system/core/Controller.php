@@ -98,7 +98,7 @@ class CI_Controller {
 		$this->isinstall ();
 		
 		$this->init_cache ();
-		//$this->checkurl ();
+		// $this->checkurl ();
 		$this->init_user ();
 		
 		$this->banned ();
@@ -132,19 +132,18 @@ class CI_Controller {
 		// 获取访问页面的后缀，可能是html,php或者别的后缀
 		$_fix = $p ['extension'];
 		
-		//如果网页带参数，提取参数前的后缀
-		if(strstr ( $_fix, '?' )){
-			$_fix=substr($_fix,0,strrpos($_fix,'?'));
+		// 如果网页带参数，提取参数前的后缀
+		if (strstr ( $_fix, '?' )) {
+			$_fix = substr ( $_fix, 0, strrpos ( $_fix, '?' ) );
 		}
-
-		if(strstr ( $url, 'index.php?' )||$this->uri->rsegments [1]=='rss'||$this->uri->rsegments [1]=='user'||$this->uri->rsegments [1]=='appstore'||$this->uri->rsegments [1]=='custom'||$this->uri->rsegments [1]=='pay'||$this->uri->rsegments [1]=='ebank'||$this->uri->rsegments [1]=='api_user'||strstr ( $this->uri->rsegments [1], 'app_' )){
-			
-		}else{
-				// 判断是否是首页
+		
+		if (strstr ( $url, 'index.php?' ) || $this->uri->rsegments [1] == 'rss' || $this->uri->rsegments [1] == 'user' || $this->uri->rsegments [1] == 'appstore' || $this->uri->rsegments [1] == 'custom' || $this->uri->rsegments [1] == 'pay' || $this->uri->rsegments [1] == 'ebank' || $this->uri->rsegments [1] == 'api_user' || strstr ( $this->uri->rsegments [1], 'app_' )) {
+		} else {
+			// 判断是否是首页
 			if (strstr ( $regular, 'index/index' )) {
 				// 如果是首页只允许后缀是 php或者后台配置的后缀
 				if ($_fix && $_fix != trim ( $setting ['seo_suffix'], '.' )) {
-					//同时后缀也不等于默认的php
+					// 同时后缀也不等于默认的php
 					if ($_fix != 'php') {
 						show_404 ();
 					}
@@ -152,25 +151,23 @@ class CI_Controller {
 			} else {
 				// 判断如果不是后台seo设置得网页后缀或者不是分类栏目地址就返回404
 				if (strstr ( $regular, 'seo/index' ) || strstr ( $regular, 'ask/index' ) || strstr ( $regular, 'category/view' ) || strstr ( $regular, 'topic/catlist' )) { // 去掉文章栏目和问题栏目的url尾巴
-					// 栏目白名单 ，如果有后缀就返回404，和后台配置相同除外
+				                                                                                                                                                            // 栏目白名单 ，如果有后缀就返回404，和后台配置相同除外
 					if ($_fix && $_fix != trim ( $setting ['seo_suffix'], '.' )) {
 						show_404 ();
 					}
 				} else {
 					
-					if (strstr ( $regular, '/index' )){
-						//排除首页分享
-					}else{
+					if (strstr ( $regular, '/index' )) {
+						// 排除首页分享
+					} else {
 						// 非栏目页面判断网址后缀是否是后台配置默认的网址后缀
 						if ($_fix != trim ( $setting ['seo_suffix'], '.' )) {
 							show_404 ();
 						}
 					}
-					
 				}
 			}
 		}
-		
 	}
 	// 检查是否已经安装
 	function isinstall() {
@@ -216,7 +213,7 @@ class CI_Controller {
 			if ($this->setting ['needlogin'] == 1) {
 				$method = $this->uri->segments [2];
 				
-				if ($this->uri->segments [1] != 'account' && $this->uri->segments [1] != 'plugin_weixin' && $this->uri->segments [1] != 'pccaiji_question' && $this->uri->segments [1] != 'pccaiji_catgory' && $this->uri->segments [1] != 'api_user' && $method != 'code' && $method != 'login' && $method != 'register' && $method != 'getpass' && $method != 'resetpass' && $method != 'checkemail' && $method != 'getsmscode') {
+				if ($this->uri->segments [1] != 'account' && $this->uri->segments [1] != 'plugin_weixin' && $this->uri->segments [1] != 'pccaiji_question' && $this->uri->segments [1] != 'pccaiji_catgory' && $this->uri->segments [1] != 'api_user' && $method != 'code' && $method != 'login' && $method != 'register'&& $method != 'ajaxsendpwdmail'&& $method != 'getsmscode'&& $method != 'getpwdsmscode'&& $method != 'getphonepass' && $method != 'getpass' && $method != 'resetpass' && $method != 'checkemail' && $method != 'getsmscode') {
 					
 					$url = url ( 'user/login' );
 					header ( "Location:$url" );
@@ -239,7 +236,7 @@ class CI_Controller {
 		$user ['avatar'] = get_avatar_dir ( $user ['uid'] );
 		
 		$user = $this->user = array_merge ( $user, $this->usergroup [$user ['groupid']] );
-					if ($user ['uid']) {
+		if ($user ['uid']) {
 			// 如果用户登录，且携带邀请被邀请注册的邀请码，则自动成为被邀请人
 			// frominvatecode
 			if (! isset ( $user ['frominvatecode'] )) {
@@ -654,6 +651,9 @@ class CI_Controller {
 	 * $ishtml=1 表示是跳转到静态网页
 	 */
 	function message($message, $url = '') {
+		if(trim($url)=='index'||trim($url)=='index/index'){
+			$url='';
+		}
 		$seotitle = '操作提示';
 		if ('' == $url) {
 			$redirect = isset ( $_SERVER ['HTTP_REFERER'] ) ? $_SERVER ['HTTP_REFERER'] : base_url ();
