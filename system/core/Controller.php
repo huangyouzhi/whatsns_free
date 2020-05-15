@@ -247,7 +247,9 @@ class CI_Controller {
 				}
 			}
 		}else{
-			session_destroy();
+			//session_destroy();
+				unset($_SESSION['loginuid']);
+			unset($_SESSION['loginpassword']);
 		}
 		
 	}
