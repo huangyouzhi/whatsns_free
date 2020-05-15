@@ -190,18 +190,21 @@ class CI_Controller {
 		$usergroup = $this->usergroup = $this->cache->load ( 'usergroup', 'groupid' );
 	}
 	function init_user() {
-		@$sid = tcookie ( 'sid' );
-		@$auth = tcookie ( 'auth' );
 		global $user;
 		$user = array ();
-		@list ( $uid, $password ) = empty ( $auth ) ? array (
-				0,
-				0 
-		) : taddslashes ( explode ( "\t", authcode ( $auth, 'DECODE' ) ), 1 );
-		if (! $sid) {
-			$sid = substr ( md5 ( time () . $this->input->ip_address () . random ( 6 ) ), 16, 16 );
-			tcookie ( 'sid', $sid, 1800 );
+		if(!$_SESSION){
+			session_start();
 		}
+    
+		$uid=0;
+		$password='';
+		if($_SESSION['loginuid']){
+			$uid=intval($_SESSION['loginuid']);
+		}
+		if($_SESSION['loginpassword']){
+			$password=$_SESSION['loginpassword'];
+		}
+	
 		$this->load->model ( 'user_model' );
 		if ($uid && $password) {
 			$user = $this->user_model->get_by_uid ( $uid, 0 );
@@ -225,13 +228,11 @@ class CI_Controller {
 			
 			exit ( "您已被网站管理员拉黑" );
 		}
-		
+	
 		if ($user ['uid'] && $user ['invatecode'] == null) {
 			$this->user_model->sendinvatecodetouid ( $user ['uid'] );
 		}
-		$this->user_model->refresh_session_time ( $sid, $user ['uid'] );
-		$user ['sid'] = $sid;
-		$user ['ip'] = $this->input->ip_address ();
+		$user ['ip'] =getip();
 		$user ['uid'] && $user ['loginuser'] = $user ['username'];
 		$user ['avatar'] = get_avatar_dir ( $user ['uid'] );
 		
@@ -240,16 +241,15 @@ class CI_Controller {
 			// 如果用户登录，且携带邀请被邀请注册的邀请码，则自动成为被邀请人
 			// frominvatecode
 			if (! isset ( $user ['frominvatecode'] )) {
-				// 如果不存在则绑定
-				if (! isset ( $_SESSION )) {
-					session_start ();
-				}
 				if (isset ( $_SESSION ['invatecode'] ) && $user ['invatecode'] != $_SESSION ['invatecode']) {
 					$this->user_model->updateinvatecode ( $user ['uid'], $_SESSION ['invatecode'] );
 					unset ( $_SESSION ['invatecode'] );
 				}
 			}
+		}else{
+			session_destroy();
 		}
+		
 	}
 	/**
 	 *

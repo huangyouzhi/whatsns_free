@@ -57,15 +57,19 @@ if ($token_arr) {
 
 	$c = new SaeTClientV2 ( WB_AKEY, WB_SKEY, $token );
 	
-	$sid = tcookie ( 'sid' );
-	$auth = tcookie ( 'auth' );
 	$user = array ();
+	if(!isset($_SESSION)){
+		session_start();
 	
-	list ( $uid, $password ) = empty ( $auth ) ? array (
-			0,
-			0 
-	) : taddslashes ( explode ( "\t", authcode ( $auth, 'DECODE' ) ), 1 );
-	
+	}
+	$uid=0;
+	$password='';
+	if($_SESSION['loginuid']){
+		$uid=intval($_SESSION['loginuid']);
+	}
+	if($_SESSION['loginpassword']){
+		$password=$_SESSION['loginpassword'];
+	}
 	if ($uid && $password) {
 		$user = get_user ( $uid );
 		if ($password != $user ['password']) {
@@ -93,6 +97,9 @@ if ($token_arr) {
 			header("Location:".$_SESSION ['forward']);
 		}else{
 			$forward = isset ( $_SERVER ['HTTP_REFERER'] ) ? $_SERVER ['HTTP_REFERER'] : SITE_URL;
+			if(strstr($forward,'graph.qq.com')){
+				$forward=SITE_URL;
+			}
 			header ( "Location:" . $forward );
 		}
 		exit ();
@@ -447,15 +454,15 @@ function refresh($user) {
 	global $db, $setting;
 	$uid = $user ['uid'];
 	$password = $user ['password'];
-	
 	$time = time ();
-	$sid = tcookie ( 'sid' );
 	
-	$db->query ( "UPDATE " . DB_TABLEPRE . "user SET `lastlogin`=$time  WHERE `uid`=$uid" ); // 更新最后登录时间
-	$db->query ( "REPLACE INTO " . DB_TABLEPRE . "session (sid,uid,islogin,ip,`time`) VALUES ('$sid',$uid,1,'" . getip () . "',$time)" );
-	$auth = authcode ( "$uid\t$password", 'ENCODE' );
-	tcookie ( 'auth', $auth );
-	tcookie ( 'loginuser', '' );
+	$db->query ( "UPDATE " . DB_TABLEPRE . "user SET `lastlogin`=$time  WHERE `uid`=$uid" ); //更新最后登录时间
+	if(!$_SESSION){
+		session_start();
+	}
+	$_SESSION['loginuid']=$uid;
+	$_SESSION['loginpassword']=$password;
+	
 }
 
 ?>

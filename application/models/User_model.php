@@ -354,75 +354,68 @@ class User_model extends CI_Model {
 	}
 	function refresh($uid, $islogin = 1, $cookietime = 0) {
 		$uid=intval($uid);
-		@$sid = tcookie ( 'sid' );
+	
 		global $user;
 		
 		$query = $this->db->select ( '*' )->from ( 'user' )->join ( 'usergroup', 'usergroup.groupid=user.groupid' )->where ( array (
-				'user.uid' => $uid 
+				'user.uid' => $uid
 		) )->get ();
 		$user = $query->row_array ();
 		
 		$this->db->set ( 'lastlogin', time () )->where ( array (
-				'uid' => $uid 
+				'uid' => $uid
 		) )->update ( 'user' );
 		$this->db->where ( array (
 				'uid' => $uid,
-				'time<' => time () 
+				'time<' => time ()
 		) )->delete ( 'session' );
-		$data = array (
-				'sid' => $sid,
-				'uid' => $uid,
-				'islogin' => $islogin,
-				'ip' => getip (),
-				'time' => time () 
-		);
-		$this->db->replace ( 'session', $data );
+
 		$password = $user ['password'];
-		$auth = authcode ( "$uid\t$password", 'ENCODE' );
-		if ($cookietime)
-			tcookie ( 'auth', $auth, $cookietime );
-		else
-			tcookie ( 'auth', $auth );
-		
-		tcookie ( 'loginuser', '' );
-		$user ['newmsg'] = 0;
+        if(!$_SESSION){
+        	session_start();
+        }
+        $_SESSION['loginuid']=$uid;
+        $_SESSION['loginpassword']=$password;
+				$user ['newmsg'] = 0;
 	}
+// 	function refresh($uid, $islogin = 1, $cookietime = 0) {
+// 		$uid=intval($uid);
+// 		@$sid = tcookie ( 'sid' );
+// 		global $user;
+		
+// 		$query = $this->db->select ( '*' )->from ( 'user' )->join ( 'usergroup', 'usergroup.groupid=user.groupid' )->where ( array (
+// 				'user.uid' => $uid 
+// 		) )->get ();
+// 		$user = $query->row_array ();
+		
+// 		$this->db->set ( 'lastlogin', time () )->where ( array (
+// 				'uid' => $uid 
+// 		) )->update ( 'user' );
+// 		$this->db->where ( array (
+// 				'uid' => $uid,
+// 				'time<' => time () 
+// 		) )->delete ( 'session' );
+// 		$data = array (
+// 				'sid' => $sid,
+// 				'uid' => $uid,
+// 				'islogin' => $islogin,
+// 				'ip' => getip (),
+// 				'time' => time () 
+// 		);
+// 		$this->db->replace ( 'session', $data );
+// 		$password = $user ['password'];
+// 		$auth = authcode ( "$uid\t$password", 'ENCODE' );
+// 		if ($cookietime)
+// 			tcookie ( 'auth', $auth, $cookietime );
+// 		else
+// 			tcookie ( 'auth', $auth );
+		
+// 		tcookie ( 'loginuser', '' );
+// 		$user ['newmsg'] = 0;
+// 	}
 	function refresh_session_time($sid, $uid) {
-	
-		$lastrefresh = intval ( tcookie ( "lastrefresh" ) );
-		if (! $lastrefresh) {
-			if ($uid) {
-				$data = array (
-						'time' => time () 
-				);
-				$this->db->where ( 'sid', $sid );
-				$this->db->update ( 'session', $data );
-			} else {
-				$query = $this->db->get_where ( 'session', array (
-						'sid' => $sid 
-				) );
-				$session = $query->row_array ();
-				
-				if ($session) {
-					$data = array (
-							'time' => time () 
-					);
-					$this->db->where ( 'sid', $sid );
-					$this->db->update ( 'session', $data );
-				} else {
-					// $this->db->where ( 'uid', $uid );
-					// $this->db->delete ( 'session' );
-					$data = array (
-							'sid' => $sid,
-							'ip' => $this->input->ip_address (),
-							'time' => time () 
-					);
-					
-					$this->db->insert ( 'session', $data );
-				}
-			}
-			tcookie ( "lastrefresh", '1', 60 );
-		}
+
+		
 	}
 	
 	/* 添加用户，本函数需要返回uid */
@@ -489,6 +482,7 @@ class User_model extends CI_Model {
 	}
 	function adduserapi($username, $password, $email = '', $groupid = 7, $uid = 0, $phone = 0) {
 		$password = md5 ( $password );
+	
 		if ($uid) {
 			$data = array (
 					'uid' => $uid,
@@ -531,6 +525,12 @@ class User_model extends CI_Model {
 			}
 			
 			$uid = $this->db->insert_id ();
+		}
+		if(FROMUC){
+			//更新用户密码
+			$salt=random(6);//加盐
+			$newpwd=md5($password.$salt);
+			$this->db->query("update ".$this->db->dbprefix."user set salt='$salt' , password='$newpwd' where uid=$uid ");
 		}
 		return $uid;
 	}
@@ -721,16 +721,19 @@ class User_model extends CI_Model {
 			$tables = array (
 					'question',
 					'topic',
-					'ask_articlecomment',
+					'articlecomment',
 					'answer' 
 			);
 			$this->db->where_in ( 'authorid', explode ( ',', $uids ) );
 			$this->db->delete ( $tables );
 			$this->db->set ( 'answers', 'answers-1', FALSE )->where_in ( 'authorid', explode ( ',', $uids ) )->update ( 'question' );
 		}
-		$_uids = explode ( ',', $uids );
-		$this->db->where_in('uid',$_uids)->delete('tag_item');
-		$this->db->where_in('authorid',$_uids)->delete('doing');
+		if(strstr($uids,',')){
+			$uids = explode ( ',', $uids );
+		}
+
+		$this->db->where_in('uid',$uids)->delete('tag_item');
+		$this->db->where_in('authorid',$uids)->delete('doing');
 	
 	}
 	function logout() {
@@ -747,6 +750,19 @@ class User_model extends CI_Model {
 				'uid' => $user ['uid'],
 				'time<' => $lasttime ['time'] 
 		) )->delete ( 'session' );
+		if(!$_SESSION){
+			//开启 Session
+			session_start();
+		}
+		
+		// 删除所有 Session 变量
+		$_SESSION = array();
+		//判断 cookie 中是否保存 Session ID
+		if(isset($_COOKIE[session_name()])){
+			setcookie(session_name(),'',time()-3600, '/');
+		}
+		//彻底销毁 Session
+		session_destroy();
 	}
 	function save_code($code,$codename="code") {
 		if (! isset ( $_SESSION )) {

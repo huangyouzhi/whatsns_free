@@ -50,8 +50,10 @@ $openid = $qc->get_openid ();
 $qc = new QC ( $token, $openid );
 
 if(isset($_SESSION)){
-	if($_SESSION['uid']){
-		$uid=$_SESSION['uid'];
+	
+	if($_SESSION['loginuid']){
+		
+		$uid=$_SESSION['loginuid'];
 		add_auth ( $token, $openid, $uid );
 		
 		header ( "Location:" . url('user/mycategory') );
@@ -62,20 +64,26 @@ if(isset($_SESSION)){
 $user = get_by_openid ( $openid, $token );
 $uid = $user ['uid'];
 if ($user) {
+	
 	add_auth ( $token, $openid, $uid );
 	refresh ( $user );
 	if (! isset ( $_SESSION )) {
 		session_start ();
 	}
 	if(isset($_SESSION ['forward'])){
+		
 		header("Location:".$_SESSION ['forward']);
 	}else{
 		$forward = isset ( $_SERVER ['HTTP_REFERER'] ) ? $_SERVER ['HTTP_REFERER'] : SITE_URL;
+		if(strstr($forward,'graph.qq.com')){
+			$forward=SITE_URL;
+		}
 		header ( "Location:" . $forward );
 	}
 	
 	exit ();
 } else {
+	
 	if (! $setting ['allow_register']) {
 		header ( "Content-Type: text/html;charset=utf-8" );
 		exit ( "系统注册功能暂时处于关闭状态!" );
@@ -392,12 +400,14 @@ function refresh($user) {
 	$uid = $user ['uid'];
 	$password = $user ['password'];
 	$time = time ();
-	$sid = tcookie ( 'sid' );
+	
 	$db->query ( "UPDATE " . DB_TABLEPRE . "user SET `lastlogin`=$time  WHERE `uid`=$uid" ); //更新最后登录时间
-	$db->query ( "REPLACE INTO " . DB_TABLEPRE . "session (sid,uid,islogin,ip,`time`) VALUES ('$sid',$uid,1,'" . getip () . "',$time)" );
-	$auth = authcode ( "$uid\t$password", 'ENCODE' );
-	tcookie ( 'auth', $auth );
-	tcookie ( 'loginuser', '' );
+	if(!$_SESSION){
+		session_start();
+	}
+	$_SESSION['loginuid']=$uid;
+	$_SESSION['loginpassword']=$password;
+	
 }
 
 ?>
