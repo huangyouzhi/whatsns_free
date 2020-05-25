@@ -190,12 +190,13 @@ class CI_Controller {
 		$usergroup = $this->usergroup = $this->cache->load ( 'usergroup', 'groupid' );
 	}
 	function init_user() {
+		
 		global $user;
 		$user = array ();
 		if(!$_SESSION){
 			session_start();
 		}
-    
+		$sid=getip();
 		$uid=0;
 		$password='';
 		if($_SESSION['loginuid']){
@@ -210,6 +211,9 @@ class CI_Controller {
 			$user = $this->user_model->get_by_uid ( $uid, 0 );
 			($password != $user ['password']) && $user = array ();
 		}
+		$baseUrl = 'http://' . $_SERVER ['HTTP_HOST'] . '/?' . urlmap ( $_SERVER ['QUERY_STRING'], 1 );
+		//$arr = parse_url ( $baseUrl );
+		//echo $baseUrl;exit();
 		if (! $user) {
 			$user ['uid'] = 0;
 			$user ['groupid'] = 6;
@@ -232,6 +236,7 @@ class CI_Controller {
 		if ($user ['uid'] && $user ['invatecode'] == null) {
 			$this->user_model->sendinvatecodetouid ( $user ['uid'] );
 		}
+		$user ['sid'] = $sid;
 		$user ['ip'] =getip();
 		$user ['uid'] && $user ['loginuser'] = $user ['username'];
 		$user ['avatar'] = get_avatar_dir ( $user ['uid'] );
@@ -248,7 +253,7 @@ class CI_Controller {
 			}
 		}else{
 			//session_destroy();
-				unset($_SESSION['loginuid']);
+			unset($_SESSION['loginuid']);
 			unset($_SESSION['loginpassword']);
 		}
 		
