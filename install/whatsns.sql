@@ -1107,6 +1107,8 @@ CREATE TABLE `whatsns_topic` (
   KEY `ispc` (`ispc`),
    KEY `yuyin` (`yuyin`),
    KEY `state` (`state`),
+    KEY `viewtime` (`viewtime`),
+	 KEY `views` (`views`),
   KEY `articleclassid` (`articleclassid`),
   KEY `authorid` (`authorid`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;
