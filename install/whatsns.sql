@@ -899,6 +899,7 @@ CREATE TABLE `whatsns_question` (
   `askcity` varchar(200) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `cid1` (`cid1`),
+    KEY `cid` (`cid`),
   KEY `cid2` (`cid2`),
   KEY `cid3` (`cid3`),
   KEY `time` (`time`),
