@@ -32,7 +32,7 @@
 
 
              <td width="20%" ><label >
- 注册日期:</label>
+ 发布日期:</label>
              <div class="input-group date form-date" data-date="" data-date-format="dd MM yyyy" data-link-field="dtp_input2" data-link-format="yyyy-mm-dd">
             <input class="form-control" size="16" id="timestart" name="srchdatestart" value="{$srchdatestart}"  readonly="">
             <span class="input-group-addon"><span class="icon-remove"></span></span>
@@ -70,8 +70,9 @@
             <td  width="10%">回答/查看</td>
             <td  width="5%">状态</td>
             <td  width="10%">IP</td>
-            <td  width="12%">提问时间</td>
-            <td  width="18%">已推荐</td>
+            <td  width="10%">提问时间</td>
+            <td  width="10%">已推荐</td>
+            <td  width="10%">操作</td>
         </tr>
         <!--{if isset($questionlist)} {loop $questionlist $question}-->
         <tr>
@@ -87,6 +88,7 @@
             <td class="altbg2">{$question['ip']}</td>
             <td class="altbg2">{$question['format_time']}</td>
             <td class="altbg2">{if $question['status']==6}<img src="{SITE_URL}static/css/admin/icn_6.gif">{else}否{/if}</td>
+         <td class="altbg2"><button data-id="{$question['id']}" data-title="{$question['title']}" type="button" data-toggle="modal" data-target="#addanswer" class="btn btn-success answerqid">补充回答</button></td>
         </tr>
         <!--{eval $content=htmlspecialchars($question['description']);}-->
         <input type="hidden" id="cont_{$question['id']}" value="{$content}" >
@@ -168,10 +170,226 @@
         </table>
     </form>
 </div>
+<div class="modal fade" id="addanswer">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">关闭</span></button>
+        <h4 class="modal-title">补充回答<span style="color:blue;" id="current_question_title"></span></h4>
+      </div>
+      <div class="modal-body">
+       <form class="form-horizontal">
+       <h5>指定回答人:</h5><hr>
+        <div class="form-group">
+    <div class="col-sm-12">
+      <div class="radio">
+        <label>
+          <input type="radio" checked value="1"  name="answerauthor"> 当前登录人
+        </label>
+      </div>
+      <div class="radio" style="margin-left:10px;"> 
+        <label>
+          <input type="radio" value="2" name="answerauthor"> 专家回答
+        </label>
+      </div>
+      <div class="radio" style="margin-left:10px;">
+        <label>
+          <input type="radio" value="3" name="answerauthor">马甲回答
+        </label>
+      </div>
+        <div class="radio" style="margin-left:10px;">
+        <label>
+          <input type="radio" value="4" name="answerauthor">其它用户回答
+        </label>
+      </div>
+      
+    </div>
+  </div>
+  <!-- 如果是专家回答 -->
+  <div class="answerbyexpert" style="display:none;">
+   <h5>选择专家:</h5><hr>
+     <div class="form-group">
 
+    <div class="col-sm-3">
+      <select class="form-control" id="expertusername">
+      	{eval $expertlist=$this->getlistbysql("select uid,username,expert from ".$this->db->dbprefix."user where expert=1 limit 0,100");}
+					 					
+					{loop $expertlist $expert}
+				   <option value="{$expert['uid']}">{$expert['username']}</option>
+				    {/loop}
+				   
+      </select>
+    </div>
+
+  </div>
+  </div>
+    <!-- 如果是马甲回答 -->
+  <div class="answerbymajia" style="display:none;">
+   <h5>选择马甲:</h5><hr>
+     <div class="form-group">
+
+    <div class="col-sm-3">
+      <select class="form-control" id="majiausername">
+       	{eval $majialist=$this->getlistbysql("select uid,username,expert from ".$this->db->dbprefix."user where fromsite=1 limit 0,100");}
+					 					
+					{loop $majialist $majia}
+					{if !empty($majia['username'])}
+				   <option value="{$majia['uid']}">{$majia['username']}</option>
+				   {/if}
+				    {/loop}
+      </select>
+    </div>
+
+  </div>
+  </div>
+    <div class="form-group" id="otherauthor" style="display:none;">
+    <label for="exampleInputAccount4" class="col-sm-1" style="width:11%">用户名</label>
+    <div class="col-md-6 col-sm-10">
+      <input type="text" class="form-control" id="answerusername" placeholder="填写社区用户账号名">
+    </div>
+  </div>
+  <h5>回答内容:</h5><hr>
+<!--{template editor}-->
+       </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+        <button type="button" id="btnanswer" class="btn btn-primary">提交发布</button>
+      </div>
+    </div>
+  </div>
+</div>
+<style>
+.clearfix,.clear{
+    clear: none;
+}
+</style>
     <link href="{SITE_URL}static/css/dist/lib/datetimepicker/datetimepicker.min.css" rel="stylesheet">
   <script src="{SITE_URL}static/css/dist/lib/datetimepicker/datetimepicker.min.js"></script>
 <script type="text/javascript">
+$(".wangEditor-menu-container").removeClass("clearfix");
+var currentansweruid="{$user['username']}";
+var slid=1;
+var _cqid=0;
+$("input:radio[name=answerauthor]").change( function (){
+	slid=$(this).val();
+	switch(slid){
+	case "1":
+		currentansweruid={$user['uid']};
+		$(".answerbyexpert").hide();
+		$(".answerbymajia").hide();
+		$("#otherauthor").hide();
+		break;
+		
+	case "2":
+		currentansweruid=$("#expertusername").text();
+		$(".answerbyexpert").show();
+		$(".answerbymajia").hide();
+		$("#otherauthor").hide();
+		break;
+	case "3":
+		currentansweruid=$("#majiausername").text();
+		$(".answerbymajia").show();
+		$("#otherauthor").hide();
+		$(".answerbyexpert").hide();
+		break;
+	case "4":
+		currentansweruid=$.trim($("#answerusername").val());
+		$(".answerbymajia").hide();
+		$(".answerbyexpert").hide();
+		$("#otherauthor").show();
+		break;
+	}
+	})
+
+	$("#btnanswer").click(function(){
+		if(slid==0){
+			alert("请选择发布作者");
+return false;
+		}
+		switch(slid){
+		case "1":
+			currentansweruid="{$user['username']}";
+		
+			break;
+			
+		case "2":
+			currentansweruid=$("#expertusername").find("option:selected").text();
+		
+			break;
+		case "3":
+			currentansweruid=$("#majiausername").find("option:selected").text();
+			
+			break;
+		case "4":
+			currentansweruid=$.trim($("#answerusername").val());
+			
+			break;
+		}
+		if(currentansweruid==''){
+			alert("发布人不能为空");
+              return false;
+              
+		}
+
+		 var eidtor_content='';
+		 if(typeof testEditor != "undefined"){
+	      	  var tmptxt=$.trim(testEditor.getMarkdown());
+	      	  if(tmptxt==''){
+	      		  alert("回答内容不能为空");
+	      		  return;
+	      	  }
+	      	  eidtor_content= testEditor.getHTML();
+	        }else{
+	      	  if (typeof UE != "undefined") {
+	      			 eidtor_content= editor.getContent();
+	      		}else{
+	      			 eidtor_content= $.trim($("#editor").val());
+	      		}
+	        }
+	        if($.trim(eidtor_content)==''){
+alert("内容不能为空");
+return false;
+	        }
+	        var adddata={qid:_cqid,content:eidtor_content,author:currentansweruid};
+	        var addurl="{url admin_question/addanswer}";
+	   
+	        $.ajax({
+	            //提交数据的类型 POST GET
+	            type:"POST",
+	            //提交的网址
+	            url:addurl,
+	            //提交的数据
+	            data:adddata,
+	            //返回数据的格式
+	            datatype: "json",//"xml", "html", "script", "json", "jsonp", "text".
+	            //在请求之前调用的函数
+	            beforeSend:function(){
+	            	
+	            },
+	            //成功返回之后调用的函数             
+	            success:function(result){
+	            	var result=eval("("+result+")");
+	            	console.log(result);
+	            	alert(result.msg);
+	            
+	            }   ,
+	            //调用执行后调用的函数
+	            complete: function(XMLHttpRequest, textStatus){
+	            	  
+	            },
+	            //调用出错执行的函数
+	            error: function(){
+	                //请求出错处理
+	                alert("提交出现问题");
+	            }         
+	         });
+	});
+$(".answerqid").click(function(){
+	 _cqid=$(this).attr("data-id");
+	var _ctitle=$(this).attr("data-title");
+	$("#current_question_title").html("["+_ctitle+"]");
+});
 $(".form-date").datetimepicker(
 	    {
 	        language:  "zh-CN",

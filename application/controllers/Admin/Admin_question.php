@@ -15,7 +15,82 @@ class Admin_question extends ADMIN_Controller {
 	function index() {
 		$this->searchquestion ();
 	}
-
+/**
+	
+	* 发布回答
+	
+	* @date: 2020年6月13日 下午12:21:37
+	
+	* @author: 61703
+	
+	* @param: variable
+	
+	* @return:
+	
+	*/
+    function addanswer(){
+    	$qid=intval($_POST['qid']);
+    	$content=addslashes($_POST['content']);
+    	$author=addslashes($_POST['author']);
+    	$question=$this->db->get_where('question',array('id'=>$qid))->row_array();
+    	if(!$question){
+    		$message['code']=2001;
+    		
+    		$message['msg']="问题不存在";
+    		echo json_encode($message);
+    		exit();
+    	}
+    	$user=$this->db->get_where('user',array('username'=>$author))->row_array();
+    	if(!$user){
+    		$message['code']=2002;
+    		
+    		$message['msg']="回答用户[$author]不存在";
+    		echo json_encode($message);
+    		exit();
+    	}
+    	if(empty($content)||strip_tags($content)==''){
+    		$message['code']=2003;
+    		
+    		$message['msg']="回答内容不能为空且必须包含文字描述";
+    		echo json_encode($message);
+    		exit();
+    	}
+    	//判断此人是否已经回答过该问题
+    	$useransser=$this->db->get_where('answer',array('author'=>$author,'qid'=>$qid))->row_array();
+    	if($useransser){
+    		$message['code']=2004;
+    		
+    		$message['msg']="该用户已经回答过此问题";
+    		echo json_encode($message);
+    		exit();
+    	}
+    	//插入回答问题
+    	$adddata=array(
+    			'author'=>$user['username'],
+    			'authorid'=>$user['uid'],
+    			'content'=>$content,
+    			'qid'=>$qid,
+    			'title'=>$question['title'],
+    			'time'=>time(),
+    			'ip'=>getip()
+    	);
+    	$this->db->insert('answer',$adddata);
+    	$aid=$this->db->insert_id();
+    	if($aid>0){
+    		$message['code']=2000;
+    		
+    		$message['msg']="提交成功";
+    		echo json_encode($message);
+    		exit();
+    	}else{
+    		$message['code']=2005;
+    		
+    		$message['msg']="发布问题失败";
+    		echo json_encode($message);
+    		exit();
+    	}
+   
+    }
 	function searchquestion($msg = '', $ty = '') {
 
 		if ($this->uri->rsegments [3] != '' && $this->uri->rsegments [3] != '0') {
