@@ -30,7 +30,7 @@ class Admin_question extends ADMIN_Controller {
 	*/
     function addanswer(){
     	$qid=intval($_POST['qid']);
-    	$content=addslashes($_POST['content']);
+    	$content=$_POST['content'];
     	$author=addslashes($_POST['author']);
     	$question=$this->db->get_where('question',array('id'=>$qid))->row_array();
     	if(!$question){
