@@ -63,22 +63,23 @@
             <td  width="10%">回答人</td>
             <td  width="13%">回答时间</td>
             <td  width="14%">IP</td>
-            <td  width="10%">支持/反对</td>
             <td  width="6%">已采纳</td>
+              <td  width="6%">编辑</td>
         </tr>
         <!--{if isset($answerlist)} {loop $answerlist $answer}-->
         <tr>
             <!--{eval $content=htmlspecialchars($answer['content']);}-->
             <td class="altbg2"><input class="checkbox" type="checkbox" value="{$answer['id']}" name="aid[]"></td>
             <td class="altbg2" id="title_{$answer['id']}">
-                <a  href="{url question/view/$answer['qid']}" target="_blank"><strong>{$answer['title']}</strong></a>
+                <a  href="{url question/view/$answer['qid']}" target="_blank"><strong>{$answer['title']}{if !empty($answer['isimg'])&&$answer['isimg']!=''}<label class="label label-success">$answer['isimg']</label>{/if}</strong></a>
                 <div style= "WIDTH:550px;OVERFLOW-Y:auto;height:100px"> {$answer['content']}</div>
             </td>
             <td class="altbg2"><a href="{user/space/$answer['authorid']}" target="_blank">{$answer['author']}</a></td>
             <td class="altbg2">{$answer['time']}</td>
             <td class="altbg2">{$answer['ip']}</td>
-            <td class="altbg2">{$answer['support']}/{$answer['against']}</td>
+           
             <td class="altbg2">{if $answer['adopttime']}<img title="已被采纳为最佳答案" src="{SITE_URL}static/css/admin/icn_2.gif">{else}否{/if}</td>
+        <td class="altbg2"><a target="_blank" href="{url question/editanswer/$answer['id']}">编辑回答</a></td>
         </tr>
         <!--{/loop} {/if}-->
            <!--{if $departstr}-->
