@@ -788,7 +788,7 @@ class Question_model extends CI_Model {
 		//(!strip_tags($description, '<img>')) && $description = '';
 		//  echo "INSERT INTO " . $this->db->dbprefix . "question SET cid='$cid',cid1='$cid1',cid2='$cid2',cid3='$cid3',authorid='$uid',author='$username',title='$title',description='$description',price='$price',time='$creattime',endtime='$endtime',hidden='$hidanswer',views='$view',status='$status',ip='{$this->base->ip}'";
 		/* 分词索引 */
-		$dataquestion=array('views'=>$view,'cid'=>$cid,'cid1'=>$cid1,'cid2'=>cid2,'cid3'=>$cid3,'authorid'=>$uid,'author'=>$username,'title'=>$title,'description'=>$description,'price'=>$price,'time'=>$creattime,'endtime'=>$endtime,'hidden'=>$hidanswer,'status'=>$status,'ip'=>getip());
+		$dataquestion=array('views'=>$view,'cid'=>$cid,'cid1'=>$cid1,'cid2'=>$cid2,'cid3'=>$cid3,'authorid'=>$uid,'author'=>$username,'title'=>$title,'description'=>$description,'price'=>$price,'time'=>$creattime,'endtime'=>$endtime,'hidden'=>$hidanswer,'status'=>$status,'ip'=>getip());
 		$this->db->insert('question',$dataquestion);
 	
 		$qid = $this->db->insert_id ();
