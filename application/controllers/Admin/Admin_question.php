@@ -77,6 +77,9 @@ class Admin_question extends ADMIN_Controller {
     	$this->db->insert('answer',$adddata);
     	$aid=$this->db->insert_id();
     	if($aid>0){
+			//问题回答数+1 
+    		$sql="update ".$this->db->dbprefix."question set answers=answers+1 where id=$qid";
+    		$this->db->query($sql);
     		$message['code']=2000;
     		
     		$message['msg']="提交成功";
