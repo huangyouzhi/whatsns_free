@@ -4,6 +4,9 @@ $urllist=array(
     '搜索引擎类问答'=>array(
       '360问答分类'=>'sowenda_ask2.txt'
     ),
+		'工商会计类'=>array(
+				'协创网'=>'xiechuang.txt'
+		),
     '母婴相关'=>array(
 	 '摇篮问答分类采集'=>'yaolanwenda.txt',
 	  '摇篮问答关键词搜索采集'=>'yaolanwendasousuo.txt',
