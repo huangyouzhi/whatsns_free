@@ -304,9 +304,9 @@ class Admin_topic extends ADMIN_Controller {
 							$state = intval ( $this->setting ['publisharticlecheck'] ) > 0 ? 0 : 1;
 						}
 						if ($state) {
-							$this->message ( '文章修改成功！', "index.php?admin_topic/default");
+							$this->message ( '文章修改成功！', "admin_topic/default");
 						} else {
-							$this->message ( "文章在审核中" , "index.php?admin_topic/default");
+							$this->message ( "文章在审核中" , "admin_topic/default");
 						}
 					} else {
 						$this->message ( '服务器忙，请稍后再试！' );
@@ -331,9 +331,9 @@ class Admin_topic extends ADMIN_Controller {
 						$state = intval ( $this->setting ['publisharticlecheck'] ) > 0 ? 0 : 1;
 					}
 					if ($state) {
-						$this->message ( '文章修改成功！' , "index.php?admin_topic/index");
+						$this->message ( '文章修改成功！' , "admin_topic/default");
 					} else {
-						$this->message ( "文章在审核中", "index.php?admin_topic/default" );
+						$this->message ( "文章在审核中", "admin_topic/default" );
 					}
 				}
 		} else {
