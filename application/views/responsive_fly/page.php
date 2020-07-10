@@ -6,3 +6,9 @@
            </div>
         </div>
         {/if}
+        <style>
+        @media screen and (max-width: 768px)
+.laypage-main a, .laypage-main span {
+    display: inline-block;
+}
+        </style>

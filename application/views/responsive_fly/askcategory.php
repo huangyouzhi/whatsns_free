@@ -1,5 +1,7 @@
  <!-- 公共头部--> 
 {template header}
+ <!-- 移动端搜索框--> 
+{template searchbox}
  <!-- 首页导航 --> 
 {template index_nav}
 

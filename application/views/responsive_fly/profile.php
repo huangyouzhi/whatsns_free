@@ -185,7 +185,7 @@
                 <span>，即可使用QQ帐号登录{$setting['name']}</span> 
                  </li>
                    <!--{/if}-->
-             <!--{if $sinalogin}-->
+             <!--{if !$sinalogin}-->
               <li class="fly-msg">
                 <i class="iconfont icon-weibo"></i>
               

@@ -689,3 +689,8 @@
 .detail ol,.detail ul{
 	padding-left:20px;
 }
+/*相关标签*/
+.relativetags{
+	margin:10px auto;
+	font-size:13px;
+}

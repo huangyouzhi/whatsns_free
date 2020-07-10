@@ -1,3 +1,9 @@
+<style>
+.fly-list em{
+color:red !important;
+font-style: normal;
+}
+</style>
  <div class="fly-panel-title fly-filter">
           <a href="{url question/search}?word={$word}" class="{if ROUTE_A=='question'}layui-this{/if}">问题</a>
           <span class="fly-mid"></span>

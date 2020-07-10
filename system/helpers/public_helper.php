@@ -1380,7 +1380,7 @@ function replacewords($content) {
 						
 						assoc_unique ( $urlarray, $keys );
 						//
-						$keyword [$key] ['num'] = $keyword [$key] ['find'] + 1;
+						$keyword [$key] ['num'] = intval ( $keyword [$key] ['find'] ) + 1;
 						$firstcontent = substr ( $articlecontent, 0, $s_start );
 						//
 						$sec = substr ( $articlecontent, $s_start + $repstrlen );
@@ -1641,6 +1641,9 @@ EOT;
 	return $state;
 }
 function sendemailtouser($toemail, $subject, $message) {
+	if (empty ( $toemail )) {
+		return false;
+	}
 	global $setting;
 	
 	$message = <<<EOT
@@ -2073,11 +2076,13 @@ function isimage($extname) {
 function imagecropper($source_path, $dst, $target_width, $target_height) {
 	$httpxieyi = strtolower ( substr ( $source_path, 0, 7 ) );
 	$httpsxieyi = strtolower ( substr ( $source_path, 0, 8 ) );
-	$controlleradmin = substr ( ROUTE_A, 0, 5 );
+	$controlleradmin = strtolower ( substr ( ROUTE_A, 0, 5 ) );
+	$controllerkecheng = strtolower ( substr ( ROUTE_A, 0, 7 ) );
+	
 	if (! file_exists ( $source_path )) {
 		
 		// 非站内图片，看看外部图片格式
-		if ($httpxieyi != 'http://' && $httpsxieyi != 'https://' && $controlleradmin != 'admin') {
+		if ($httpxieyi != 'http://' && $httpsxieyi != 'https://' && $controlleradmin != 'admin' && $controllerkecheng != 'kecheng') {
 			exit ( "非正常图片地址" );
 		} else {
 			$source_info = getimagesize ( $source_path );

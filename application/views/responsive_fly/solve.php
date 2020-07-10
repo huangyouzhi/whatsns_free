@@ -77,11 +77,26 @@
          <!--{/if}-->
           </div>
         </div>
+              {if $question['description']}
         <div class="detail-body photos">
          {template question_content_header}
-         {eval echo clearlinkref(htmlspecialchars_decode($question['description']));}
+         {eval echo htmlspecialchars_decode($question['description']);}
          {template question_content_footer}
         </div>
+        {/if}
+              <div class="relativetags">
+              相关标签:
+     	<!--{if $taglist}-->
+				<!--{loop $taglist $tag}-->
+
+				<a href="{url tags/view/$tag['tagalias']}" title="{$tag['tagname']}"
+					target="_blank" class="project-tag-14">
+
+					  <button type="button" class="layui-btn layui-btn-xs layui-btn-warm "><i class="layui-icon layui-icon-note"></i> {$tag['tagname']}</button>
+					</a>
+				<!--{/loop}-->
+				<!--{/if}-->
+  </div>
       </div>
       
       <div class="fly-panel detail-box" id="flyReply">

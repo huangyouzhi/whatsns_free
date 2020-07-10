@@ -1,8 +1,8 @@
 {template meta}
 <div class="fly-header layui-bg-black">
   <div class="layui-container">
-    <a class="fly-logo" href="{SITE_URL}">
-      <img src="{$setting['site_logo']}" alt="{$setting['site_name']}">
+    <a class="fly-logo" href="/">
+      <img src="{$setting['site_logo']}" alt="{$setting['site_name']}" style="width:130px;height:30px;">
     </a>
     <ul class="layui-nav fly-nav layui-hide-xs">
       <li class="layui-nav-item {if $regular=='ask/index'}layui-this{/if}">
@@ -65,3 +65,4 @@
     </ul>
   </div>
 </div>
+
