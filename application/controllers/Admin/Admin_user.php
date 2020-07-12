@@ -283,7 +283,7 @@ class Admin_user extends ADMIN_Controller {
 					}
 					$_pwd=$this->input->post ( 'password' );
 					if(!empty($_pwd)){
-						$this->ucenter_model->uppass ( $this->user ['username'], '',$_pwd, $email,1 );
+						$this->ucenter_model->uppass ( $username, '',$_pwd, $email,1 );
 						
 					}
 					
