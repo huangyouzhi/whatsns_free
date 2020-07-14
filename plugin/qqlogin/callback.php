@@ -174,6 +174,14 @@ if ($user) {
 	}
 	
 }
+function forcemkdir($path) {
+	if (! file_exists ( $path )) {
+		forcemkdir ( dirname ( $path ) );
+		$oldumask = umask ( 0 );
+		mkdir ( $path, 0777 );
+		umask ( $oldumask );
+	}
+}
 function url($var, $url = '') {
 	global $setting;
 	// exit($var);

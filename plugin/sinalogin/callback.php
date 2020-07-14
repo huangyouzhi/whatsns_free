@@ -231,6 +231,14 @@ if ($token_arr) {
 		// header ( "Location:" . SITE_URL );
 	}
 }
+function forcemkdir($path) {
+	if (! file_exists ( $path )) {
+		forcemkdir ( dirname ( $path ) );
+		$oldumask = umask ( 0 );
+		mkdir ( $path, 0777 );
+		umask ( $oldumask );
+	}
+}
 function get_remote_image($url, $savepath) {
 	ob_start ();
 	readfile ( $url );
