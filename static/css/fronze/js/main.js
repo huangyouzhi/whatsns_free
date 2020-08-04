@@ -220,16 +220,16 @@ function attentto_user(uid) {
     }
     $.post(g_site_url + "index.php?user/attentto", {uid: uid}, function(msg) {
         if (msg == 'ok') {
-            if ($("#attenttouser_"+uid).hasClass("following")) {
-                $("#attenttouser_"+uid).removeClass("btn-default following");
-                $("#attenttouser_"+uid).addClass("btn-success follow");
+            if ($("#attenttouser_"+uid).hasClass("button_followed")) {
+                $("#attenttouser_"+uid).removeClass("button_followed");
+                $("#attenttouser_"+uid).addClass("button_attention");
                 
-                $("#attenttouser_"+uid).html('<i class="fa fa-plus"></i><span>关注</span>');
+                $("#attenttouser_"+uid).html('+关注</span>');
             } else {
-                $("#attenttouser_"+uid).removeClass("btn-success follow");
-                $("#attenttouser_"+uid).addClass("btn-default following");
+                $("#attenttouser_"+uid).removeClass("button_attention");
+                $("#attenttouser_"+uid).addClass("button_followed");
                
-                $("#attenttouser_"+uid).html('<i class="fa fa-check"></i><span >已关注</span>');
+                $("#attenttouser_"+uid).html('<span >已关注</span>');
             }
        
         }
