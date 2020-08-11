@@ -73,7 +73,8 @@ layui.use(['jquery', 'layer','form'], function(){
 		        	
 		        	}
 		        	if(data==1){
-		        		window.location.reload();
+		        		//window.location.reload();
+		        		window.parent.location.reload();
 		        	}
 		        }   ,
 		       

@@ -73,7 +73,8 @@ $(".btn-dashang").click(function(){
 		        		alert('账户余额不足，先充值!');
 		        	}
 		        	if(data==1){
-		        		window.location.reload();
+		        		//window.location.reload();
+		        		window.parent.location.reload();
 		        	}else{
 			        	
 		        		alert(data);
