@@ -54,9 +54,9 @@
 
         </li>
          <li>
-            <a href="{url topic/default}">
-                <i class="fa fa-sticky-note-o <!--{if $regular=='topic/default'}--> current<!--{/if}-->" style="line-height: 34px;"></i>
-                <div class="ui-txt-muted <!--{if $regular=='topic/default'}--> current<!--{/if}-->"><h6>专栏</h6></div>
+            <a href="{url seo/index}">
+                <i class="fa fa-sticky-note-o <!--{if $regular=='seo/index'}--> current<!--{/if}-->" style="line-height: 34px;"></i>
+                <div class="ui-txt-muted <!--{if $regular=='seo/index'}--> current<!--{/if}-->"><h6>专栏</h6></div>
 
             </a>
         </li>

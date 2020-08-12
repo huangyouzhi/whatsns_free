@@ -11,7 +11,9 @@ class Newpage extends CI_Controller {
 		$this->load->model ( 'question_model' );
 	}
 	function index() {
-
+$url=url("ask/index");
+header("Location: $url");
+exit();
 		$navtitle = "站内问题库列表_";
 		$seo_description = $this->setting ['site_name'] . '最近更新相关内容。';
 		$seo_keywords = '站内问题库列表';

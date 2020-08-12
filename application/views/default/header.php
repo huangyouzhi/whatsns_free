@@ -34,9 +34,9 @@
     <div class="ask-logo"><a href="{SITE_URL}" target="_blank"><img src="{$setting['site_logo']}" alt=""></a></div>
     <ul class="hnav clearfix">
         		  <li class="<!--{if strstr('index/index',$regular)}--> current<!--{/if}-->"><a href="{SITE_URL}" >首页</a></li>
-				  <li class="<!--{if strstr('new/default',$regular)}--> current<!--{/if}-->"><a href="{url newpage/index}" >问题库</a></li>
+				  <li class="<!--{if strstr('ask/index',$regular)}--> current<!--{/if}-->"><a href="{url ask/index}" >问题库</a></li>
 				  <li class="<!--{if strstr('expert/index',$regular)}--> current<!--{/if}-->"><a href="{url expert/index}" >专家</a></li>
-				  <li class="<!--{if strstr('topic/default',$regular)}--> current<!--{/if}-->"><a href="{url topic/default}" >专栏</a></li>
+				  <li class="<!--{if strstr('seo/index',$regular)}--> current<!--{/if}-->"><a href="{url seo/index}" >专栏</a></li>
 		  
 		    </ul>
     <div class="searchbox">

@@ -566,7 +566,9 @@ class Topic extends CI_Controller {
 		exit ();
 	}
 	function index() {
-
+		$url=url("seo/index");
+header("Location: $url");
+exit();
 		$navtitle = "最新文章专栏推荐";
 		$seo_description = "推荐问答最新文章专栏，热门文章和最新文章推荐。";
 		$seo_keywords = "问答文章专栏";
