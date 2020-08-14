@@ -549,7 +549,7 @@ body .fly-user-main{position: relative; min-height: 600px;}
   .fly-footer{margin-top: 0; border-top: none;}
 
   /* 分页 */
-  .laypage-main a, .laypage-main span{display: none;}
+  .laypage-main a, .laypage-main span{}
   .laypage-main .laypage-prev,
   .laypage-main .laypage-curr,
   .laypage-main .laypage-next{display: inline-block;}
