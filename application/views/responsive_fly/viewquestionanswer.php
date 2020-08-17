@@ -79,7 +79,7 @@
         </div>
         <div class="detail-body photos">
          {template question_content_header}
-         {eval echo clearlinkref(htmlspecialchars_decode($question['description']));}
+         {eval echo $question['description'];}
          {template question_content_footer}
         </div>
       </div>
@@ -128,7 +128,7 @@
 
             </div>
             <div class="detail-body jieda-body photos">
-              <p>          {eval    echo clearlinkref(htmlspecialchars_decode(replacewords($useranswer['content'])));    }</p>
+              <p>          {eval    echo replacewords($useranswer['content']);    }</p>
              <div class="appendcontent">
                                 <!--{loop $useranswer['appends'] $append}-->
                                 <div class="appendbox">
