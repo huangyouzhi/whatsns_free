@@ -80,7 +80,7 @@
               {if $question['description']}
         <div class="detail-body photos">
          {template question_content_header}
-         {eval echo htmlspecialchars_decode($question['description']);}
+         {eval echo $question['description'];}
          {template question_content_footer}
         </div>
         {/if}
@@ -144,7 +144,7 @@
               <i class="iconfont icon-caina" title="最佳答案"></i>
             </div>
             <div class="detail-body jieda-body photos">
-              <p>          {eval    echo clearlinkref(htmlspecialchars_decode(replacewords($bestanswer['content'])));    }</p>
+              <p>          {eval    echo replacewords($bestanswer['content']);    }</p>
              <div class="appendcontent">
                                 <!--{loop $bestanswer['appends'] $append}-->
                                 <div class="appendbox">
@@ -259,7 +259,7 @@
             <div class="detail-body jieda-body photos">
              {if $answer['serverid']==null}
                              {if $answer['reward']==0||$answer['authorid']==$user['uid']}
-                             {eval    echo replacewords(clearlinkref(htmlspecialchars_decode($answer['content'])));    }
+                             {eval    echo replacewords($answer['content']);    }
                                {else}
                                {eval if($question['authorid']==$user['uid']) $answer['canview']=1;}
                                {if $answer['canview']==0}
@@ -270,7 +270,7 @@
 
 										</div>
                                {else}
-                                 {eval    echo replacewords(clearlinkref(htmlspecialchars_decode($answer['content'])));    }
+                                 {eval    echo replacewords($answer['content']);    }
                                {/if}
 
                                {/if}

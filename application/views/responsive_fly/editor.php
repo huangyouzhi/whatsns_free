@@ -18,7 +18,7 @@
              {if $this->uri->segment ( 1 )!='question'}
   {eval echo  replacewords($topic['describtion']);}
              {/if}
-           {if $user['groupid']==1||$user['uid']==$answer['authorid']&&$this->uri->segment ( 2 )=='editanswer'&&$this->uri->segment ( 1 )=='question'}  {eval echo htmlspecialchars_decode($answer['content']);} {/if}
+           {if $user['groupid']==1||$user['uid']==$answer['authorid']&&$this->uri->segment ( 2 )=='editanswer'&&$this->uri->segment ( 1 )=='question'}  {eval echo $answer['content'];} {/if}
 
  {/if}
             </textarea>
@@ -50,7 +50,7 @@ editor.disable();
 {else}
 <script type="text/javascript" src="{SITE_URL}static/js/neweditor/ueditor.config.js"></script>
 <script type="text/javascript" src="{SITE_URL}static/js/neweditor/ueditor.all.js"></script>
-<script type="text/plain" id="editor"  name="content"  style="width:100%;height:200px;">{if $this->uri->segment ( 2 )!='view'&&$this->uri->segment ( 1 )=='question'||$this->uri->segment ( 2 )=='editxinzhi'}{if $navtitle=='编辑问题'}{$question['description']} {/if}{if $this->uri->segment ( 1 )!='question'}{eval echo  replacewords($topic['describtion']);}{/if}{if $user['groupid']==1||$user['uid']==$answer['authorid']&&$this->uri->segment ( 2 )=='editanswer'&&$this->uri->segment ( 1 )=='question'}{eval echo htmlspecialchars_decode($answer['content']);}{/if}{/if}</script>                                 
+<script type="text/plain" id="editor"  name="content"  style="width:100%;height:200px;">{if $this->uri->segment ( 2 )!='view'&&$this->uri->segment ( 1 )=='question'||$this->uri->segment ( 2 )=='editxinzhi'}{if $navtitle=='编辑问题'}{$question['description']} {/if}{if $this->uri->segment ( 1 )!='question'}{eval echo  replacewords($topic['describtion']);}{/if}{if $user['groupid']==1||$user['uid']==$answer['authorid']&&$this->uri->segment ( 2 )=='editanswer'&&$this->uri->segment ( 1 )=='question'}{eval echo $answer['content'];}{/if}{/if}</script>                                 
 <script type="text/javascript">
                                  var isueditor=1;
             var editor = UE.getEditor('editor',{
