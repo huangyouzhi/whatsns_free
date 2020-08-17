@@ -345,17 +345,9 @@ position:relative;
           <div class="left-details-head" style="border:none">
                       <!-- 问题描述 -->
       {if $question['description']}
-            <div class="show-content shortquestioncontent">
-
-                <p>
-                {$question['shortdescription']}
-                {if $question['artlen']>=100}
-                <button type="button" class="btnshowall">显示全部<i class="fa fa-angle-down"></i></button>
-                {/if}
-                </p>
-            </div>
+       
             
-            <div class="show-content hide hidequestioncontent">
+            <div class="show-content ">
                   {eval    echo replacewords($question['description']);    }
             </div>
             
