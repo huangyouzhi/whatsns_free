@@ -349,20 +349,9 @@ position:relative;
           <div class="left-details-head" style="border:none">
                       <!-- 问题描述 -->
       {if $question['description']}
-            <div class="show-content shortquestioncontent">
-
-                <p>
-              
-                {if $question['artlen']>=100||strstr($question['shortdescription'],'图')}
-                 {eval    echo $question['shortdescription'];}
-                <button type="button" class="btnshowall">显示全部<i class="fa fa-angle-down"></i></button>
-               {else}
-                {eval    echo replacewords($question['description']);    }
-                {/if}
-                </p>
-            </div>
+      
             
-            <div class="show-content hide hidequestioncontent">
+            <div class="show-content  ">
                   {eval    echo  replacewords($question['description']);    }
            
             </div>
@@ -513,7 +502,7 @@ position:relative;
 
              {/if}
              <div class="comment-wrap art-content">
-             <div class="answercontent">
+             <div class="answercontent" style="max-height:1000000px">
                 {eval    echo replacewords($bestanswer['content']);    }
 
                  <div class="appendcontent">
@@ -532,9 +521,7 @@ position:relative;
                                 <!--{/loop}-->
                         </div>
             </div>
-                <div class="readmore">
-                查看更多
-                </div>
+             
              <div class="tool-group">
                 <a class="button_agree dianzan" id='{$bestanswer['id']}'><i class="fa fa-eject"></i> <span>{$bestanswer['supports']}人赞</span></a>
              <a class="icon_discuss jsslideshowcomment showcommentid" data-id="{$bestanswer['id']}" onclick="show_comment('{$bestanswer['id']}');"><i class="fa fa-cloud"></i> <span>  添加讨论({$bestanswer['comments']})</span></a>
@@ -632,7 +619,7 @@ position:relative;
              </div>
              {/if}
              <div class="comment-wrap art-content">
-             <div class="answercontent">
+             <div class="answercontent" style="max-height:1000000px">
                                  {eval    echo replacewords($answer['content']);    }
 
                  <div class="appendcontent">
@@ -651,9 +638,7 @@ position:relative;
                                 <!--{/loop}-->
                         </div>
             </div>
-              <div class="readmore">
-                查看更多
-                </div>
+       
              <div class="tool-group">
              <a class="button_agree dianzan" id='{$answer['id']}'><i class="fa fa-eject"></i> <span>{$answer['supports']}人赞</span></a>
 
@@ -1169,23 +1154,7 @@ scrollTo(0,$('#showanswerform').offset().top-200);
 
 $(".noreplaytext").hide();
   }
-  $("#normal-comment-list .answercontent").each(function(){
-		if($(this).height()>150){
-			$(this).parent().find(".readmore").show();
-		}else{
-			$(this).parent().find(".readmore").hide();
-		}
-	});
-	$(".readmore").click(function(){
-		if($.trim($(this).html())=="查看更多"){
-			$(this).parent().find(".answercontent").css("max-height","100000px").css("overflow","visible");
-			$(this).html("收起");
-		}else{
-			$(this).parent().find(".answercontent").css("max-height","200px").css("overflow","hidden");
-			$(this).html("查看更多");
-		}
-		
-	});
+
   <!--{if $setting['code_ask']}-->
   var needcode=1;
   <!--{else}-->

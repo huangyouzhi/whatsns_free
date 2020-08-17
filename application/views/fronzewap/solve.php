@@ -291,7 +291,7 @@ color:#fff;
                                   </span>
                               </li>
                           </ul>
-                    <div class="ans-content">
+                    <div class="ans-content" style="max-height:1000000px">
                   
                  
                     {if $bestanswer['serverid']==null}
@@ -347,7 +347,7 @@ color:#fff;
                 </div>
                    <div class="publish_time">发布于 {$bestanswer['format_time']}</div>
                     </div>
-                       <div class="readmore">查看更多</div>
+                      
                     <div class="ans-footer">
                     <div class="operationlist">
 
@@ -458,7 +458,7 @@ color:#fff;
                                   </span>
                               </li>
                           </ul>
-                    <div class="ans-content">
+                    <div class="ans-content" style="max-height:1000000px">
                 
                        {if $answer['serverid']==null}
                             {if $answer['reward']==0||$answer['authorid']==$user['uid']}
@@ -513,7 +513,7 @@ color:#fff;
                         </div>
                         <div class="publish_time">发布于  {$answer['time']}</div>
                     </div>
-                         <div class="readmore">查看更多</div>
+                 
                     <div class="ans-footer">
                       <div class="operationlist">
                       <span onclick="show_comment('{$answer['id']}');">
@@ -1152,16 +1152,7 @@ $(".answerlist .ans-content").each(function(){
 		$(this).parent().find(".readmore").hide();
 	}
 });
-$(".readmore").click(function(){
-	if($(this).html()=="查看更多"){
-		$(this).parent().find(".answerlist .ans-content").css("max-height","fit-content").css("overflow","visible");
-		$(this).html("收起");
-	}else{
-		$(this).parent().find(".answerlist .ans-content").css("max-height","100px").css("overflow","hidden");
-		$(this).html("查看更多");
-	}
-	
-});
+
 {if $openId==null || PHP_OS=='WINNT'}
 var canyuyin=0;
 {else}
