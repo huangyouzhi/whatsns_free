@@ -18,7 +18,7 @@
              {if $this->uri->segment ( 1 )!='question'}
   {eval echo  replacewords($topic['describtion']);}
              {/if}
-           {if $user['groupid']==1||$user['uid']==$answer['authorid']&&$this->uri->segment ( 2 )=='editanswer'&&$this->uri->segment ( 1 )=='question'}    {eval echo htmlspecialchars_decode($answer['content']);} {/if}
+           {if $user['groupid']==1||$user['uid']==$answer['authorid']&&$this->uri->segment ( 2 )=='editanswer'&&$this->uri->segment ( 1 )=='question'}    {eval echo $answer['content'];} {/if}
 
  {/if}
             </textarea>

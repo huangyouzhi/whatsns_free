@@ -120,7 +120,7 @@ class Question_model extends CI_Model {
 				$question['shortdescription']="[图]".$question ['shortdescription'];
 			}
 			$question ['artlen']=mb_strlen(strip_tags(checkwordsglobal ( htmlspecialchars_decode($question ['description'] ) )));
-			$question ['description'] = checkwordsglobal (htmlspecialchars_decode($question ['description'] ) );
+			$question ['description'] = checkwordsglobal ($question ['description']  );
 		}
 		return $question;
 	}

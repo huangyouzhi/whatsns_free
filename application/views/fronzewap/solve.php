@@ -140,12 +140,12 @@ color:#fff;
         </div>
         <div class="article-content">
          <div class="ask_detail_content_text qyer_spam_text_filter">
-                   {eval    echo htmlspecialchars_decode(htmlspecialchars_decode(replacewords($question['description'])));    }
+                   {eval    echo replacewords($question['description']);    }
                    <!--{if $supplylist}-->
                        <ul class="nav">
                     <!--{loop $supplylist $supply}-->
                     <li><span class="time buchongtime">问题补充 : {$supply['format_time']}</span>
-                      {eval    echo htmlspecialchars_decode(replacewords($supply['content']));    }
+                      {eval    echo replacewords($supply['content']);    }
 
                     </li>
                     <!--{/loop}-->
@@ -296,7 +296,7 @@ color:#fff;
                  
                     {if $bestanswer['serverid']==null}
                          {if $bestanswer['reward']==0||$bestanswer['authorid']==$user['uid']}
-                             {eval    echo htmlspecialchars_decode(replacewords($bestanswer['content']));    }
+                             {eval    echo replacewords($bestanswer['content']);    }
                                {else}
                                  {eval if($question['authorid']==$user['uid']) $bestanswer['canview']=1;}
                                {if $bestanswer['canview']==0}
@@ -312,7 +312,7 @@ color:#fff;
 										</div>
                                {else}
                               
-                                 {eval    echo htmlspecialchars_decode(replacewords($bestanswer['content']));    }
+                                 {eval    echo replacewords($bestanswer['content']);    }
                                {/if}
 
                                {/if}
@@ -339,7 +339,7 @@ color:#fff;
                         <!--{/if}-->
                           <div class="zhuiwentext">
 
-                         {eval    echo htmlspecialchars_decode(replacewords($append['content']));    }
+                         {eval    echo replacewords($append['content']);    }
                                       </div>
                     <div class="clr"></div>
                     </div>
@@ -462,7 +462,7 @@ color:#fff;
                 
                        {if $answer['serverid']==null}
                             {if $answer['reward']==0||$answer['authorid']==$user['uid']}
-                             {eval    echo htmlspecialchars_decode(replacewords($answer['content']));    }
+                             {eval    echo replacewords($answer['content']);    }
                                {else}
                                      {eval if($question['authorid']==$user['uid']) $answer['canview']=1;}
                                {if $answer['canview']==0}
@@ -477,7 +477,7 @@ color:#fff;
 
 										</div>
                                {else}
-                                 {eval    echo htmlspecialchars_decode(replacewords($answer['content']));    }
+                                 {eval    echo replacewords($answer['content']);    }
                                {/if}
 
                                {/if}
@@ -505,7 +505,7 @@ color:#fff;
                                     <h4 class="appendask font-12">作者追问:<span class='time'>{$append['format_time']}</span></h4>
                                     <!--{/if}-->
                                      <div class="zhuiwentext">
-                                          {eval    echo htmlspecialchars_decode(replacewords($append['content']));    }
+                                          {eval    echo replacewords($append['content']);    }
                                                </div>
                                 <div class="clr"></div>
                                 </div>

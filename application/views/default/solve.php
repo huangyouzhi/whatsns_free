@@ -354,16 +354,16 @@ position:relative;
                 <p>
               
                 {if $question['artlen']>=100||strstr($question['shortdescription'],'图')}
-                 {eval    echo htmlspecialchars_decode( htmlspecialchars_decode($question['shortdescription']));}
+                 {eval    echo $question['shortdescription'];}
                 <button type="button" class="btnshowall">显示全部<i class="fa fa-angle-down"></i></button>
                {else}
-                {eval    echo htmlspecialchars_decode( htmlspecialchars_decode(replacewords($question['description'])));    }
+                {eval    echo replacewords($question['description']);    }
                 {/if}
                 </p>
             </div>
             
             <div class="show-content hide hidequestioncontent">
-                  {eval    echo  htmlspecialchars_decode(htmlspecialchars_decode(replacewords($question['description'])));    }
+                  {eval    echo  replacewords($question['description']);    }
            
             </div>
             
@@ -514,7 +514,7 @@ position:relative;
              {/if}
              <div class="comment-wrap art-content">
              <div class="answercontent">
-                {eval    echo htmlspecialchars_decode(replacewords($bestanswer['content']));    }
+                {eval    echo replacewords($bestanswer['content']);    }
 
                  <div class="appendcontent">
                                 <!--{loop $bestanswer['appends'] $append}-->
@@ -633,7 +633,7 @@ position:relative;
              {/if}
              <div class="comment-wrap art-content">
              <div class="answercontent">
-                                 {eval    echo htmlspecialchars_decode(replacewords($answer['content']));    }
+                                 {eval    echo replacewords($answer['content']);    }
 
                  <div class="appendcontent">
                                 <!--{loop $answer['appends'] $append}-->
