@@ -32,7 +32,7 @@ class Install  {
 	function createsiteinfo(){
 		$data = json_decode ( urldecode ( $_POST ['ajax'] ), TRUE );
 		$message=array();	
-		$dbpre=trim($data['dbpre']);
+		
 		$sitename=trim($data['sitename']);
 		$description=trim($data['description']);
 		$keywordinfo=trim($data['keywordinfo']);
@@ -41,21 +41,23 @@ class Install  {
 		$baseurl=trim($data['baseurl']);
 		$dirName=trim($data['dirname']);
 		$this->configdomain($baseurl,$dirName);
-		if(file_exists($file)){
-			include $file;
-			
-		}else{
+		if(!file_exists($file)){
 			$message['code']=201;
 			$message['msg']="数据库配置文件不存在";
 			echo json_encode($message);
 			exit();
+			
 		}
 		
-		$dbconfig = $db['default'];
+		if(!$_SESSION){
+			session_start();
+		}
 		
-		$con=mysqli_connect($dbconfig['hostname'], $dbconfig['username'], $dbconfig['password']);
-	mysqli_set_charset($con, "utf8");
-				mysqli_select_db($con,$dbconfig ['database']);
+		$dbpre=$_SESSION['db_pre'];
+		
+		$con=mysqli_connect($_SESSION['db_host'], $_SESSION['db_user'], $_SESSION['db_pwd']);
+		mysqli_set_charset($con, "utf8");
+		mysqli_select_db($con,$_SESSION['db_name']);
 		mysqli_query($con,"set names utf8");
 
 		mysqli_query($con,"DELETE FROM `".$dbpre."setting` WHERE `k`='seo_index_description'");
@@ -120,30 +122,34 @@ class Install  {
 	function createuser(){
 		$data = json_decode ( urldecode ( $_POST ['ajax'] ), TRUE );
 		$message=array();
-		$dbpre=trim($data['dbpre']);
+		
 
-		$username=trim($data['username']);
+		$username=addslashes(trim($data['username']));
 		$password=trim($data['password']);
-		$email=trim($data['email']);
-		$signature=strip_tags(trim($data['signature']));
-		$introduction=strip_tags(trim($data['introduction']));
+		$email=addslashes(trim($data['email']));
+		$signature=addslashes(strip_tags(trim($data['signature'])));
+		$introduction=addslashes(strip_tags(trim($data['introduction'])));
 		$file=APPPATH . 'config' . DIRECTORY_SEPARATOR . 'database.php';
 
-		if(file_exists($file)){
-			include $file;
-			
-		}else{
+		if(!file_exists($file)){
 			$message['code']=201;
 			$message['msg']="数据库配置文件不存在";
 			echo json_encode($message);
 			exit();
+			
+		}else{
+			
 		}
 
-		$dbconfig = $db['default'];		
-	
-		$con=mysqli_connect($dbconfig['hostname'], $dbconfig['username'], $dbconfig['password']);
+		if(!$_SESSION){
+			session_start();
+		}
+		
+		$dbpre=$_SESSION['db_pre'];
+		
+		$con=mysqli_connect($_SESSION['db_host'], $_SESSION['db_user'], $_SESSION['db_pwd']);
 	mysqli_set_charset($con, "utf8");
-				mysqli_select_db($con,$dbconfig ['database']);
+	mysqli_select_db($con,$_SESSION['db_name']);
 		mysqli_query($con,"set names utf8");
 
 		mysqli_query($con,"DELETE FROM `".$dbpre."user` WHERE `uid`=1");
@@ -458,7 +464,14 @@ class Install  {
 		
 		$returnmsg=$this->runquery($sql,$tablepre, $ip, $dbuser, $dbpwd,$dbname);
 		$this->exutesql($tablepre, $ip, $dbuser, $dbpwd,$dbname);
-	
+	    if(!$_SESSION){
+	    	session_start();
+	    }
+	    $_SESSION['db_host']=$ip;
+	    $_SESSION['db_pre']=$tablepre;
+	    $_SESSION['db_user']=$dbuser;
+	    $_SESSION['db_pwd']=$dbpwd;
+	    $_SESSION['db_name']=$dbname;
 		$message['code']=200;
 		$message['msg']='';
 		echo json_encode($message);
