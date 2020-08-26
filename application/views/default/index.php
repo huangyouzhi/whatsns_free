@@ -71,8 +71,8 @@ color: #3280fc;
 					最新问题 <a href="{url newpage/index}" class="ask-list-all"
 						target="_blank">[全部]</a>
 				</h4>
-				<ul class="ask-q-list">
-					{eval $newquestionlist=$this->getlistbysql("select id,title,time from ".$this->db->dbprefix."question where status in(1,2,6) order by time desc limit 0,10");}
+						<ul class="ask-q-list">
+					<!--{eval $newquestionlist = $this->fromcache("nosolvelist");}-->
 					 					
 					{loop $newquestionlist $question}
 					<li><a class="gellipsis" href="{url question/view/$question['id']}">
@@ -88,8 +88,7 @@ color: #3280fc;
 						target="_blank">[全部]</a>
 				</h4>
 				<ul class="ask-q-list">
-					{eval $newquestionlist=$this->getlistbysql("select id,title,time from ".$this->db->dbprefix."question where status in(1,2,6) and answers>=1 order by time desc limit 0,10");}
-					 					
+				<!--{eval $newquestionlist = $this->fromcache("solvelist");}-->			
 					{loop $newquestionlist $question}
 					<li><a class="gellipsis" href="{url question/view/$question['id']}">
 							$question['title'] </a></li>
