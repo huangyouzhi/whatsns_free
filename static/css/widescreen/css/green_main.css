@@ -1102,7 +1102,7 @@ header nav .menu .search-input-hull input {
     width:470px;
     height:56px;
     color:#444;
-    background:#0085ee;
+    background:#f44;
     position:absolute;
     font-size:14px;
     line-height:50px;
@@ -1227,7 +1227,7 @@ header nav .menu .menu-box>ul.menu-list-content li span.menu-tit-box {
 }
 header nav .menu .menu-box>ul.menu-list-content li:hover {
     background:#282828;
-    color:#0085ee
+    color:#f44
 }
 header nav .menu .menu-box>ul.menu-list-content li.current a.menu-list-box {
     font-weight:600
@@ -1238,7 +1238,7 @@ header nav .menu .discover {
 }
 header nav .menu .discover:hover {
     background:#444;
-    color:#0085ee
+    color:#f44
 }
 header nav .menu .discover:hover .menu-list {
     display:block
@@ -1281,7 +1281,7 @@ header nav .menu .discover .discover-box .discover-box-list a {
     border-radius:4px
 }
 header nav .menu .discover .discover-box .discover-box-list a:hover {
-    background:#0085ee;
+    background:#f44;
     color:#444
 }
 header nav .menu .discover .discover-box .discover-check-all {
@@ -1318,7 +1318,7 @@ header nav .menu .header-menu-withmore {
 }
 header nav .menu .header-menu-withmore:hover {
     background:#444;
-    color:#0085ee
+    color:#f44
 }
 header nav .menu-list,header nav .user-center .menu-list {
     box-shadow:0 1px 12px 0 rgba(0,0,0,.2);
@@ -1373,7 +1373,7 @@ header nav .menu-list p {
     cursor:pointer
 }
 header nav .menu-list p:hover {
-    background:#0085ee
+    background:#f44
 }
 header nav .menu-list p a {
     width:100%;
@@ -1459,7 +1459,7 @@ header nav .user-center .menu-list p {
     cursor:pointer
 }
 header nav .user-center .menu-list p:hover {
-    background:#0085ee
+    background:#f44
 }
 header nav .user-center .upload {
     float:left;
@@ -1597,7 +1597,7 @@ header nav .user-center>ul .message .message-box ul.message-box-list li a.readed
     color:#bbb
 }
 header nav .user-center>ul .message .message-box ul.message-box-list li:hover {
-    background:#0085ee;
+    background:#f44;
     color:#fff;
 }
 header nav .user-center>ul .message .message-box ul.message-box-list li:hover a {
@@ -2235,16 +2235,16 @@ input[type=text].borderred,textarea.borderred {
 }
 .btn-default-main {
     color:#fff;
-    background:#0085ee;
-    border:1px solid #0085ee;
+    background:#f44;
+    border:1px solid #f44;
     border-radius:4px;
     cursor:pointer;
     text-align:center
 }
 .btn-default-main:hover {
     color:#fff;
-    background:#0085ee;
-    border:1px solid #0085ee
+    background:#f44;
+    border:1px solid #f44
 }
 .btn-default-secondary {
     color:#666;
@@ -2311,8 +2311,8 @@ input[type=text].borderred,textarea.borderred {
 }
 .btn-default-loading {
     color:#444;
-    background:#0085ee;
-    border:1px solid #0085ee;
+    background:#f44;
+    border:1px solid #f44;
     border-radius:4px;
     cursor:pointer;
     text-align:center
@@ -3520,7 +3520,7 @@ sup.subnav-num-sup {
      text-overflow:ellipsis
  }
 .main-bg-color {
-    background:#0085ee;
+    background:#f44;
     color:#333
 }
 .main-link-color {
@@ -3840,10 +3840,10 @@ div.js-H-fixed-show {
     border:1px solid #999
 }
 .project-tag-12.current,.project-tag-12.current:hover {
-    border:1px solid #0085ee
+    border:1px solid #f44
 }
 .project-tag-12.current {
-    background:#0085ee;
+    background:#f44;
     color:#282828
 }
 .project-tag-12.disabled:hover {
@@ -3877,7 +3877,7 @@ div.js-H-fixed-show {
     padding: 0 12px;
     font-size: 14px;
     line-height: 30px;
-    color: #0084FF;
+    color: #f44;
     vertical-align: top;
     border-radius: 100px;
     background: rgba(0, 132, 255, 0.1);
@@ -4233,8 +4233,8 @@ div.js-H-fixed-show {
     border-bottom:2px solid transparent
 }
 .subnav-wrap .subnav-contentbox .subnav-content>li.current>a,.subnav-wrap .subnav-contentbox .subnav-content>li>a:hover {
-color: #3280fc;
-    border-bottom: 2px solid #3280fc;
+color: #f44;
+    border-bottom: 2px solid #f44;
 }
 .tab-menu {
     position:relative
@@ -4374,8 +4374,8 @@ color: #3280fc;
     border-radius:4px
 }
 #biuuu_page .laypage_main a:hover {
-    background-color:#0085ee;
-    border:1px solid #0085ee;
+    background-color:#f44;
+    border:1px solid #f44;
     color:#282828
 }
 #biuuu_page .laypage_main .laypage_next,#biuuu_page .laypage_main .laypage_prev {
@@ -4450,8 +4450,8 @@ color: #3280fc;
 .laypageskin_default .laypage_curr {
     font-weight:400;
     color:#333;
-    background:#0085ee;
-    border:1px solid #0085ee;
+    background:#f44;
+    border:1px solid #f44;
     border-radius:4px
 }
 .laypageskin_molv a,.laypageskin_molv span {
@@ -4504,7 +4504,7 @@ color: #3280fc;
     border-radius:4px
 }
 #biuuu_city a:hover,#biuuu_city a:visited {
-    background:#0085ee;
+    background:#f44;
     border:1px solid #efc713;
     color:#333
 }
@@ -4951,7 +4951,7 @@ color: #3280fc;
     line-height:24px;
     font-size:12px;
     display:block;
-    background:#0085ee;
+    background:#f44;
     z-index:2;
     position:absolute;
     border-radius:0 4px 4px 0;
@@ -5187,7 +5187,7 @@ color: #3280fc;
     width:6px;
     height:6px;
     margin:5px 0;
-    background:#0085ee;
+    background:#f44;
     border-radius:50%
 }
 .card-designer-list .work-show .work-show-more .view-more:hover span,.card-designer-list-attention .work-show .work-show-more .view-more:hover span,.card-designer-list-details .work-show .work-show-more .view-more:hover span {
@@ -5424,7 +5424,7 @@ color: #3280fc;
     position:relative
 }
 .personal-menu .menu-list li:hover {
-    background:#0085ee
+    background:#f44
 }
 .personal-menu .menu-list .menu-list-default.current i {
     display:inline-block;
@@ -5433,7 +5433,7 @@ color: #3280fc;
     top:10px;
     width:3px;
     height:32px;
-    background:#0085ee;
+    background:#f44;
     vertical-align:middle
 }
 .personal-menu .new-red {
@@ -6938,7 +6938,7 @@ color: #3280fc;
     background-image:url(../images/right.png)
 }
 .ipt-default {
-    background:#0085ee;
+    background:#f44;
     border:1px solid #eaeaea;
     border-radius:4px;
     padding-left:20px
@@ -7262,7 +7262,7 @@ div#login_container {
     font-size: 14px;
     line-height: 44px;
     text-align: center;
-    background-color: #0085ee;
+    background-color: #f44;
    
     background-repeat: no-repeat;
     position: absolute;
@@ -7312,11 +7312,11 @@ color: transparent;
 }
 .filter-item-wrapper .filter-item.active {
     color: #fff;
-    background: #3280fc;
+    background: #f44;
 }
 .filter-item-wrapper .filter-item:hover {
     color: #fff;
-    background: #3280fc;
+    background: #f44;
     text-decoration: none;
 }
 .filter-item-wrapper .filter-item a{

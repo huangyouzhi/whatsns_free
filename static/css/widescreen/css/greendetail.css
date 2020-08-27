@@ -946,7 +946,7 @@ color: #8590A6;
 .note .post .comment-list .tool-group a i.fa-eject{
 	position:relative;
 	top:-2px;
-	    color: #0084FF;
+	    color: #f44;
 
 }
 .note .post .comment-list .tool-group a.dianzan {
@@ -956,7 +956,7 @@ color: #8590A6;
     line-height: 28px;
     padding-right: 10px;
     border-radius: 3px;
-   color: #0084FF;
+   color: #f44;
     background: rgba(0, 132, 255, 0.1);
     border-color: transparent;
 }

@@ -2086,12 +2086,12 @@ html.lightbox-zoomed-little .Elastic_layer .layerBannar #lightbox-img-wrap ul li
     border: 1px solid;
     border-radius: 3px;
 	    color: #FFFFFF;
-    background-color: #0084FF;
-        border-color: #0084FF;
+    background-color: #f44;
+        border-color: #f44;
         margin-right:10px;
 }
   .btneditanswer i{
-	    color: #0084FF;
+	    color: #f44;
 	    margin-right:3px;
 }
  .btneditanswer{
@@ -2104,8 +2104,8 @@ html.lightbox-zoomed-little .Elastic_layer .layerBannar #lightbox-img-wrap ul li
     background: none;
     border: 1px solid;
     border-radius: 3px;
-	color: #0084FF;
-    border-color: #0084FF;
+	color: #f44;
+    border-color: #f44;
     margin-right:10px;
 }
 .three-link .preview-collection {

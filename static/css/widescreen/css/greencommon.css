@@ -19,7 +19,7 @@
 	margin-right:6px;
 }
 .icon_price {
-    color: #0085ee;
+    color: #f44;
     margin-left: 3px;
 }
 .FLlist a {
@@ -1239,7 +1239,7 @@ me
 	font-weight: normal;
 	clear: both;
 	color: #fff;
-background-color: #0085ee;
+background-color: #f44;
 	border-radius: 4px;
 	padding: 1px 3px;
 	cursor: pointer;
@@ -1511,7 +1511,7 @@ input:-webkit-autofill ,input:-webkit-autofill :focus,input:-webkit-autofill:act
 	display: inline-flex;
 	width: 95px;
 	padding: 3px;
-	background: #0085ee;
+	background: #f44;
 	color: #fff;
 	text-align: center;
 	line-height: 30px;
@@ -1557,8 +1557,8 @@ input:-webkit-autofill ,input:-webkit-autofill :focus,input:-webkit-autofill:act
 	height:32px;
 }
 .nav-secondary>li.active>a, .nav-secondary>li.active>a:focus, .nav-secondary>li.active>a:hover {
-    color: #0085ee;
-    border-bottom-color: #0085ee;
+    color: #f44;
+    border-bottom-color: #f44;
 }
 .list .labeltop,.index .aside .lfrecommend span.labeltop{
 	    background: #ea644a;
@@ -1567,7 +1567,7 @@ input:-webkit-autofill ,input:-webkit-autofill :focus,input:-webkit-autofill:act
     color:#fff;
 }
 .list .labelsec,.index .aside .lfrecommend span.labelsec{
-	    background: #0085ee;
+	    background: #f44;
     padding: 5px;
     border-radius: 3px;
     color:#fff;
@@ -2102,8 +2102,8 @@ padding-bottom:10px;
 .list-group-item.active, .list-group-item.active:hover, .list-group-item.active:focus {
     z-index: 2;
     color: #fff;
-    background-color: #0085ee;
-    border-color: #0085ee;
+    background-color: #f44;
+    border-color: #f44;
 }
 .show-content img{
     margin-right: 10px;

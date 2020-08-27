@@ -316,7 +316,7 @@ button,input,select,textarea {
 
 
 a:focus,a:hover {
-	color: #0085ee;
+	color: #f44;
 	text-decoration: none;
 	outline:none;
 }
@@ -3186,8 +3186,8 @@ a.btn.disabled,fieldset[disabled] a.btn {
 
 .btn-success {
 	color: #444;
-	background-color: #0085ee;
-	border-color: #0085ee
+	background-color: #f44;
+	border-color: #f44
 }
 
 .btn-success.focus,.btn-success:focus {
@@ -3209,7 +3209,7 @@ a.btn.disabled,fieldset[disabled] a.btn {
 }
 
 .btn-success .badge {
-	color: #0085ee;
+	color: #f44;
 	background-color: #fff
 }
 
@@ -4844,7 +4844,7 @@ tbody.collapse.in {
 }
 
 .label-success {
-	background-color: #0085ee
+	background-color: #f44
 }
 
 .label-success[href]:focus,.label-success[href]:hover {
@@ -5041,7 +5041,7 @@ a.thumbnail.active,a.thumbnail:focus,a.thumbnail:hover {
 .alert-success {
 	background: rgba(0, 132, 255, 0.1);
 	border-color:rgba(0, 132, 255, 0.1);
-	color: #0085ee;
+	color: #f44;
 }
 
 .alert-success hr {
@@ -5149,7 +5149,7 @@ a.thumbnail.active,a.thumbnail:focus,a.thumbnail:hover {
 }
 
 .progress-bar-success {
-	background-color: #0085ee
+	background-color: #f44
 }
 
 .progress-striped .progress-bar-success {
@@ -7344,8 +7344,8 @@ input:focus {
 .btn-success {
 	
     color: #fff;
-	background-color: #0085ee;
-	border-color: #0085ee
+	background-color: #f44;
+	border-color: #f44
 }
 
 .btn-ask{
@@ -7364,8 +7364,8 @@ input:focus {
 
 .btn-success.focus,.btn-success:focus,.btn-success:hover {
 	color: #fff;
-	background-color: #0085ee;
-	border-color: #0085ee
+	background-color: #f44;
+	border-color: #f44
 }
 .btn-ask.focus,.btn-ask:focus,.btn-ask:hover {
 	color: #fff;
@@ -7396,7 +7396,7 @@ input:focus {
 
 .btn-success.active.focus,.btn-success.active:focus,.btn-success.active:hover,.btn-success:active.focus,.btn-success:active:focus,.btn-success:active:hover,.open>.btn-success.dropdown-toggle.focus,.open>.btn-success.dropdown-toggle:focus,.open>.btn-success.dropdown-toggle:hover {
 	color: 0;
-	background-color: #0085ee;
+	background-color: #f44;
 	border-color: #89e675
 }
 
@@ -7405,13 +7405,13 @@ input:focus {
 }
 
 .btn-success.disabled.focus,.btn-success.disabled:focus,.btn-success.disabled:hover,.btn-success[disabled].focus,.btn-success[disabled]:focus,.btn-success[disabled]:hover,fieldset[disabled] .btn-success.focus,fieldset[disabled] .btn-success:focus,fieldset[disabled] .btn-success:hover {
-	background-color: #0085ee;
-	border-color: #0085ee
+	background-color: #f44;
+	border-color: #f44
 }
 
 .btn-success .badge {
 	color: #fff;
-	background-color: #0085ee
+	background-color: #f44
 }
 
 .btn-delete,.btn-gray,.btn-hollow {
@@ -7423,8 +7423,8 @@ input:focus {
 }
 
 .btn-hollow {
-	border: 1px solid #0085ee;
-	color: #0085ee!important
+	border: 1px solid #f44;
+	color: #f44!important
 }
 
 
@@ -8306,7 +8306,7 @@ input:-ms-input-placeholder,textarea:-ms-input-placeholder {
 	bottom: -2px;
 	width: 100%;
 	opacity: 0;
-	border-bottom: 2px solid #0085ee;
+	border-bottom: 2px solid #f44;
 	transform: translate(-50%) scaleX(0);
 	-webkit-transform: translate(-50%) scaleX(0);
 	-moz-transform: translate(-50%) scaleX(0);
@@ -8332,7 +8332,7 @@ input:-ms-input-placeholder,textarea:-ms-input-placeholder {
 }
 
 .trigger-menu li.active {
-	border-bottom: 2px solid #0085ee
+	border-bottom: 2px solid #f44
 }
 
 .trigger-menu i {
@@ -8349,7 +8349,7 @@ input:-ms-input-placeholder,textarea:-ms-input-placeholder {
 }
 
 .trigger-menu .active a,.trigger-menu a:hover {
-	color: #0085ee
+	color: #f44
 }
 
 .trigger-menu .search {
@@ -8623,7 +8623,7 @@ input:-ms-input-placeholder,textarea:-ms-input-placeholder {
 	font-size: 13px;
 	text-align: center;
 	color: #fff;
-	background-color: #0085ee;
+	background-color: #f44;
 	border-radius: 4px;
 	line-height: 36px
 }
@@ -9381,7 +9381,7 @@ body.reader-night-mode .note .post .article .show-content a,body.reader-night-mo
 }
 
 body.reader-night-mode .person .aside a.function-btn.new-collection-btn,body.reader-night-mode .person .aside a.new-collection-btn {
-	color: #0085ee
+	color: #f44
 }
 
 body.reader-night-mode .person .aside a.new-collection-btn:hover {
@@ -9697,7 +9697,7 @@ body.reader-night-mode .collection .aside .list.collection-follower li img {
 }
 
 body.reader-night-mode .collection .aside .function-btn {
-	background-color: #0085ee
+	background-color: #f44
 }
 
 body.reader-night-mode .collection .aside .function-btn:hover {
@@ -9749,7 +9749,7 @@ body.reader-night-mode .notification .main .comment-list .info span.money,body.r
 }
 
 body.reader-night-mode .notification .main .pay-list a {
-	color: #0085ee
+	color: #f44
 }
 
 body.reader-night-mode .notification .main .pay-list a.btn.btn-hollow:hover {
@@ -9818,7 +9818,7 @@ body.reader-night-mode .setting .aside ul a:hover {
 }
 
 body.reader-night-mode .setting .main input.btn {
-	border-color: #0085ee
+	border-color: #f44
 }
 
 body.reader-night-mode .collection-wrap .avatar,body.reader-night-mode .collection-wrap .avatar-collection,body.reader-night-mode .recommend .wrap .avatar,body.reader-night-mode .recommend .wrap .avatar-collection {
@@ -9842,7 +9842,7 @@ body.reader-night-mode .new-collection .main input.btn.btn-success {
 }
 
 body.reader-night-mode .new-collection .main .disabled .setting-title,body.reader-night-mode .new-collection .main .disabled span {
-	color: #0085ee!important
+	color: #f44!important
 }
 
 body.reader-night-mode .advanced-requests .dropdown-menu:after {
