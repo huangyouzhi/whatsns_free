@@ -257,10 +257,7 @@ class User_model extends CI_Model {
 	function get_caiji_list($start = 0, $limit = 10) {
 		$userlist = array ();
 		
-		$query = $this->db->select ( '*' )->from ( 'user' )->where ( array (
-				'fromsite' => 1 
-		) )->order_by ( 'lastlogin desc' )->limit ( $limit, $start )->get ();
-		
+		$query=$this->db->query("select * from  " . $this->db->dbprefix . "user where fromsite=1 order by rand() limit $start,$limit");
 		foreach ( $query->result_array () as $user ) {
 			$user ['avatar'] = get_avatar_dir ( $user ['uid'] );
 			$userlist [] = $user;
