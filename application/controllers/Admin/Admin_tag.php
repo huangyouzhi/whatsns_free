@@ -3,39 +3,42 @@ ini_set('max_execution_time', '0');
 defined ( 'BASEPATH' ) or exit ( 'No direct script access allowed' );
 
 class Admin_tag extends ADMIN_Controller {
-
+	
 	function __construct() {
 		parent::__construct ();
 		$this->load->model ( 'tag_model' );
-
+		
 	}
-
-	function index($msg = '') {
 	
+	function index($msg = '') {
+		
 		$msg && $message = $msg;
 		@$page = max ( 1, intval ( $this->uri->segment ( 4 ) ) );
 		$pagesize = 20;
 		$startindex = ($page - 1) * $pagesize;
 		$where='';
-	
+		
 		$srchtitle='';
-	    if($_POST){
-	    	$srchtitle=trim($this->input->post('srchtitle'));
-	    
-	   
-	    }elseif($this->uri->segments[3]){
-	    	$srchtitle=urldecode($this->uri->segments[3]);
-	    	
-	    }
-	   
-	    if($srchtitle){
-	    	
-	    	$where=" and tagname like '%$srchtitle%' or tagalias like '%$srchtitle%' ";
-	    }
-	  
-	    $taglist = $this->tag_model->getalltaglist ( $startindex, $pagesize,$where );
+		if($_POST){
+			$srchtitle=trim($this->input->post('srchtitle'));
+			
+			
+		}elseif($this->uri->segments[3]){
+			$srchtitle=urldecode($this->uri->segments[3]);
+			
+		}
+		
+		if($srchtitle){
+			
+			$where=" and tagname like '%$srchtitle%' or tagalias like '%$srchtitle%' ";
+		}
+		
+		$taglist = $this->tag_model->getalltaglist ( $startindex, $pagesize,$where );
+	
 		$rownum = returnarraynum ( $this->db->query ( getwheresql ( 'tag', " 1=1 $where", $this->db->dbprefix ) )->row_array () );
 		$pages = @ceil ( $rownum / $pagesize );
+		$rownumtag = returnarraynum ( $this->db->query ( getwheresql ( 'tag', " 1=1 ", $this->db->dbprefix ) )->row_array () );
+		$pagestag = @ceil ( $rownumtag / $pagesize );
 		if($srchtitle){
 			$departstr = page ( $rownum, $pagesize, $page, "admin_tag/index/$srchtitle" );
 		}else{
@@ -63,30 +66,31 @@ class Admin_tag extends ADMIN_Controller {
 		$tag=$this->tag_model->get_by_tagalias($tagalias);
 		if(!$tag){
 			$message['code']=201;
-	
+			
 			exit("标签不存在");
 		}else{
 			//通过标签查询问题
-		
+			
 			$word=trim($tag['tagname']);
 			
-		
-				$id=$tag['id'];
-					$query=$this->db->
+			
+			$id=$tag['id'];
+			$query=$this->db->
 			where_in('status',explode ( ",", "1,2,6,9" ))
 			->group_start() //左括号
 			->like('title',$word)
 			->or_like('description', $word)
 			->group_end() //右括号
-			->order_by("time desc")
+			->order_by("rand()")
 			->limit($pagesize, 0)->get('question');
 			$questionlist=array();
-		if($query){
-			$questionlist=$query->result_array () ;
-		}
+			if($query){
+				$questionlist=$query->result_array () ;
+			}
+			
 			$datas=array();
 			foreach ($questionlist as $question ) {
-						$qid=$question['id'];
+				$qid=$question['id'];
 				$data=array(
 						'tagid' => $id,
 						'typeid' =>$qid ,
@@ -97,25 +101,25 @@ class Admin_tag extends ADMIN_Controller {
 				);
 				$tagquestion = $this->db->query ( "SELECT tagid,itemtype,typeid FROM " . $this->db->dbprefix . "tag_item WHERE tagid=$id and itemtype='question' and typeid=$qid " )->row_array ();
 				if (!$tagquestion) {
-						array_push($datas,$data);
-				
+					array_push($datas,$data);
+					
 				}
 			}
-				$this->db->insert_batch ( 'tag_item', $datas );
-		
-	
-		
-		
-		
+			$this->db->insert_batch ( 'tag_item', $datas );
 			
-			$query = $this->db->order_by ( '  viewtime desc ' )->get_where ( 'topic', "concat(`title`,`describtion`) like '%$word%' ", $pagesize, 0 );
+			
+			
+			
+			
+			
+			$query = $this->db->order_by ( "rand()")->get_where ( 'topic', "concat(`title`,`describtion`) like '%$word%' ", $pagesize, 0 );
 			$topiclist=array();
 			if($query){
-			$topiclist=	$query->result_array () ;
+				$topiclist=	$query->result_array () ;
 			}
 			$datas=array();
 			foreach ($topiclist as $topic ) {
-						$tid=$topic['id'];
+				$tid=$topic['id'];
 				$data=array(
 						'tagid' => $id,
 						'typeid' => $topic['id'] ,
@@ -130,8 +134,8 @@ class Admin_tag extends ADMIN_Controller {
 					
 				}
 			}
-		$this->db->insert_batch ( 'tag_item', $datas );
-	
+			$this->db->insert_batch ( 'tag_item', $datas );
+			
 			$qnum=count($questionlist);
 			$anum=count($topiclist);
 			exit("数据处理成功（问题:$qnum 条,文章：$anum 条），可以在标签详情页面查看到");
@@ -139,41 +143,41 @@ class Admin_tag extends ADMIN_Controller {
 	}
 	function tongbudatatag(){
 		$pagesize=20;
-			$pagemaxsize=500;
+		$pagemaxsize=500;
 		//获取站内标签总数
 		//$rownum = returnarraynum ( $this->db->query ( getwheresql ( 'tag', " 1=1 ", $this->db->dbprefix ) )->row_array () );
-	
+		
 		//分页处理标签同步
-	//	$pages = @ceil ( $rownum / $pagesize );
+		//	$pages = @ceil ( $rownum / $pagesize );
 		
-	
-			$startindex = intval($_POST['pageindex']);
-			//分页提取标签
-			$taglist = $this->tag_model->getalltaglist ( $startindex, $pagesize );
 		
-			foreach ($taglist as $tag){
-				//通过标签查询问题
+		$startindex = intval($_POST['pageindex']);
+		//分页提取标签
+		$taglist = $this->tag_model->getalltaglist ( $startindex, $pagesize );
 		
+		foreach ($taglist as $tag){
+			//通过标签查询问题
+			
 			$word=trim($tag['tagname']);
 			
-		
-				$id=$tag['id'];
-					$query=$this->db->
+			
+			$id=$tag['id'];
+			$query=$this->db->
 			where_in('status',explode ( ",", "1,2,6,9" ))
 			->group_start() //左括号
 			->like('title',$word)
 			->or_like('description', $word)
 			->group_end() //右括号
-			->order_by("time desc")
+			->order_by("rand()")
 			->limit($pagemaxsize, 0)->get('question');
 			$questionlist=array();
-		if($query){
-			$questionlist=$query->result_array () ;
-		}
+			if($query){
+				$questionlist=$query->result_array () ;
+			}
 			$datas=array();
 			$dataids=array();
 			foreach ($questionlist as $question ) {
-						$qid=$question['id'];
+				$qid=$question['id'];
 				$data=array(
 						'tagid' => $id,
 						'typeid' =>$qid ,
@@ -182,30 +186,30 @@ class Admin_tag extends ADMIN_Controller {
 						'time'=>time(),
 						'uid'=>$question['authorid']
 				);
-					//array_push($dataids,$id);
+				//array_push($dataids,$id);
 				$tagquestion = $this->db->query ( "SELECT tagid,itemtype,typeid FROM " . $this->db->dbprefix . "tag_item WHERE tagid=$id and itemtype='question' and typeid=$qid " )->row_array ();
 				if (!$tagquestion) {
-						array_push($datas,$data);
-				
+					array_push($datas,$data);
+					
 				}
 			}
-				//$this->db->where(array('itemtype'=>'question'))->where_in("tagid",$dataids)->delete("tag_item");
-				$this->db->insert_batch ( 'tag_item', $datas );
-		
-	
-		
-		
-		
+			//$this->db->where(array('itemtype'=>'question'))->where_in("tagid",$dataids)->delete("tag_item");
+			$this->db->insert_batch ( 'tag_item', $datas );
 			
-			$query = $this->db->order_by ( '  viewtime desc ' )->get_where ( 'topic', "concat(`title`,`describtion`) like '%$word%' ", $pagemaxsize, 0 );
+			
+			
+			
+			
+			
+			$query = $this->db->order_by ( "rand()" )->get_where ( 'topic', "concat(`title`,`describtion`) like '%$word%' ", $pagemaxsize, 0 );
 			$topiclist=array();
 			if($query){
-			$topiclist=	$query->result_array () ;
+				$topiclist=	$query->result_array () ;
 			}
 			$datas=array();
 			$dataids=array();
 			foreach ($topiclist as $topic ) {
-						$tid=$topic['id'];
+				$tid=$topic['id'];
 				$data=array(
 						'tagid' => $id,
 						'typeid' => $topic['id'] ,
@@ -215,19 +219,19 @@ class Admin_tag extends ADMIN_Controller {
 						'uid'=>$topic['authorid']
 				);
 				//array_push($dataids,$id);
-			$tagtopic= $this->db->query ( "SELECT tagid,itemtype,typeid FROM " . $this->db->dbprefix . "tag_item WHERE tagid=$id and itemtype='article' and typeid=$tid " )->row_array ();
+				$tagtopic= $this->db->query ( "SELECT tagid,itemtype,typeid FROM " . $this->db->dbprefix . "tag_item WHERE tagid=$id and itemtype='article' and typeid=$tid " )->row_array ();
 				if (!$tagtopic) {
 					array_push($datas,$data);
 					
 				}
 			}
 			//$this->db->where(array('itemtype'=>'article'))->where_in("tagid",$dataids)->delete("tag_item");
-		$this->db->insert_batch ( 'tag_item', $datas );
+			$this->db->insert_batch ( 'tag_item', $datas );
 			
-			}
-	
+		}
+		
 		$message['code']=200;
-	
+		
 		$message['msg']="第".$startindex."页内容同步成功";
 		echo json_encode($message);
 		exit();
@@ -251,37 +255,37 @@ class Admin_tag extends ADMIN_Controller {
 		//$rownum = returnarraynum ( $this->db->query ( getwheresql ( 'tag', " 1=1 ", $this->db->dbprefix ) )->row_array () );
 		
 		//分页处理标签同步
-	//	$pages = @ceil ( $rownum / $pagesize );
+		//	$pages = @ceil ( $rownum / $pagesize );
 		$tagstr='';
-	
-			$startindex =intval($_POST['pageindex']);
-			//分页提取标签
-			$taglist = $this->tag_model->getalltaglist ( $startindex, $pagesize );
-			$tagstr='';
-			foreach ($taglist as $tag){
-				$tagid=$tag['id'];
-				$tagstr=$tagstr.",".$tag['tagname'];
-				//获取标签全部问题数据
-				$qrownum = returnarraynum ( $this->db->query ( getwheresql ( 'tag_item', " tagid=$tagid and itemtype='question' ", $this->db->dbprefix ) )->row_array () );
-				
-				//获取标签全部文章数
-				$trownum = returnarraynum ( $this->db->query ( getwheresql ( 'tag_item', " tagid=$tagid and itemtype='article' ", $this->db->dbprefix ) )->row_array () );
-				if(trim($tag['tagalias'])=='rewriteurl'){
-					$tagstr.=$tag['tagalias']."--tagid:$tagid--#$i#---".$qrownum.'----'.$trownum;
-				}
-				// 标签首字母
-				$tagfisrtchar = strtoupper ( preg_replace ( '# #', '', $this->getfirstchar ($tag['tagalias'] ) ) ); // 标签首字母
-				
-				//更新标签信息
-				//$this->db->query ( "UPDATE `" . $this->db->dbprefix . "tag` set tagquestions=$qrownum and tagarticles=$trownum  WHERE `id` =$tagid" );
-				$data=array('tagfisrtchar'=>$tagfisrtchar,'tagquestions'=>$qrownum,'tagarticles'=>$trownum);
-				$this->db->where ( 'id', $tagid );
-				$this->db->update ( 'tag', $data );
+		
+		$startindex =intval($_POST['pageindex']);
+		//分页提取标签
+		$taglist = $this->tag_model->getalltaglist ( $startindex, $pagesize );
+		$tagstr='';
+		foreach ($taglist as $tag){
+			$tagid=$tag['id'];
+			$tagstr=$tagstr.",".$tag['tagname'];
+			//获取标签全部问题数据
+			$qrownum = returnarraynum ( $this->db->query ( getwheresql ( 'tag_item', " tagid=$tagid and itemtype='question' ", $this->db->dbprefix ) )->row_array () );
+			
+			//获取标签全部文章数
+			$trownum = returnarraynum ( $this->db->query ( getwheresql ( 'tag_item', " tagid=$tagid and itemtype='article' ", $this->db->dbprefix ) )->row_array () );
+			if(trim($tag['tagalias'])=='rewriteurl'){
+				$tagstr.=$tag['tagalias']."--tagid:$tagid--#$i#---".$qrownum.'----'.$trownum;
 			}
-	
+			// 标签首字母
+			$tagfisrtchar = strtoupper ( preg_replace ( '# #', '', $this->getfirstchar ($tag['tagalias'] ) ) ); // 标签首字母
+			
+			//更新标签信息
+			//$this->db->query ( "UPDATE `" . $this->db->dbprefix . "tag` set tagquestions=$qrownum and tagarticles=$trownum  WHERE `id` =$tagid" );
+			$data=array('tagfisrtchar'=>$tagfisrtchar,'tagquestions'=>$qrownum,'tagarticles'=>$trownum);
+			$this->db->where ( 'id', $tagid );
+			$this->db->update ( 'tag', $data );
+		}
+		
 		$message['code']=200;
 		$message['tagstr']=$tagstr;
-	
+		
 		$message['msg']=$tagstr."标签更新成功";
 		echo json_encode($message);
 		exit();
@@ -320,18 +324,18 @@ class Admin_tag extends ADMIN_Controller {
 	
 	*/
 	function postmutttag(){
-	
+		
 		$strresult="";
 		
 		$tags = explode ( "\n", $this->input->post ( 'txttag' ) );
 		foreach ( $tags as $tag ) {
 			$tag = str_replace ( array ("\r\n", "\n", "\r" ), '', $tag );
 			
-		
+			
 			
 			if (empty ( $tag ))
 				continue;
-			
+				
 				
 				
 				$tagname='';
@@ -344,17 +348,17 @@ class Admin_tag extends ADMIN_Controller {
 					$tagalias=$this->getPinyin($tagname);
 				}
 				
-		
+				
 				$tagalias = preg_replace ( '# #', '',$tagalias ); // 标签别名
 				//通过别名查询标签别名是否重复
 				$tag1 = $this->tag_model->get_by_tagalias ( $tagalias );
 				if($tag1){
-					$strresult.= $tagname."标签别名".$tagalias."已经存在!\r\n";		
+					$strresult.= $tagname."标签别名".$tagalias."已经存在!\r\n";
 					$tagalias=$tagalias.time();
 					continue;
 				}
 				
-			
+				
 				
 				//查询标签名是否存在
 				$tag2 = $this->tag_model->get_by_tagname ( $tagname );
@@ -363,7 +367,7 @@ class Admin_tag extends ADMIN_Controller {
 					continue;
 				}
 				
-			
+				
 				
 				$title=$tagname."标签相关问题和文章知识库列表";
 				$description='';
@@ -388,7 +392,7 @@ class Admin_tag extends ADMIN_Controller {
 				}else{
 					$strresult.= $tagname."标签别名生成失败!\r\n";
 				}
-			
+				
 				
 		}
 		$message['code']=200;
@@ -425,28 +429,28 @@ class Admin_tag extends ADMIN_Controller {
 			if($tagalias==''){
 				$this->message ( "标签别名不能为空!", 'admin_tag/add' );
 			}
-		
+			
 			$tagalias=$this->getPinyin($tagalias);
 			$tagalias = preg_replace ( '# #', '',$tagalias ); // 标签别名
-		
+			
 			if($title==''){
 				$this->message ( "标签seo标题不能为空!", 'admin_tag/add' );
 			}
 			$title=str_replace('，', ',', $title); //将中文逗号替换成英文逗号
 			
-				//通过别名查询标签别名是否重复
+			//通过别名查询标签别名是否重复
 			$tag1 = $this->tag_model->get_by_tagalias ( $tagalias );
-				if($tag1){
-					$this->message ( "标签别名已经存在，请修改!", 'admin_tag/add' );
-				}
+			if($tag1){
+				$this->message ( "标签别名已经存在，请修改!", 'admin_tag/add' );
+			}
 			
 			
-		
-				//查询标签名是否存在
-				$tag2 = $this->tag_model->get_by_tagname ( $tagname );
-				if($tag2){
-					$this->message ( "标签名称已经存在，请修改!", 'admin_tag/add' );
-				}
+			
+			//查询标签名是否存在
+			$tag2 = $this->tag_model->get_by_tagname ( $tagname );
+			if($tag2){
+				$this->message ( "标签名称已经存在，请修改!", 'admin_tag/add' );
+			}
 			
 			
 			
@@ -493,7 +497,7 @@ class Admin_tag extends ADMIN_Controller {
 					$tagimage=$bigimg;
 					
 			}
-		
+			
 			$id=$this->tag_model->addtag($tagname,$tagalias,$title,$description,$keywords,$tagimage);
 			if($id>0){
 				$this->message ( "标签添加成功!", 'admin_tag' );
@@ -559,7 +563,7 @@ class Admin_tag extends ADMIN_Controller {
 					$this->message ( "标签别名已经存在，请修改!", 'admin_tag/edit/'.$tagalias );
 				}
 			}
-		
+			
 			if($tagname!=$tag['tagname']){
 				//查询标签名是否存在
 				$tag2 = $this->tag_model->get_by_tagname ( $tagname );
@@ -567,7 +571,7 @@ class Admin_tag extends ADMIN_Controller {
 					$this->message ( "标签名称已经存在，请修改!", 'admin_tag/edit/'.$tagalias );
 				}
 			}
-		
+			
 			
 			$tagimage=null;
 			if ($_FILES ["tagimage"]['name'] != '') {
@@ -579,7 +583,7 @@ class Admin_tag extends ADMIN_Controller {
 					
 				}
 				$extname = extname ( $_FILES ["tagimage"] ["name"] );
-			
+				
 				if (! isimage ( $extname ))
 					$this->message ( "图片扩展名不正确!", 'admin_tag/edit/'.$tagalias );
 					$upload_tmp_file = FCPATH . '/data/tmp/tag_' . $uid . '.' . $extname;
@@ -615,7 +619,7 @@ class Admin_tag extends ADMIN_Controller {
 			if(!$tagimage){
 				$tagimage=$tag['tagimage'];
 			}
-	
+			
 			$this->tag_model->updatetag($tag['id'],$tagname,$_tagalias,$title,$description,$keywords,$tagimage);
 			$this->message ( "标签修改成功!", 'admin_tag' );
 		}
@@ -629,13 +633,13 @@ class Admin_tag extends ADMIN_Controller {
 		$_name_arr = explode ( ',', $names );
 		for($i = 0; $i < count ( $_name_arr ); $i ++) {
 			$char_split = $char_split . $this->getfirstchar ( $_name_arr [$i] );
-
+			
 		}
-
+		
 		$pinyin = $char_split;
-
+		
 		$pinyin = 'q_' . $pinyin . '_' . $id;
-
+		
 		$this->db->query ( "UPDATE " . $this->db->dbprefix . "question_tag SET  `pinyin`='$pinyin' WHERE `name`='$name'" );
 		echo $pinyin;
 		exit ();
@@ -652,55 +656,55 @@ class Admin_tag extends ADMIN_Controller {
 		$firstchar_ord = ord ( strtoupper ( $s0 {0} ) );
 		if (($firstchar_ord >= 65 and $firstchar_ord <= 91) or ($firstchar_ord >= 48 and $firstchar_ord <= 57))
 			return $s0 {0};
-		$s = iconv ( "UTF-8", "gb2312", $s0 );
-		$asc = ord ( $s {0} ) * 256 + ord ( $s {1} ) - 65536;
-		if ($asc >= - 20319 and $asc <= - 20284)
-			return "a";
-		if ($asc >= - 20283 and $asc <= - 19776)
-			return "b";
-		if ($asc >= - 19775 and $asc <= - 19219)
-			return "c";
-		if ($asc >= - 19218 and $asc <= - 18711)
-			return "d";
-		if ($asc >= - 18710 and $asc <= - 18527)
-			return "e";
-		if ($asc >= - 18526 and $asc <= - 18240)
-			return "f";
-		if ($asc >= - 18239 and $asc <= - 17923)
-			return "g";
-		if ($asc >= - 17922 and $asc <= - 17418)
-			return "h";
-		if ($asc >= - 17417 and $asc <= - 16475)
-			return "j";
-		if ($asc >= - 16474 and $asc <= - 16213)
-			return "k";
-		if ($asc >= - 16212 and $asc <= - 15641)
-			return "l";
-		if ($asc >= - 15640 and $asc <= - 15166)
-			return "m";
-		if ($asc >= - 15165 and $asc <= - 14923)
-			return "m";
-		if ($asc >= - 14922 and $asc <= - 14915)
-			return "o";
-		if ($asc >= - 14914 and $asc <= - 14631)
-			return "p";
-		if ($asc >= - 14630 and $asc <= - 14150)
-			return "q";
-		if ($asc >= - 14149 and $asc <= - 14091)
-			return "r";
-		if ($asc >= - 14090 and $asc <= - 13319)
-			return "s";
-		if ($asc >= - 13318 and $asc <= - 12839)
-			return "t";
-		if ($asc >= - 12838 and $asc <= - 12557)
-			return "w";
-		if ($asc >= - 12556 and $asc <= - 11848)
-			return "x";
-		if ($asc >= - 11847 and $asc <= - 11056)
-			return "y";
-		if ($asc >= - 11055 and $asc <= - 10247)
-			return "z";
-		return null;
+			$s = iconv ( "UTF-8", "gb2312", $s0 );
+			$asc = ord ( $s {0} ) * 256 + ord ( $s {1} ) - 65536;
+			if ($asc >= - 20319 and $asc <= - 20284)
+				return "a";
+				if ($asc >= - 20283 and $asc <= - 19776)
+					return "b";
+					if ($asc >= - 19775 and $asc <= - 19219)
+						return "c";
+						if ($asc >= - 19218 and $asc <= - 18711)
+							return "d";
+							if ($asc >= - 18710 and $asc <= - 18527)
+								return "e";
+								if ($asc >= - 18526 and $asc <= - 18240)
+									return "f";
+									if ($asc >= - 18239 and $asc <= - 17923)
+										return "g";
+										if ($asc >= - 17922 and $asc <= - 17418)
+											return "h";
+											if ($asc >= - 17417 and $asc <= - 16475)
+												return "j";
+												if ($asc >= - 16474 and $asc <= - 16213)
+													return "k";
+													if ($asc >= - 16212 and $asc <= - 15641)
+														return "l";
+														if ($asc >= - 15640 and $asc <= - 15166)
+															return "m";
+															if ($asc >= - 15165 and $asc <= - 14923)
+																return "m";
+																if ($asc >= - 14922 and $asc <= - 14915)
+																	return "o";
+																	if ($asc >= - 14914 and $asc <= - 14631)
+																		return "p";
+																		if ($asc >= - 14630 and $asc <= - 14150)
+																			return "q";
+																			if ($asc >= - 14149 and $asc <= - 14091)
+																				return "r";
+																				if ($asc >= - 14090 and $asc <= - 13319)
+																					return "s";
+																					if ($asc >= - 13318 and $asc <= - 12839)
+																						return "t";
+																						if ($asc >= - 12838 and $asc <= - 12557)
+																							return "w";
+																							if ($asc >= - 12556 and $asc <= - 11848)
+																								return "x";
+																								if ($asc >= - 11847 and $asc <= - 11056)
+																									return "y";
+																									if ($asc >= - 11055 and $asc <= - 10247)
+																										return "z";
+																										return null;
 	}
 	private $_outEncoding = "GB2312";
 	public function getPinyin($str, $pix = ' ', $code = 'gb2312') {
@@ -769,7 +773,7 @@ class Admin_tag extends ADMIN_Controller {
 			$_Res [$_Arr1 [$i]] = $_Arr2 [$i];
 			return $_Res;
 	}
-
+	
 }
 
 ?>
