@@ -44,6 +44,10 @@
             <td class="altbg1"><b>分类别名:</b><br><span class="smalltxt">别名有利于seo优化</span></td>
             <td class="altbg2" colspan="2"><input name="aliasname" style="width:300px;"  type="text" value="{$category['alias']}"></td>
         </tr>
+           <tr>
+            <td class="altbg1"><b>分类目录:</b><br><span class="smalltxt">设置后，分类详情url将不在显示id用此设置拼音代替，不得和已有拼音名称冲突，否则解析失败</span></td>
+            <td class="altbg2" colspan="2"><input name="dir"  type="text" value="{$category['dir']}"></td>
+        </tr>
                <tr>
             <td class="altbg1"><b>专栏描述:</b><br><span class="smalltxt">描述将出现在专栏详情页面简介</span></td>
             <td class="altbg2" colspan="2">

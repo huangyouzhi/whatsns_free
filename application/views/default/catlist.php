@@ -11,7 +11,7 @@
     <div class="col-md-17 main bb">
       <!-- 专题头部模块 -->
       <div class="main-top" style="padding-right: 20px;">
-        <a class="avatar-collection" href="{url topic/catlist/$catmodel['id']}">
+        <a class="avatar-collection" href="{eval echo getcaturl($catmodel['id'],'topic/catlist/#id#');}">
   <img src="$catmodel['bigimage']" alt="240">
 </a>
 {if  $is_followed}
@@ -26,7 +26,7 @@
        
 
         <div class="title">
-          <a class="name" href="{url topic/catlist/$catmodel['id']}"> {$catmodel['name']}</a>
+          <a class="name" href="{eval echo getcaturl($catmodel['id'],'topic/catlist/#id#');}"> {$catmodel['name']}</a>
         </div>
         <div class="info">
           收录了{$rownum}篇文章 ·{$catmodel['questions']}个问题 · {$catmodel['followers']}人关注
@@ -49,7 +49,7 @@
           <!--{loop $catlist $index $cat}-->
 
 
-                   <a class="collection" href="{url topic/catlist/$cat['id']}">
+                   <a class="collection" href="{eval echo getcaturl($cat['id'],'topic/catlist/#id#');}">
             <img src="$cat['image']" alt="195" style="height:32px;width:32px;">
             <div class="name">{$cat['name']}</div>
         </a>
@@ -57,18 +57,18 @@
 
 
         {if $catmodel['pid']}
-             <a class="more-hot-collection"  href="{url topic/catlist/$catmodel['pid']}">
+             <a class="more-hot-collection"  href="{eval echo getcaturl($catmodel['pid'],'topic/catlist/#id#');}">
         返回上级 <i class="fa fa-angle-right mar-ly-1"></i>
     </a>
         {/if}
                 </div>
       <ul class="trigger-menu" data-pjax-container="#list-container">
-      <li class="active"><a href="{url topic/catlist/$catmodel['id']}">
+      <li class="active"><a href="{eval echo getcaturl($catmodel['id'],'topic/catlist/#id#');}">
       <i class="fa fa-sticky-note-o"></i> 全部文章</a>
       </li>
   {if $catmodel['isuseask']}
     <li >
-      <a href="{url category/view/$catmodel['id']}"><i class="fa fa-sticky-note-o"></i> 相关问题</a>
+      <a href="{eval echo getcaturl($catmodel['id'],'category/view/#id#');}"><i class="fa fa-sticky-note-o"></i> 相关问题</a>
       </li>
         {/if}
       </ul>
@@ -92,7 +92,7 @@
               <a href="{url user/space/$topic['authorid']}"> {$topic['author']}</a>
                     
                     发布于
-                                            <a href="{url topic/catlist/$topic['articleclassid']}">{$catmodel['name']}</a>
+                                            <a href="{eval echo getcaturl($topic['articleclassid'],'topic/catlist/#id#');}">{eval $_cid=$topic['articleclassid']; echo $this->category[$_cid]['name'];}</a>
                                             </span>
                                             </li>
       <li class="bookmark " title="{$topic['likes']} 收藏" >
@@ -152,7 +152,7 @@
         <a class="share-circle share-weixin" data-action="weixin-share" data-toggle="tooltip" data-original-title="分享到微信">
           <i class="fa fa-wechat"></i>
         </a>
-        <a class="share-circle" data-toggle="tooltip" href="javascript:void((function(s,d,e,r,l,p,t,z,c){var%20f='http://v.t.sina.com.cn/share/share.php?appkey=1515056452',u=z||d.location,p=['&amp;url=',e(u),'&amp;title=',e(t||d.title),'&amp;source=',e(r),'&amp;sourceUrl=',e(l),'&amp;content=',c||'gb2312','&amp;pic=',e(p||'')].join('');function%20a(){if(!window.open([f,p].join(''),'mb',['toolbar=0,status=0,resizable=1,width=440,height=430,left=',(s.width-440)/2,',top=',(s.height-430)/2].join('')))u.href=[f,p].join('');};if(/Firefox/.test(navigator.userAgent))setTimeout(a,0);else%20a();})(screen,document,encodeURIComponent,'','','{$catmodel['bigimage']}', '《{$catmodel['name']}》','{url topic/catlist/$catmodel['id']}','页面编码gb2312|utf-8默认gb2312'));" data-original-title="分享到微博">
+        <a class="share-circle" data-toggle="tooltip" href="javascript:void((function(s,d,e,r,l,p,t,z,c){var%20f='http://v.t.sina.com.cn/share/share.php?appkey=1515056452',u=z||d.location,p=['&amp;url=',e(u),'&amp;title=',e(t||d.title),'&amp;source=',e(r),'&amp;sourceUrl=',e(l),'&amp;content=',c||'gb2312','&amp;pic=',e(p||'')].join('');function%20a(){if(!window.open([f,p].join(''),'mb',['toolbar=0,status=0,resizable=1,width=440,height=430,left=',(s.width-440)/2,',top=',(s.height-430)/2].join('')))u.href=[f,p].join('');};if(/Firefox/.test(navigator.userAgent))setTimeout(a,0);else%20a();})(screen,document,encodeURIComponent,'','','{$catmodel['bigimage']}', '《{$catmodel['name']}》','{eval echo getcaturl($catmodel['id'],'category/view/#id#');}','页面编码gb2312|utf-8默认gb2312'));" data-original-title="分享到微博">
           <i class="fa fa-weibo"></i>
         </a>
 
@@ -196,11 +196,11 @@
   </div>
 </div>
 <!-- 微信分享 -->
-<div class="modal share-wechat animated" style="display: none;"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" data-dismiss="modal" class="close">×</button></div> <div class="modal-body"><h5>打开微信“扫一扫”，打开网页后点击屏幕右上角分享按钮</h5> <div data-url="{url topic/catlist/$catmodel['id']}" class="qrcode" title="{url topic/catlist/$catmodel['id']}"><canvas width="170" height="170" style="display: none;"></canvas>
+<div class="modal share-wechat animated" style="display: none;"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" data-dismiss="modal" class="close">×</button></div> <div class="modal-body"><h5>打开微信“扫一扫”，打开网页后点击屏幕右上角分享按钮</h5> <div data-url="{eval echo getcaturl($catmodel['id'],'category/view/#id#');}" class="qrcode" title="{eval echo getcaturl($catmodel['id'],'category/view/#id#');}"><canvas width="170" height="170" style="display: none;"></canvas>
 <div id="qr_wxcode">
 </div></div></div> <div class="modal-footer"></div></div></div></div>
 <script>
-var qrurl="{url topic/catlist/$catmodel['id']}";
+var qrurl="{eval echo getcaturl($catmodel['id'],'category/view/#id#');}";
 $(function(){
 	//微信二维码生成
 	$('#qr_wxcode').qrcode(qrurl);
@@ -217,4 +217,4 @@ $(function(){
 });
 
 </script>
-<!--{template footer }-->
+<!--{template footer}-->

@@ -191,10 +191,10 @@ position:relative;
                             <div class="work-head-box">
                                 <div class="head-left">
                                             <span class="head-index">
-                                                <span><a href="{url new/default}" target="_blank">站内问答</a></span>
+                                                <span><a href="{url ask/index}" target="_blank">站内问答</a></span>
                                                 <i>/</i>
                                                 <span>
-                                                   <a class="notebook" href="{url category/view/$question['cid']}" data-toggle="tooltip" data-html="true" data-original-title="问题归属分类">
+                                                   <a class="notebook" href="{eval echo getcaturl($question['cid'],'category/view/#id#');}" data-toggle="tooltip" data-html="true" data-original-title="问题归属分类">
  <span>{$question['category_name']}</span>
                 </a>  
                                                 </span>

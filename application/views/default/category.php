@@ -59,23 +59,23 @@
     </a>
         {/if}
                 </div>
-      <ul class="trigger-menu" data-pjax-container="#list-container">
-      <li <!--{if all==$status}-->class="active"<!--{/if}-->><a href="{url category/view/$cid/all}">
+         <ul class="trigger-menu" data-pjax-container="#list-container">
+      <li <!--{if 'all'==$status}-->class="active"<!--{/if}-->><a href="{eval echo getcaturl($cid,'category/view/#id#/all');}">
       <i class="fa fa-sticky-note-o"></i> 全部问题</a>
       </li>
-      <li <!--{if 1==$status}-->class="active"<!--{/if}-->><a href="{url category/view/$cid/1}">
+      <li <!--{if 1==$status}-->class="active"<!--{/if}-->><a href="{eval echo getcaturl($cid,'category/view/#id#/1');}">
       <i class="fa fa-times">
       </i> 未解决</a>
       </li>
       <li <!--{if 2==$status}-->class="active"<!--{/if}-->>
-      <a  href="{url category/view/$cid/2}"><i class="fa fa-check"></i> 已解决</a>
+      <a  href="{eval echo getcaturl($cid,'category/view/#id#/2');}"><i class="fa fa-check"></i> 已解决</a>
       </li>
       <li <!--{if 6==$status}-->class="active"<!--{/if}-->>
-      <a href="{url category/view/$cid/6}"><i class="fa fa-shield"></i> 推荐问题</a>
+      <a href="{eval echo getcaturl($cid,'category/view/#id#/6');}"><i class="fa fa-shield"></i> 推荐问题</a>
       </li>
       {if $category['isusearticle']}
         <li >
-      <a href="{url topic/catlist/$cid}"><i class="fa fa-sticky-note-o"></i> 相关文章</a>
+      <a href="{eval echo getcaturl($cid,'topic/catlist/#id#');}"><i class="fa fa-sticky-note-o"></i> 相关文章</a>
       </li>
       {/if}
       </ul>

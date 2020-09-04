@@ -54,7 +54,6 @@ $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
 $route['index'] = 'index/index';//对首页重写
 $route['index/index'] = 'Whatsns/index';//对首页重写
-$route['article-(:num)'] = 'Topic/getone/$1';//对文章重写
 //问题库列表重写
 $route['ask'] = 'Ask/index';//对问题库列表重写
 $route['ask/(:any)'] = 'Ask/index/$1';//对问题库列表重写--分类
@@ -67,16 +66,19 @@ $route['article'] = 'Seo/index';//对文章栏目库列表重写
 $route['article/(:any)'] = 'Seo/index/$1';//对文章栏目库列表重写--分类
 $route['article/(:any)/(:any)'] = 'Seo/index/$1/$2';//对文章栏目库列表重写--分类/排序
 $route['article/(:any)/(:any)/(:num)'] = 'Seo/index/$1/$2/$3';//对文章栏目库列表重写--分类/排序/分页
+
+
+$route['article-(:num)'] = 'Topic/getone/$1';//对文章重写
 $route['article-(:num)/(:num)'] = 'Topic/getone/$1/$2';//对文章重写
-$route['cat-(:num)'] = 'Topic/catlist/$1';//对文章分类重写
-$route['cat-(:num)/(:num)'] = 'Topic/catlist/$1/$2';//对文章分类重写
+$route['cat-(:any)'] = 'Topic/catlist/$1';//对文章分类重写
+$route['cat-(:any)/(:num)'] = 'Topic/catlist/$1/$2';//对文章分类重写
 $route['q-(:num)'] = 'Question/view/$1';//对问题重写
 $route['q-(:num)/(:num)'] = 'Question/view/$1/$2';//对问题重写
 $route['u-(:num)'] = 'User/space/$1';//对用户空间重写
 $route['u-(:num)/(:num)'] = 'User/space/$1/$2';//对用户空间重写
-$route['c-(:num)'] = 'Category/view/$1';//对分类详情url重写
-$route['c-(:num)/(:any)'] ='Category/view/$1/$2';//对分类重写
-$route['c-(:num)/(:any)/(:num)'] ='Category/view/$1/$2/$3';//对分类重写
+$route['c-(:any)'] = 'Category/view/$1';//对分类详情url重写
+$route['c-(:any)/(:any)'] ='Category/view/$1/$2';//对分类重写
+$route['c-(:any)/(:any)/(:num)'] ='Category/view/$1/$2/$3';//对分类重写
 $route['ua-(:num)'] = 'User/space_answer/$1';//对用户空间用户回答重写
 $route['ua-(:num)/(:num)'] = 'User/space_answer/$1/$2';//对用户空间用户回答重写
 $route['ua-(:num)/(:num)/(:num)'] = 'User/space_answer/$1/$2/$2';//对用户空间用户回答重写
