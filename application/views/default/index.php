@@ -201,7 +201,7 @@
 				{eval $expertlist=$this->getlistbysql("select uid,username,expert,regtime,signature from ".$this->db->dbprefix."user where expert=1 order by regtime asc limit 0,6;");}
 					{loop $expertlist $expert}
 					<li>
-						<a href="//kuaiwen.pcbaby.com.cn/48921652/" target="_blank" rel="nofollow">
+						<a href="{url user/space/$expert['uid']}" target="_blank" rel="nofollow">
 							<img src="{eval echo get_avatar_dir($expert['uid']);}" width="80" height="80">
 							<em>
 								<span>{$expert['username']}</span>
