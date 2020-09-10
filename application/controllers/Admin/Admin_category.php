@@ -230,8 +230,9 @@ class Admin_category extends ADMIN_Controller {
 			$edit_miaosu = trim ( $this->input->post ( 'edit_miaosu' ) ); // 分类描述
 			$s_tmplist = trim ( $this->input->post ( 's_tmplist' ) ); // 文章分类模板名字
 			$s_articletmplist = trim ( $this->input->post ( 's_articletmplist' ) ); // 文章详情模板名字
-			
+			$dir= trim ( $this->input->post ( 'dir' ) ); // 分类目录名称
 			$categorydir = '';
+			$categorydir = empty($dir) ? '':$dir;
 			$cid = 0;
 			$category1 = $this->input->post ( 'category1' );
 			$category2 = $this->input->post ( 'category2' );

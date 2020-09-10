@@ -2922,7 +2922,7 @@ class Question extends CI_Controller {
 				echo json_encode ( $message );
 				exit ();
 			}
-			$content = $this->input->post ( 'content', FALSE );
+			$content = $this->input->post ( 'content' );
 			
 			// 更新问题详情
 			$tags = trim ( $this->input->post ( 'tags' ), ',' );
@@ -2941,7 +2941,7 @@ class Question extends CI_Controller {
 					'cid1' => $cid1,
 					'cid2' => $cid2,
 					'cid3' => $cid3,
-					'description' => htmlspecialchars ( $content ) 
+					'description' => $content 
 			
 			);
 			$this->db->where ( array (

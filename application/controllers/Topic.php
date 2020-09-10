@@ -696,7 +696,18 @@ exit();
 		include template ( 'topic' );
 	}
 	function catlist() {
-		$catid = intval ( $this->uri->rsegments [3] );
+		if(intval ( $this->uri->rsegments[3] )==0){
+			$catdir=addslashes(strip_tags($this->uri->rsegments[3]));//获取目录
+			$_cat=$this->db->get_where('category',array('dir'=>$catdir))->row_array();
+			if($_cat){
+				$catid=$_cat['id'];
+			}else{
+				show_404();
+			}
+		}else{
+			$catid = intval ( $this->uri->rsegments [3] );
+		}
+		
 		//相关分类标签
 		$this->load->model ( "tag_model" );
 		$relativetags = $this->tag_model->gettaglistbycid ( $catid );
@@ -735,7 +746,8 @@ exit();
 			// 获取该分类下的父亲级别的分类
 			// $catlist=$this->category_model->list_by_pid($catmodel['pid']);
 			
-	
+		
+			
 			if ($catmodel ['grade'] == 3) {
 				
 				//$catlist = $this->category_model->list_by_pid ( $catmodel ['pid'] );
@@ -752,9 +764,7 @@ exit();
 						array_push ( $cids, $val ['id'] );
 					}
 				}
-				
 			}
-
 			
 			// var_dump($catmodel);exit();
 		}
@@ -773,7 +783,12 @@ exit();
 			
 			$topiclist [$key] ['tags'] = $taglist;
 		}
-		$departstr = page ( $rownum, $pagesize, $page, "topic/catlist/$catid" );
+		if($catdir){
+		    	$departstr = page ( $rownum, $pagesize, $page, "topic/catlist/$catdir" );
+		}else{
+		    	$departstr = page ( $rownum, $pagesize, $page, "topic/catlist/$catid" );
+		}
+	
 		
 		/* SEO */
 		$seo_keywords = $navtitle;
@@ -800,7 +815,7 @@ exit();
 			$seo_keywords = str_replace ( "{wzmc}", $this->setting ['site_name'], $this->setting ['seo_category_keywords'] );
 			$seo_keywords = str_replace ( "{flmc}", $navtitle, $seo_keywords );
 		}
-		
+	
 		// 如果分类模板没有为空，就应用新模板
 		if ($catmodel ['template'] == null || trim ( $catmodel ['template'] ) == '') {
 			include template ( 'catlist' );
@@ -808,6 +823,7 @@ exit();
 			include template ( trim ( $catmodel ['template'] ) );
 		}
 	}
+	
 	
 	function convertUrlQuery($query) {
 		$queryParts = explode ( '&', $query );

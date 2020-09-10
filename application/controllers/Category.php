@@ -10,7 +10,6 @@ class Category extends CI_Controller {
 		$this->load->model ( 'category_model' );
 		$this->load->model ( 'question_model' );
 		$this->load->model ( "topic_model" );
-
 	}
 
 	function viewtopic() {
@@ -34,11 +33,22 @@ class Category extends CI_Controller {
 		$departstr = page ( $rownum, $pagesize, $page, "category/viewtopic/$status" );
 		include template ( 'category_all' );
 	}
-	//category/view/1/2/10
-	//cid，status,第几页？
-	function view() {
+function view() {
 		$this->load->model ( "expert_model" );
-		$cid = intval ( $this->uri->rsegments[3] ) ? intval ( $this->uri->rsegments[3])  : 'all';
+		
+		if(intval ( $this->uri->rsegments[3] )==0){
+			$catdir=addslashes(strip_tags($this->uri->rsegments[3]));//获取目录
+		
+			$_cat=$this->db->get_where('category',array('dir'=>$catdir))->row_array();
+			if($_cat){
+				$cid=$_cat['id'];
+			}else{
+				show_404();
+			}
+		}else{
+			$cid = intval ( $this->uri->rsegments[3] ) ? intval ( $this->uri->rsegments[3])  : 'all';
+		}
+		
 		$status = null!==  $this->uri->rsegments[4]  ? $this->uri->rsegments[4]: 'all';
 		@$page = max ( 1, intval ( $this->uri->rsegments[5]) );
 		$pagesize = $this->setting ['list_default'];
@@ -90,7 +100,12 @@ class Category extends CI_Controller {
 		$questionlist = $this->question_model->list_by_cfield_cvalue_status ( $cfield, $cid, $status, $startindex, $pagesize ); //问题列表数据
 		$topiclist = $this->topic_model->get_bycatid ( $cid, 0, 8 );
 		$followerlist = $this->category_model->get_followers ( $cid, 0, 8 ); //获取导航
-		$departstr = page ( $rownum, $pagesize, $page, "category/view/$cid/$status" ); //得到分页字符串
+		if($catdir){
+		    	$departstr = page ( $rownum, $pagesize, $page, "category/view/$catdir/$status" ); //得到分页字符串
+		}else{
+		    	$departstr = page ( $rownum, $pagesize, $page, "category/view/$cid/$status" ); //得到分页字符串
+		}
+	
 		$navlist = $this->category_model->get_navigation ( $cid ); //获取导航
 		$sublist = $this->category_model->list_by_cid_pid ( $cid, $category ['pid'] ); //获取子分类
 		$expertlist = $this->expert_model->get_by_cid ( $cid ); //分类专家
