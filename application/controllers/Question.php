@@ -112,7 +112,8 @@ class Question extends CI_Controller {
 		$title = $this->input->post ( 'title' );
 		$chakanjine = doubleval ( $this->input->post ( 'chakanjine' ) );
 		$content = $this->input->post ( 'content' );
-		
+			$content=str_replace("&lt;video", "<video ", $content);
+		$content=str_replace("&gt;&lt;/video&gt;", "</video> ", $content);
 		// 检查审核和内容外部URL过滤
 		$status = intval ( 2 != (2 & $this->setting ['verify_question']) );
 		$allow = $this->setting ['allow_outer'];
@@ -652,7 +653,8 @@ class Question extends CI_Controller {
 		
 		// $description = strip_tags($this->post['description']);
 		$description = $this->input->post ( 'description' );
-		
+			$description=str_replace("&lt;video", "<video ", $description);
+		$description=str_replace("&gt;&lt;/video&gt;", "</video> ", $description);
 		$tags = trim ( $this->input->post ( 'tags' ), ',' );
 		$cid1 = intval ( $this->input->post ( 'cid1' ) );
 		$cid2 = intval ( $this->input->post ( 'cid2' ) );
@@ -1974,7 +1976,7 @@ class Question extends CI_Controller {
 				exit ();
 			}
 		}
-		if ($this->user ['uid'] == $answer ['authorid']) {
+		if ($this->user ['uid'] == $answer ['authorid'] && $this->user ['grouptype'] != 1) {
 			$message ['message'] = '不能采纳自己的回答';
 			echo json_encode ( $message );
 			exit ();
@@ -2353,9 +2355,11 @@ class Question extends CI_Controller {
 					exit ();
 				}
 			}
-			$content = $this->input->post ( 'content', false );
+			$content = $this->input->post ( 'content' );//false关闭 xss过滤检测
 			$content = str_replace ( "<script", "<code><script", $content );
 			$content = str_replace ( "</script>", "</code></script>", $content );
+				$content=str_replace("&lt;video", "<video ", $content);
+		$content=str_replace("&gt;&lt;/video&gt;", "</video> ", $content);		
 			$viewurl = urlmap ( 'question/view/' . $question ['id'], 2 );
 			
 			// 检查审核和内容外部URL过滤
@@ -2923,8 +2927,8 @@ class Question extends CI_Controller {
 				exit ();
 			}
 			$content = $this->input->post ( 'content' );
-			
-			// 更新问题详情
+				$content=str_replace("&lt;video", "<video ", $content);
+			$content=str_replace("&gt;&lt;/video&gt;", "</video> ", $content);			// 更新问题详情
 			$tags = trim ( $this->input->post ( 'tags' ), ',' );
 			$cid1 = intval ( $this->input->post ( 'cid1' ) );
 			$cid2 = intval ( $this->input->post ( 'cid2' ) );
@@ -3005,13 +3009,7 @@ class Question extends CI_Controller {
 		}
 	}
 	
-	// 设为未解决
-	function nosolve() {
-		$qid = intval ( $this->uri->segment ( 3 ) );
-		$viewurl = urlmap ( 'question/view/' . $qid, 2 );
-		$this->question_model->change_to_nosolve ( $qid );
-		$this->message ( '问题状态设置成功!', $viewurl );
-	}
+
 	
 	// 前台删除问题回答
 	function deleteanswer() {
