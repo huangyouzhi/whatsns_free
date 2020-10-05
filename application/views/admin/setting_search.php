@@ -3,12 +3,12 @@
     <div style="float:left;"><a href="index.php?admin_main/stat{$setting['seo_suffix']}" target="main"><b>控制面板首页</b></a>&nbsp;&raquo;&nbsp;搜索设置</div>
 </div>
 <!--{if isset($message)}-->
-<!--{eval $type=isset($type)?$type:'correctmsg'; }-->
-<table class="table">
-    <tr>
-        <td class="{$type}">{$message}</td>
-    </tr>
-</table>
+{if $type=='errormsg'}
+<div class="alert alert-warning">{$message}</div>
+{else}
+<div class="alert alert-info">{$message}</div>
+{/if}
+
 <!--{/if}-->
 <table class="table">
     <tbody><tr class="header"><td>设置说明</td></tr>

@@ -3,6 +3,26 @@
 # Generator: MySQL-Front 5.3  (Build 4.234)
 
 /*!40101 SET NAMES utf8 */;
+CREATE TABLE `whatsns_admin_nav` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL DEFAULT '' COMMENT '菜单名字',
+  `pid` int(11) NOT NULL DEFAULT '0' COMMENT '父级菜单id',
+  `url` varchar(255) NOT NULL DEFAULT '' COMMENT '菜单网址',
+  `status` int(11) NOT NULL DEFAULT '1' COMMENT '菜单状态，1激活，0禁用',
+  `ordernum` int(11) NOT NULL DEFAULT '1' COMMENT '菜单排序',
+  `childs` int(11) NOT NULL DEFAULT '0' COMMENT '包含子导航数',
+  PRIMARY KEY (`id`),
+  KEY `pid` (`pid`) COMMENT 'pid',
+  KEY `status` (`status`) COMMENT 'status',
+  KEY `ordernum` (`ordernum`) COMMENT 'ordernum',
+  KEY `pidandstatus` (`pid`,`status`) COMMENT 'pidandstatus'
+) ENGINE=InnoDB AUTO_INCREMENT=98 DEFAULT CHARSET=utf8mb4 COMMENT='后台管理菜单';
+
+#
+# Data for table "whatsns_admin_nav1"
+#
+
+REPLACE INTO `whatsns_admin_nav` VALUES (1,'插件管理',0,'',1,1,5),(2,'马甲发布文章',1,'admin_chajian/addarticle',1,2,0),(3,'自问自答',1,'admin_chajian/autoasnwer',1,1,0),(4,'批量任务自动采集',1,'admin_autocaiji/default',1,4,1),(5,'批量注册马甲',1,'admin_majia/default',1,3,0),(6,'单任务数据采集',1,'admin_setting/caiji',1,5,0),(7,'系统设置',0,'',1,2,10),(8,'用户管理',0,'',1,4,5),(9,'模板管理',0,'',1,12,2),(11,'系统工具',0,'',1,10,7),(12,'礼品商店',0,'',1,9,5),(15,'认证管理',0,'',1,7,2),(16,'高级管理',0,'',1,6,10),(17,'内容管理',0,'',1,5,13),(18,'站点设置',7,'admin_setting/sitesetting',1,1,0),(19,'全局设置',7,'admin_totalset/default',1,1,0),(20,'站点日志查看',7,'admin_sitelog/default',1,1,0),(24,'搜索管理',7,'admin_setting/search',1,1,0),(25,'注册设置',7,'admin_setting/register',1,1,0),(26,'导航管理',7,'admin_nav/default',1,1,0),(27,'友情链接',7,'admin_link/default',1,1,0),(28,'短信设置',16,'admin_sms/index',1,1,0),(29,'邮件设置',16,'admin_setting/mail',1,1,0),(30,'消息模板',16,'admin_setting/msgtpl',1,1,0),(31,'财富值设置',16,'admin_setting/settingcredit',1,1,0),(32,'财富充值',16,'admin_setting/ebank',1,1,0),(33,'seo设置',16,'admin_setting/seo',1,1,0),(34,'编辑器设置',16,'admin_editor/setting',1,1,0),(36,'sina互联设置',16,'admin_setting/sinalogin',1,1,0),(37,'qq互联设置',16,'admin_setting/qqlogin',1,1,0),(38,'认证管理列表',15,'admin_vertifyuser/default',1,1,0),(39,'已认证列表',15,'admin_vertifyuser/userlist',1,1,0),(49,'顶置内容管理',17,'admin_topic/topicdatalist',1,1,0),(50,'推荐内容管理',17,'admin_topic/topichotlist',1,1,0),(51,'问答审核',17,'admin_question/examine',1,1,0),(52,'回答管理',17,'admin_question/searchanswer',1,1,0),(53,'问题管理',17,'admin_question/default',1,1,0),(54,'分类管理',17,'admin_category/default',1,1,0),(55,'文章管理',17,'admin_topic/default',1,1,0),(56,'标签管理',17,'admin_tag/default',1,1,0),(57,'关键词库',17,'admin_keywords/default',1,1,0),(58,'词语过滤',17,'admin_word/default',1,1,0),(59,'举报管理',17,'admin_inform/default',1,1,0),(60,'公告管理',17,'admin_note/default',1,1,0),(67,'添加用户',8,'admin_user/add',1,1,0),(68,'禁止IP',8,'admin_banned/add',1,1,0),(69,'专家管理',8,'admin_expert/default',1,1,0),(70,'用户组',8,'admin_usergroup/default',1,1,0),(71,'系统用户组',8,'admin_usergroup/system',1,1,0),(72,'PC模板',9,'admin_template/default/pc',1,1,0),(73,'手机Wap模板',9,'admin_template/default/wap',1,1,0),(82,'更新缓存',11,'admin_setting/cache',1,1,0),(83,'js数据调用',11,'admin_datacall/default',1,1,0),(84,'数据校正',11,'admin_main/regulate',1,1,0),(89,' 百度统计',11,'https://tongji.baidu.com/web/welcome/login',1,1,0),(90,' CNZZ统计',11,'https://i.umeng.com/?',1,1,0),(91,' 百度站长平台',11,'http://zhanzhang.baidu.com/',1,1,0),(92,'礼品列表',12,'admin_gift/default',1,1,0),(93,' 360站长平台',11,'http://zhanzhang.so.com/',1,1,0),(94,'添加礼品',12,'admin_gift/add',1,1,0),(95,'礼品公告',12,'admin_gift/note',1,1,0),(96,'礼品价格区间',12,'admin_gift/addrange',1,1,0),(97,'礼品兑换日志',12,'admin_gift/log',1,1,0);
 
 #
 # Structure for table "whatsns__keywords"

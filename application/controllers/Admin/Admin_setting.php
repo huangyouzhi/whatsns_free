@@ -335,6 +335,8 @@ class Admin_setting extends ADMIN_Controller {
 		} else {
 			$cid3 = 0;
 		}
+	
+	
 		
 		// $catlist=$_ENV['category']->list_by_pid($catmodel['pid']);
 		if (trim ( $randclass ) != '') {
@@ -378,8 +380,9 @@ class Admin_setting extends ADMIN_Controller {
 		$username = $userlist [$mwtuid] ['username'];
 		
 		$desc = str_replace ( "'", '"', $desc );
-		$qid = $this->question_model->add_seo ( htmlspecialchars ( $title ), $uid, $username, $desc, 0, 0, $cid, $cid1, $cid2, $cid3, 1, rand ( 100, 200 ), $mtime );
 		
+		$qid = $this->question_model->add_seo ( htmlspecialchars ( $title ), $uid, $username, $desc, 0, 0, $cid, $cid1, $cid2, $cid3, 1, rand ( 100, 200 ), $mtime );
+	
 		$numuser = rand ( 3, 5 );
 		for($i = 0; $i <= $numuser; $i ++) {
 			$auid = array_rand ( $userlist, 1 );
@@ -482,7 +485,7 @@ class Admin_setting extends ADMIN_Controller {
 			$cid2 = 0;
 		}
 		// $catlist=$_ENV['category']->list_by_pid($catmodel['pid']);
-		if (trim ( $randclass ) != '') {
+		if (trim ( $randclass ) != ''&&!empty($randclass)) {
 			
 			$classarray = explode ( ',', $randclass );
 			$cidindex = array_rand ( $classarray, 1 );
@@ -544,12 +547,15 @@ class Admin_setting extends ADMIN_Controller {
 			}
 			
 			if ($title == "" || $title == null) {
-				
+				echo "标题不能为空";exit();
 				return false;
 			}
 			$q = $this->question_model->get_by_title ( htmlspecialchars ( $title ) );
-			if ($q != null)
+			if ($q != null){
+				echo $title."已经存在";exit();
 				return false;
+			}
+				
 			
 			// $desc=htmlspecialchars($desc);
 			
@@ -644,7 +650,14 @@ class Admin_setting extends ADMIN_Controller {
 				$user = $this->user_model->get_by_username ( $wendausername );
 				
 				if (! $user) {
-					$hduid = $this->user_model->caijiadd ( $wendausername, '123456', rand ( 1111111, 99999999 ) . "@qq.com" );
+					$pwd=random(11);
+					$email=random(10). "@qq.com";
+					$hduid = $this->user_model->caijiadd ( $wendausername,$pwd,$email );
+					// ucenter注册。
+					if ($this->setting ["ucenter_open"]) {
+						$this->load->model ( 'ucenter_model' );
+						 $this->ucenter_model->ajaxregister ( $wendausername, $pwd, $email, '', 0 );					
+					}
 					
 					$hduid = intval ( $hduid );
 					$avatardir = "/data/avatar/";
@@ -959,10 +972,15 @@ class Admin_setting extends ADMIN_Controller {
 				if (in_array ( 'data', $this->input->post ( 'type' ) )) {
 					$datachecked = true;
 					cleardir ( FCPATH . '/data/cache' );
+					
 				}
-				//unlink ( FCPATH . "index.html" );
-				//file_get_contents ( url ( 'index/index' ) );
+				if(is_dir(FCPATH."/course")){
+					cleardir ( FCPATH . '/course/data/cache' );
+					cleardir ( FCPATH . '/course/data/logs' );
+				}
+			
 				$this->db->query ( "delete from " . $this->db->dbprefix . "session " );
+				cleardir ( FCPATH . '/data/logs' );
 				$message = '缓存更新成功！';
 			} else {
 				$tplchecked = $datachecked = false;
@@ -1066,23 +1084,37 @@ class Admin_setting extends ADMIN_Controller {
 			$this->setting ['search_placeholder'] = $this->input->post ( 'search_placeholder' );
 			$this->setting ['search_shownum'] = $this->input->post ( 'search_shownum' );
 			$this->setting ['xunsearch_open'] = $this->input->post ( 'xunsearch_open' );
-			$this->setting ['xunsearch_sdk_file'] = $this->input->post ( 'xunsearch_sdk_file' );
-			if ($this->setting ['xunsearch_open'] && ! file_exists ( $this->setting ['xunsearch_sdk_file'] )) {
+			$this->setting ['xunsearch_sdk_file'] = trim($this->input->post ( 'xunsearch_sdk_file' ));
+			if(file_exists(FCPATH.".user.ini")){
 				$type = 'errormsg';
-				$message = 'SDK文件不存在，请核实!';
-			} else {
-				$type = 'correctmsg';
-				$message = '搜索设置成功!';
+				$message="检测到网站根目录下存在 user.ini文件，请确定此文件是否为空，否则会导致配置讯搜后网站500打不开";
 			}
-			$this->setting_model->update ( $this->setting );
+			if(strtoupper(substr(PHP_OS,0,3))=="WIN"){
+				$type = 'errormsg';
+				$message = 'windows 服务器不支持配置xunsearch讯搜全文检索，请选择linux操作系统 centos7+或者ubuntu!';
+				$this->setting ['xunsearch_open']=0;
+			}else{
+				if ($this->setting ['xunsearch_open'] && ! file_exists ( $this->setting ['xunsearch_sdk_file'] )) {
+					$type = 'errormsg';
+					$message = 'SDK文件不存在，请核实!';
+					$this->setting ['xunsearch_open']=0;
+				} else {
+					$this->setting_model->update ( $this->setting );
+					$type = 'correctmsg';
+					$message = '搜索设置成功!';
+					$qrownum = returnarraynum ( $this->db->query ( getwheresql ( 'question', "  status!=0 and  isupdatexunsearch=0 ", $this->db->dbprefix ) )->row_array () );
+					$pagesize = 1000;
+					$qpages = @ceil ( $qrownum / $pagesize );
+					
+					$trownum = returnarraynum ( $this->db->query ( getwheresql ( 'topic', "  state!=0 and  isupdatexunsearch=0 ", $this->db->dbprefix ) )->row_array () );
+					
+					$tpages = @ceil ( $trownum / $pagesize );
+				}
+			}
+		
+			
 		}
-		$qrownum = returnarraynum ( $this->db->query ( getwheresql ( 'question', " 1=1 ", $this->db->dbprefix ) )->row_array () );
-		$pagesize = 1000;
-		$qpages = @ceil ( $qrownum / $pagesize );
-		
-		$trownum = returnarraynum ( $this->db->query ( getwheresql ( 'topic', " 1=1 ", $this->db->dbprefix ) )->row_array () );
-		
-		$tpages = @ceil ( $trownum / $pagesize );
+	
 		
 		include template ( 'setting_search', 'admin' );
 	}
