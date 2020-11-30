@@ -1,5 +1,5 @@
 <!DOCTYPE html><html><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><link href=https://cdn.jsdelivr.net/npm/animate.css@3.5.1 rel=stylesheet type=text/css>
-<title>WHATSNS问答系统安装</title>　
+<title>WHATSNS问答系统安装test</title>　
 <script>var _installurl=window.location.href;
     var CURRENTURL = _installurl.substring(0,_installurl.lastIndexOf('install'));
 
